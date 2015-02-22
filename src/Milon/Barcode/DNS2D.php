@@ -1,8 +1,8 @@
 <?php namespace Milon\Barcode;
 
-use Dinesh\Barcode\QRcode;
-use Dinesh\Barcode\Datamatrix;
-use Dinesh\Barcode\PDF417;
+use Milon\Barcode\QRcode;
+use Milon\Barcode\Datamatrix;
+use Milon\Barcode\PDF417;
 use Illuminate\Support\Str;
 
 /*
