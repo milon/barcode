@@ -17,7 +17,7 @@ Next, update Composer from the Terminal:
 
 Once this operation completes, the final step is to add the service provider. Open `config/app.php`, and add a new item to the providers array.
 
-    'Dinesh\Barcode\BarcodeServiceProvider'
+    'Milon\Barcode\BarcodeServiceProvider'
 
 If you want to change Bar-code's settings (Store Path etc.), you need to publish its config file(s). For that you need to run in the terminal-
 
@@ -27,7 +27,7 @@ Now add the alias.
 ```php
 'aliases' => array(
 	'DNS1D' => 'Milon\Barcode\Facades\DNS1DFacade',
-        'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
+	'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
 )
 ```
 
