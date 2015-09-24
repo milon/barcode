@@ -1,6 +1,6 @@
 This is a barcode generation package inspired by [https://github.com/tecnickcom/TCPDF](https://github.com/tecnickcom/TCPDF). Actually I use that package's underline classes for generating barcode. This package is just a wrapper of that package and adds compatibility with Laravel 5.
 
-I used the following classes of thas package.
+I used the following classes of that package.
 
 - src/Milon/Barcode/Datamatrix.php (include/barcodes/datamatrix.php)
 - src/Milon/Barcode/DNS1D.php (tcpdf_barcodes_1d.php)
