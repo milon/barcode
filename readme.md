@@ -142,11 +142,11 @@ echo DNS1D::getBarcodeHTML("4445645656", "PHARMA2T");
 ## License
 This package is published under `GNU LGPLv3` license and copyright to [Nuruzzaman Milon](http://milon.im). Original Barcode generation classes were written by Nicola Asuni. The license agreement is on project's root.
 
-License: GNU LGPLv3   return
-Package Author: [Nuruzzaman Milon](http://milon.im)   return
-Original Barcode Class Author: [Nicola Asuni](http://www.tcpdf.org)   return
-Package Copyright: Nuruzzaman Milon   return
-Barcode Generation Class Copyright:   return
-Nicola Asuni   return
-Tecnick.com LTD   return
-www.tecnick.com   return
+License: GNU LGPLv3   
+Package Author: [Nuruzzaman Milon](http://milon.im)   
+Original Barcode Class Author: [Nicola Asuni](http://www.tcpdf.org)   
+Package Copyright: Nuruzzaman Milon   
+Barcode Generation Class Copyright:   
+Nicola Asuni   
+Tecnick.com LTD   
+www.tecnick.com   
