@@ -1,10 +1,18 @@
-This is a barcode generation package inspired by [https://github.com/dineshrabara/barcode](https://github.com/dineshrabara/barcode). Actually I use that package's underline classes. I just add the compatibility of Laravel 5 with that package.
+This is a barcode generation package inspired by [https://github.com/tecnickcom/TCPDF](https://github.com/tecnickcom/TCPDF). Actually I use that package's underline classes for generating barcode. This package is just a wrapper of that package and adds compatibility with Laravel 5.
 
-[Read More Wiki](https://github.com/dineshrabara/barcode/wiki)
+I used the following classes of thas package.
+
+- src/Milon/Barcode/Datamatrix.php (include/barcodes/datamatrix.php)
+- src/Milon/Barcode/DNS1D.php (tcpdf_barcodes_1d.php)
+- src/Milon/Barcode/DNS2D.php (tcpdf_barcodes_2d.php)
+- src/Milon/Barcode/PDF417.php (include/barcodes/pdf417.php)
+- src/Milon/Barcode/QRcode.php (include/barcodes/qrcode.php)
+
+[Read More on TCPDF website](http://www.tcpdf.org)
 
 ## Installation
 
-Begin by installing this package through Composer. Edit your project's `composer.json` file to require `dinesh/barcode`.
+Begin by installing this package through Composer. Edit your project's `composer.json` file to require `milon/barcode`.
 
     "require": {
 		...
@@ -130,3 +138,15 @@ echo DNS1D::getBarcodeHTML("4445645656", "CODE11");
 echo DNS1D::getBarcodeHTML("4445645656", "PHARMA");
 echo DNS1D::getBarcodeHTML("4445645656", "PHARMA2T");
 ```
+
+## License
+This package is published under `GNU LGPLv3` license and copyright to [Nuruzzaman Milon](http://milon.im). Original Barcode generation classes were written by Nicola Asuni. The license agreement is on project's root.
+
+License: GNU LGPLv3
+Package Author: [Nuruzzaman Milon](http://milon.im)
+Original Barcode Class Author: [Nicola Asuni](http://www.tcpdf.org)
+Package Copyright: Nuruzzaman Milon
+Barcode Generation Class Copyright:
+	Nicola Asuni
+	Tecnick.com LTD
+	www.tecnick.com
