@@ -1,7 +1,50 @@
-<?php namespace Milon\Barcode;
+<?php 
 
-// File name   : Datamatrix.php
-// Author      : Dinesh Rabara - Tecnick.com LTD - Manor Coach House, Church Hill, Aldershot, Hants, GU12 4RQ, UK - www.tecnick.com - info@tecnick.com
+namespace Milon\Barcode;
+
+//============================================================+
+// File name   : datamatrix.php
+// Version     : 1.0.008
+// Begin       : 2010-06-07
+// Last Update : 2014-05-06
+// Author      : Nicola Asuni - Tecnick.com LTD - www.tecnick.com - info@tecnick.com
+// License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
+// -------------------------------------------------------------------
+// Copyright (C) 2010-2014  Nicola Asuni - Tecnick.com LTD
+//
+// This file is part of TCPDF software library.
+//
+// TCPDF is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// TCPDF is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with TCPDF.  If not, see <http://www.gnu.org/licenses/>.
+//
+// See LICENSE.TXT file for more information.
+// -------------------------------------------------------------------
+//
+// DESCRIPTION :
+//
+// Class to create DataMatrix ECC 200 barcode arrays for TCPDF class.
+// DataMatrix (ISO/IEC 16022:2006) is a 2-dimensional bar code.
+//============================================================+
+/**
+* @file
+* Class to create DataMatrix ECC 200 barcode arrays for TCPDF class.
+* DataMatrix (ISO/IEC 16022:2006) is a 2-dimensional bar code.
+*
+* @package com.tecnick.tcpdf
+* @author Nicola Asuni
+* @version 1.0.008
+*/
+
 // custom definitions
 if (!defined('DATAMATRIXDEFS')) {
 

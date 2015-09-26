@@ -1,14 +1,60 @@
-<?php namespace Milon\Barcode;
+<?php 
 
-// File name   : PDF417.php
-// Author      : Dinesh Rabara
+namespace Milon\Barcode;
 
+//============================================================+
+// File name   : pdf417.php
+// Version     : 1.0.005
+// Begin       : 2010-06-03
+// Last Update : 2014-04-25
+// Author      : Nicola Asuni - Tecnick.com LTD - www.tecnick.com - info@tecnick.com
+// License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
+// -------------------------------------------------------------------
+// Copyright (C) 2010-2013  Nicola Asuni - Tecnick.com LTD
+//
+// This file is part of TCPDF software library.
+//
+// TCPDF is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Lesser General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// TCPDF is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with TCPDF.  If not, see <http://www.gnu.org/licenses/>.
+//
+// See LICENSE.TXT file for more information.
+// -------------------------------------------------------------------
+//
+// DESCRIPTION :
+//
+// Class to create PDF417 barcode arrays for TCPDF class.
+// PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
+// It is one of the most popular 2D codes because of its ability to be read with slightly modified handheld laser or linear CCD scanners.
+// TECHNICAL DATA / FEATURES OF PDF417:
+//      Encodable Character Set:     All 128 ASCII Characters (including extended)
+//      Code Type:                   Continuous, Multi-Row
+//      Symbol Height:               3 - 90 Rows
+//      Symbol Width:                90X - 583X
+//      Bidirectional Decoding:      Yes
+//      Error Correction Characters: 2 - 512
+//      Maximum Data Characters:     1850 text, 2710 digits, 1108 bytes
+//
+//============================================================+
 /**
  * @file
- * PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code 
+ * Class to create PDF417 barcode arrays for TCPDF class.
+ * PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
  * (requires PHP bcmath extension)
- * @author Dinesh Rabara
+ * @package com.tecnick.tcpdf
+ * @author Nicola Asuni
+ * @version 1.0.005
  */
+
 // definitions
 if (!defined('PDF417DEFS')) {
 
