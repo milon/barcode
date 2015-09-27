@@ -3,7 +3,7 @@
 
     "description": "Barcode generator like Qr Code , PDF417,C39, C39+,C39E,C39E+,C93,S25,S25+,I25,I25+,C128,C128A,C128B,C128C,2-Digits UPC-Based Extention,5-Digits UPC-Based Extention,EAN 8,EAN 13,UPC-A,UPC-E,MSI (Variation of Plessey code) ",
     "keywords": ["barcode", "laravel","qrcode","QR Code","PDF417","Datamatrix","CODE 39","CODE 128","EAN","CODABAR"],
-    "license": "MIT",
+    "license": "LGPL-3.0",
     "authors": [
     {
         "name": "Nuruzzaman Milon",

@@ -1,4 +1,6 @@
-<?php namespace Milon\Barcode;
+<?php 
+
+namespace Milon\Barcode;
 
 use Illuminate\Support\ServiceProvider;
 
