@@ -12,7 +12,13 @@ I used the following classes of that package.
 
 ## Installation
 
-Begin by installing this package through Composer. Edit your project's `composer.json` file to require `milon/barcode`.
+Begin by installing this package through Composer. Just run following command to terminal-
+
+```
+composer require milon/barcode
+```
+
+You can also edit your project's `composer.json` file to require `milon/barcode`.
 
     "require": {
 		...
