@@ -22,7 +22,7 @@ You can also edit your project's `composer.json` file to require `milon/barcode`
 
     "require": {
 		...
-		"milon/barcode": "dev-master"
+		"milon/barcode": "~1.0"
 	}
 
 Next, update Composer from the Terminal:
