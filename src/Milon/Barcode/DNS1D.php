@@ -87,7 +87,7 @@ class DNS1D {
      */
     public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black') {
         if (!$this->store_path) {
-            $this->setStorPath(\Config::get("barcode::store_path"));
+            $this->setStorPath(\Config::get("barcode.store_path"));
         }
         $this->setBarcode($code, $type);
         // replace table for special characters
