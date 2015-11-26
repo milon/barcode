@@ -71,7 +71,7 @@ echo DNS1D::getBarcodeSVG("4445645656", "PHARMA2T");
 echo DNS1D::getBarcodeHTML("4445645656", "PHARMA2T");
 echo '<img src="data:image/png,' . DNS1D::getBarcodePNG("4", "C39+") . '" alt="barcode"   />';
 echo DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T");
-echo '<img src="data:image/png,' . DNS1D::getBarcodePNG("4", "C39+") . '" alt="barcode"   />';
+echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+") . '" alt="barcode"   />';
 ```
 
 ```php
@@ -79,7 +79,7 @@ echo DNS1D::getBarcodeSVG("4445645656", "C39");
 echo DNS2D::getBarcodeHTML("4445645656", "QRCODE");
 echo DNS2D::getBarcodePNGPath("4445645656", "PDF417");
 echo DNS2D::getBarcodeSVG("4445645656", "DATAMATRIX");
-echo '<img src="data:image/png,' . DNS2D::getBarcodePNG("4", "PDF417") . '" alt="barcode"   />';
+echo '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG("4", "PDF417") . '" alt="barcode"   />';
 ```
 
 ## Width and Height example
@@ -89,7 +89,7 @@ echo DNS1D::getBarcodeSVG("4445645656", "PHARMA2T",3,33);
 echo DNS1D::getBarcodeHTML("4445645656", "PHARMA2T",3,33);
 echo '<img src="' . DNS1D::getBarcodePNG("4", "C39+",3,33) . '" alt="barcode"   />';
 echo DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T",3,33);
-echo '<img src="data:image/png,' . DNS1D::getBarcodePNG("4", "C39+",3,33) . '" alt="barcode"   />';
+echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+",3,33) . '" alt="barcode"   />';
 ```
     
 ## Color
@@ -99,7 +99,7 @@ echo DNS1D::getBarcodeSVG("4445645656", "PHARMA2T",3,33,"green");
 echo DNS1D::getBarcodeHTML("4445645656", "PHARMA2T",3,33,"green");
 echo '<img src="' . DNS1D::getBarcodePNG("4", "C39+",3,33,array(1,1,1)) . '" alt="barcode"   />';
 echo DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T",3,33,array(255,255,0));
-echo '<img src="data:image/png,' . DNS1D::getBarcodePNG("4", "C39+",3,33,array(1,1,1)) . '" alt="barcode"   />';
+echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+",3,33,array(1,1,1)) . '" alt="barcode"   />';
 ```
 
 ## 2D Barcodes
