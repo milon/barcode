@@ -30,10 +30,10 @@ class BarcodeServiceProvider extends ServiceProvider {
      */
     public function register() {
 
-        $this->app->bindShared('DNS1D', function() {
+        $this->app->singleton('DNS1D', function() {
 		return new DNS1D;
 	});
-	$this->app->bindShared('DNS2D', function() {
+	$this->app->singleton('DNS2D', function() {
 		return new DNS2D;
 	});
     }
