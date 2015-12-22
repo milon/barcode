@@ -10,6 +10,8 @@ I used the following classes of that package.
 
 [Read More on TCPDF website](http://www.tcpdf.org)
 
+### This package is compatible with Laravel 5.2
+
 ## Installation
 
 Begin by installing this package through Composer. Just run following command to terminal-
@@ -22,8 +24,15 @@ You can also edit your project's `composer.json` file to require `milon/barcode`
 
     "require": {
 		...
-		"milon/barcode": "~1.0"
+		"milon/barcode": "~2.0"
 	}
+
+For Laravel 5.0 and 5.1 use this-
+
+    "require": {
+        ...
+        "milon/barcode": "~1.0"
+    }
 
 Next, update Composer from the Terminal:
 
@@ -31,7 +40,13 @@ Next, update Composer from the Terminal:
 
 Once this operation completes, the final step is to add the service provider. Open `config/app.php`, and add a new item to the providers array.
 
-    'Milon\Barcode\BarcodeServiceProvider'
+```php
+'providers' => [
+    ...
+    Milon\Barcode\BarcodeServiceProvider::class,
+    ...
+]
+```
 
 If you want to change Bar-code's settings (Store Path etc.), you need to publish its config file(s). For that you need to run in the terminal-
 
@@ -44,12 +59,12 @@ Now add the alias.
 ```php
 'aliases' => [
 	...
-	'DNS1D' => 'Milon\Barcode\Facades\DNS1DFacade',
-	'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
+	'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+	'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
 ]
 ```
 
-Bar-code generator like 
+Bar-code generator like
 Qr Code,
 PDF417,
 C39,C39+,
@@ -64,7 +79,7 @@ EAN 8,EAN 13,
 UPC-A,UPC-E,
 MSI (Variation of Plessey code)
 
-generator in html, png embedded base64 code and SVG canvas 
+generator in html, png embedded base64 code and SVG canvas
 
 ```php
 echo DNS1D::getBarcodeSVG("4445645656", "PHARMA2T");
@@ -91,7 +106,7 @@ echo '<img src="' . DNS1D::getBarcodePNG("4", "C39+",3,33) . '" alt="barcode"   
 echo DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T",3,33);
 echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+",3,33) . '" alt="barcode"   />';
 ```
-    
+
 ## Color
 
 ```php
