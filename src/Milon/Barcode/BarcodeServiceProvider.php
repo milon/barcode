@@ -40,12 +40,12 @@ class BarcodeServiceProvider extends ServiceProvider {
         // Shortcut so developers don't need to add an Alias in app/config/app.php
         $this->app->booting(function() {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('DNS1D', 'Dinesh\Barcode\Facades\DNS1DFacade');
+            $loader->alias('DNS1D', 'Milon\Barcode\Facades\DNS1DFacade');
         });
 
         $this->app->booting(function() {
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-            $loader->alias('DNS2D', 'Dinesh\Barcode\Facades\DNS2DFacade');
+            $loader->alias('DNS2D', 'Milon\Barcode\Facades\DNS2DFacade');
         });
     }
 
