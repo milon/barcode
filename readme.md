@@ -24,14 +24,21 @@ You can also edit your project's `composer.json` file to require `milon/barcode`
 
     "require": {
 		...
-		"milon/barcode": "~2.0"
+		"milon/barcode": "^5.2"
 	}
 
 For Laravel 5.0 and 5.1 use this-
 
     "require": {
         ...
-        "milon/barcode": "~1.0"
+        "milon/barcode": "^5.1"
+    }
+
+For Laravel 4.0, 4.1 and 4.2 use this-
+
+    "require": {
+        ...
+        "milon/barcode": "^4.2"
     }
 
 Next, update Composer from the Terminal:
@@ -48,6 +55,15 @@ Once this operation completes, the final step is to add the service provider. Op
 ]
 ```
 
+For version 4.* add these lines on `app/config/app.php` file-
+
+```php
+'providers' => array(
+    ...
+    'Milon\Barcode\BarcodeServiceProvider',
+)
+```
+
 If you want to change Bar-code's settings (Store Path etc.), you need to publish its config file(s). For that you need to run in the terminal-
 
     php artisan vendor:publish
@@ -62,6 +78,16 @@ Now add the alias.
 	'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
 	'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
 ]
+```
+
+For version 4.2 alias will be like this-
+
+```php
+'aliases' => array(
+	...
+	'DNS1D' => 'Milon\Barcode\Facades\DNS1DFacade',
+	'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
+)
 ```
 
 Bar-code generator like
@@ -170,4 +196,4 @@ Package Copyright: Nuruzzaman Milon
 Barcode Generation Class Copyright:   
 Nicola Asuni   
 Tecnick.com LTD   
-www.tecnick.com   
+www.tecnick.com
