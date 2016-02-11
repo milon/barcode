@@ -214,7 +214,7 @@ class DNS1D {
         return $image;
     }
 
-	/**
+    /**
      * Get the array representation of last generated barcode.
      * 
      * @return array
