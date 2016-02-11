@@ -214,6 +214,16 @@ class DNS1D {
         return $image;
     }
 
+	/**
+     * Get the array representation of last generated barcode.
+     * 
+     * @return array
+    */
+    public function getBarcodeArray()
+    {
+        return $this->barcode_array;
+    }
+
     /**
      * Return a .png file path which create in server
      * @param $code (string) code to print
