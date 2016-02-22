@@ -186,6 +186,20 @@ echo DNS1D::getBarcodeHTML("4445645656", "PHARMA");
 echo DNS1D::getBarcodeHTML("4445645656", "PHARMA2T");
 ```
 
+# Running without Laravel
+
+You can use this library without using Laravel.
+
+Example:
+```
+use \Milon\Barcode\DNS1D;
+
+$d = new DNS1D();
+$d->setStorPath(__DIR__."/cache/");
+echo $d->getBarcodeHTML("9780691147727", "EAN13");
+```
+
+
 ## License
 This package is published under `GNU LGPLv3` license and copyright to [Nuruzzaman Milon](http://milon.im). Original Barcode generation classes were written by Nicola Asuni. The license agreement is on project's root.
 
