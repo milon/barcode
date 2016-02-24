@@ -66,7 +66,13 @@ For version 4.* add these lines on `app/config/app.php` file-
 
 If you want to change Bar-code's settings (Store Path etc.), you need to publish its config file(s). For that you need to run in the terminal-
 
-    php artisan vendor:publish
+```
+# Laravel 5.x
+php artisan vendor:publish
+
+# Laravel 4.x
+php artisan config:publish milon/barcode
+```
 
 Make sure you have write permission to the storage path. By default it sets to `/storage` folder.
 
