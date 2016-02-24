@@ -1,3 +1,6 @@
+[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+
 This is a barcode generation package inspired by [https://github.com/tecnickcom/TCPDF](https://github.com/tecnickcom/TCPDF). Actually I use that package's underline classes for generating barcode. This package is just a wrapper of that package and adds compatibility with Laravel 5.
 
 I used the following classes of that package.
@@ -66,7 +69,13 @@ For version 4.* add these lines on `app/config/app.php` file-
 
 If you want to change Bar-code's settings (Store Path etc.), you need to publish its config file(s). For that you need to run in the terminal-
 
-    php artisan vendor:publish
+```
+# Laravel 5.x
+php artisan vendor:publish
+
+# Laravel 4.x
+php artisan config:publish milon/barcode
+```
 
 Make sure you have write permission to the storage path. By default it sets to `/storage` folder.
 
