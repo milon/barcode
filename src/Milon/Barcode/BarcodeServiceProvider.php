@@ -14,11 +14,12 @@ class BarcodeServiceProvider extends ServiceProvider {
     protected $defer = false;
 
 
-/**
- * Publish asset
- */
+    /**
+     * Publish asset
+     */
 	public function boot()
     {
+
 		$this->package('milon/barcode');
 	}
 
@@ -30,11 +31,21 @@ class BarcodeServiceProvider extends ServiceProvider {
     public function register()
     {
         $this->app['DNS1D'] = $this->app->share(function($app) {
-            return new DNS1D;
+
+            $instance = new DNS1D;
+
+            $instance->setStorPath($app['config']->get('barcode::config.store_path'));
+
+            return $instance;
         });
 
         $this->app['DNS2D'] = $this->app->share(function($app) {
-            return new DNS2D;
+
+            $instance = new DNS2D;
+
+            $instance->setStorPath($app['config']->get('barcode::config.store_path'));
+
+            return $instance;
         });
 
         // Shortcut so developers don't need to add an Alias in app/config/app.php
