@@ -86,9 +86,6 @@ class DNS1D {
      * @public
      */
     public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black') {
-        if (!$this->store_path) {
-            $this->setStorPath(\Config::get("barcode.store_path"));
-        }
         $this->setBarcode($code, $type);
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
@@ -125,9 +122,7 @@ class DNS1D {
      * @public
      */
     public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black') {
-        if (!$this->store_path) {
-            $this->setStorPath(\Config::get("barcode.store_path"));
-        }
+        
         $this->setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;">' . "\n";
         $html = '<div style="font-size:0;position:relative;width:' . ($this->barcode_array['maxw'] * $w) . 'px;height:' . ($h) . 'px;">' . "\n";
@@ -158,9 +153,7 @@ class DNS1D {
      * @public
      */
     public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
-        if (!$this->store_path) {
-            $this->setStorPath(\Config::get("barcode.store_path"));
-        }
+        
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
@@ -225,9 +218,7 @@ class DNS1D {
      * @public
      */
     public function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
-        if (!$this->store_path) {
-            $this->setStorPath(\Config::get("barcode.store_path"));
-        }
+        
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
