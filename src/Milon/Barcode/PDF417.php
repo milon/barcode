@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Milon\Barcode;
 
@@ -740,7 +740,10 @@ class PDF417 {
         $maxecl = 8; // starting error level
         $maxerrsize = (928 - $numcw); // available codewords for error
         while ($maxecl > 0) {
-            $errsize = (2 << $ecl);
+            $errsize = 0;
+            if ($ecl >= 0) { // Avoid PHP7 ArithmeticError
+                $errsize = (2 << $ecl);
+            }
             if ($maxerrsize >= $errsize) {
                 break;
             }
