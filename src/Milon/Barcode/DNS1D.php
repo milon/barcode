@@ -87,7 +87,7 @@ class DNS1D {
      */
     public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black') {
         if (!$this->store_path) {
-            $this->setStorPath(config("barcode.store_path"));
+            $this->setStorPath(app('config')->get("barcode.store_path"));
         }
         $this->setBarcode($code, $type);
         // replace table for special characters
@@ -126,7 +126,7 @@ class DNS1D {
      */
     public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black') {
         if (!$this->store_path) {
-            $this->setStorPath(config("barcode.store_path"));
+            $this->setStorPath(app('config')->get("barcode.store_path"));
         }
         $this->setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;">' . "\n";
@@ -159,7 +159,7 @@ class DNS1D {
      */
     public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
         if (!$this->store_path) {
-            $this->setStorPath(config("barcode.store_path"));
+            $this->setStorPath(app('config')->get("barcode.store_path"));
         }
         $this->setBarcode($code, $type);
         // calculate image size
@@ -236,7 +236,7 @@ class DNS1D {
      */
     public function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
         if (!$this->store_path) {
-            $this->setStorPath(config("barcode.store_path"));
+            $this->setStorPath(app('config')->get("barcode.store_path"));
         }
         $this->setBarcode($code, $type);
         // calculate image size
