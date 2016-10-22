@@ -14,7 +14,9 @@ I used the following classes of that package.
 
 [Read More on TCPDF website](http://www.tcpdf.org)
 
-### This package is compatible with Laravel 5.2
+### This package is compatible with Laravel 5.2 and 5.3
+
+This package relies on [php-gd](http://php.net/manual/en/book.image.php) extention. So, make sure it is installed on your machine.
 
 ## Installation
 
