@@ -16,7 +16,7 @@ I used the following classes of that package.
 
 ### This package is compatible with Laravel 5.2 and 5.3
 
-This package relies on [php-gd](http://php.net/manual/en/book.image.php) extention. So, make sure it is installed on your machine.
+This package relies on [php-gd](http://php.net/manual/en/book.image.php) extension. So, make sure it is installed on your machine.
 
 ## Installation
 
