@@ -216,7 +216,7 @@ class DNS1D {
 
     /**
      * Get the array representation of last generated barcode.
-     * 
+     *
      * @return array
     */
     public function getBarcodeArray()
@@ -1395,7 +1395,11 @@ class DNS1D {
         }
         $data_len = $len - 1;
         //Padding
-        $code = str_pad($code, $data_len, '0', STR_PAD_LEFT);
+        if ($upce) {
+            $code = $this->upce2a($code);
+        } else {
+            $code = str_pad($code, $data_len, '0', STR_PAD_LEFT);
+        }
         $code_len = strlen($code);
         // calculate check digit
         $sum_a = 0;
@@ -2375,4 +2379,50 @@ class DNS1D {
         return $this;
     }
 
+    /**
+     * Convert UPC-E to UPC-A
+     * @param $code (string) code to represent.
+     * @return string upc-a value of upc-e
+     * @protected
+     */
+    protected function upce2a($code) {
+        $manufacturer = '';
+        $itemNumber = '';
+        // break digits
+        $digit1 = substr($code, 0, 1);
+        $digit2 = substr($code, 1, 1);
+        $digit3 = substr($code, 2, 1);
+        $digit4 = substr($code, 3, 1);
+        $digit5 = substr($code, 4, 1);
+        $digit6 = substr($code, 5, 1);
+
+        switch ($digit6) {
+            case '0':
+                $manufacturer = $digit1 . $digit2 . $digit6 . '00';
+                $itemNumber = '00' . $digit3 . $digit4 . $digit5;
+                break;
+            case '1':
+                $manufacturer = $digit1 . $digit2 . $digit6 . '00';
+                $itemNumber = '00' . $digit3 . $digit4 . $digit5;
+                break;
+            case '2':
+                $manufacturer = $digit1 . $digit2 . $digit6 . '00';
+                $itemNumber = '00' . $digit3 . $digit4 . $digit5;
+                break;
+            case '3':
+                $manufacturer = $digit1 . $digit2 . $digit3 . '00';
+                $itemNumber = '000' . $digit4 . $digit5;
+                break;
+            case '4':
+                $manufacturer = $digit1 . $digit2 . $digit3 . $digit4 . '0';
+                $itemNumber = '0000' . $digit5;
+                break;
+            default:
+                $manufacturer = $digit1 . $digit2 . $digit3 . $digit4 . $digit5;
+                $itemNumber = '0000' . $digit6;
+                break;
+        }
+
+        return '0' . $manufacturer . $itemNumber;
+    }
 }
