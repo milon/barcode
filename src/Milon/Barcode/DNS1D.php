@@ -2388,6 +2388,13 @@ class DNS1D {
     protected function upce2a($code) {
         $manufacturer = '';
         $itemNumber = '';
+
+        if (strlen($code) > 6) {
+            $code = substr($code, -6);
+        } else {
+            $code = str_pad($code, 6, '0', STR_PAD_LEFT);
+        }
+
         // break digits
         $digit1 = substr($code, 0, 1);
         $digit2 = substr($code, 1, 1);
