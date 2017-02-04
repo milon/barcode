@@ -1,8 +1,6 @@
-[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
-[![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
-[![License](https://img.shields.io/packagist/l/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) [![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) [![License](https://img.shields.io/packagist/l/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
 
-This is a barcode generation package inspired by [https://github.com/tecnickcom/TCPDF](https://github.com/tecnickcom/TCPDF). Actually I use that package's underline classes for generating barcode. This package is just a wrapper of that package and adds compatibility with Laravel 5.
+This is a barcode generation package inspired by <https://github.com/tecnickcom/TCPDF>. Actually I use that package's underline classes for generating barcode. This package is just a wrapper of that package and adds compatibility with Laravel 5.
 
 I used the following classes of that package.
 
@@ -14,7 +12,7 @@ I used the following classes of that package.
 
 [Read More on TCPDF website](http://www.tcpdf.org)
 
-### This package is compatible with Laravel 5.2 and 5.3
+# This package is compatible with Laravel 5.2, 5.3 and 5.4
 
 This package relies on [php-gd](http://php.net/manual/en/book.image.php) extension. So, make sure it is installed on your machine.
 
@@ -28,28 +26,36 @@ composer require milon/barcode
 
 You can also edit your project's `composer.json` file to require `milon/barcode`.
 
-    "require": {
-		...
-		"milon/barcode": "^5.2"
-	}
+```
+"require": {
+    ...
+    "milon/barcode": "^5.2"
+}
+```
 
 For Laravel 5.0 and 5.1 use this-
 
-    "require": {
-        ...
-        "milon/barcode": "^5.1"
-    }
+```
+"require": {
+    ...
+    "milon/barcode": "^5.1"
+}
+```
 
 For Laravel 4.0, 4.1 and 4.2 use this-
 
-    "require": {
-        ...
-        "milon/barcode": "^4.2"
-    }
+```
+"require": {
+    ...
+    "milon/barcode": "^4.2"
+}
+```
 
 Next, update Composer from the Terminal:
 
-    composer update
+```
+composer update
+```
 
 Once this operation completes, the final step is to add the service provider. Open `config/app.php`, and add a new item to the providers array.
 
@@ -86,9 +92,9 @@ Now add the alias.
 
 ```php
 'aliases' => [
-	...
-	'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
-	'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+    ...
+    'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+    'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
 ]
 ```
 
@@ -96,26 +102,13 @@ For version 4.2 alias will be like this-
 
 ```php
 'aliases' => array(
-	...
-	'DNS1D' => 'Milon\Barcode\Facades\DNS1DFacade',
-	'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
+    ...
+    'DNS1D' => 'Milon\Barcode\Facades\DNS1DFacade',
+    'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
 )
 ```
 
-Bar-code generator like
-Qr Code,
-PDF417,
-C39,C39+,
-C39E,C39E+,
-C93,
-S25,S25+,
-I25,I25+,
-C128,C128A,C128B,C128C,
-2-Digits UPC-Based Extention,
-5-Digits UPC-Based Extention,
-EAN 8,EAN 13,
-UPC-A,UPC-E,
-MSI (Variation of Plessey code)
+Bar-code generator like Qr Code, PDF417, C39,C39+, C39E,C39E+, C93, S25,S25+, I25,I25+, C128,C128A,C128B,C128C, 2-Digits UPC-Based Extention, 5-Digits UPC-Based Extention, EAN 8,EAN 13, UPC-A,UPC-E, MSI (Variation of Plessey code)
 
 generator in html, png embedded base64 code and SVG canvas
 
@@ -203,6 +196,7 @@ echo DNS1D::getBarcodeHTML("4445645656", "PHARMA2T");
 You can use this library without using Laravel.
 
 Example:
+
 ```
 use \Milon\Barcode\DNS1D;
 
@@ -211,15 +205,15 @@ $d->setStorPath(__DIR__."/cache/");
 echo $d->getBarcodeHTML("9780691147727", "EAN13");
 ```
 
-
 ## License
+
 This package is published under `GNU LGPLv3` license and copyright to [Nuruzzaman Milon](http://milon.im). Original Barcode generation classes were written by Nicola Asuni. The license agreement is on project's root.
 
-License: GNU LGPLv3   
-Package Author: [Nuruzzaman Milon](http://milon.im)   
-Original Barcode Class Author: [Nicola Asuni](http://www.tcpdf.org)   
-Package Copyright: Nuruzzaman Milon   
-Barcode Generation Class Copyright:   
-Nicola Asuni   
-Tecnick.com LTD   
+License: GNU LGPLv3<br>
+Package Author: [Nuruzzaman Milon](http://milon.im)<br>
+Original Barcode Class Author: [Nicola Asuni](http://www.tcpdf.org)<br>
+Package Copyright: Nuruzzaman Milon<br>
+Barcode Generation Class Copyright:<br>
+Nicola Asuni<br>
+Tecnick.com LTD<br>
 www.tecnick.com
