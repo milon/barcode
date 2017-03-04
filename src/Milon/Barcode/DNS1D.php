@@ -122,7 +122,7 @@ class DNS1D {
      * @public
      */
     public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black') {
-        
+
         $this->setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;">' . "\n";
         $html = '<div style="font-size:0;position:relative;width:' . ($this->barcode_array['maxw'] * $w) . 'px;height:' . ($h) . 'px;">' . "\n";
@@ -153,7 +153,7 @@ class DNS1D {
      * @public
      */
     public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
-        
+
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
@@ -167,7 +167,7 @@ class DNS1D {
             $fgcol = imagecolorallocate($png, $color[0], $color[1], $color[2]);
         } elseif (extension_loaded('imagick')) {
             $imagick = true;
-            $bgcol = new \imagickpixel('rgb(255,255,255');
+            $bgcol = new \imagickpixel('rgb(255,255,255)');
             $fgcol = new \imagickpixel('rgb(' . $color[0] . ',' . $color[1] . ',' . $color[2] . ')');
             $png = new \Imagick();
             $png->newImage($width, $height, 'none', 'png');
@@ -218,7 +218,7 @@ class DNS1D {
      * @public
      */
     public function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
-        
+
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
