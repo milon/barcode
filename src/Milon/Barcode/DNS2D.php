@@ -90,9 +90,9 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in user units.
      * @param $color (string) Foreground color (in SVG format) for bar elements (background is transparent).
      * @return string SVG code.
-     * @public
+     * @protected
      */
-    public function getBarcodeSVG($code, $type, $w = 3, $h = 3, $color = 'black') {
+    protected function getBarcodeSVG($code, $type, $w = 3, $h = 3, $color = 'black') {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -137,9 +137,9 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (string) Foreground color for bar elements (background is transparent).
      * @return string HTML code.
-     * @public
+     * @protected
      */
-    public function getBarcodeHTML($code, $type, $w = 10, $h = 10, $color = 'black') {
+    protected function getBarcodeHTML($code, $type, $w = 10, $h = 10, $color = 'black') {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -177,9 +177,9 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return path or false in case of error.
-     * @public
+     * @protected
      */
-    public function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
+    protected function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -249,9 +249,9 @@ class DNS2D {
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return url or false in case of error.
-     * @public
+     * @protected
      */
-    public function getBarcodePNGUri($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
+    protected function getBarcodePNGUri($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
         return url($this->getBarcodePNGPath($code, $type, $w, $h, $color));
     }
 
@@ -267,9 +267,9 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return path of image whice created
-     * @public
+     * @protected
      */
-    public function getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
+    protected function getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -404,9 +404,34 @@ class DNS2D {
         return $path;
     }
 
-    public function setStorPath($path) {
+    protected function setStorPath($path) {
         $this->store_path = $path;
         return $this;
     }
 
+
+
+	/**
+	 * Handle dynamic method calls.
+	 *
+	 * @param  string  $method
+	 * @param  array  $parameters
+	 * @return mixed
+	 */
+	public function __call($method, $parameters)
+	{
+		return $this->$method(...$parameters);
+	}
+
+	/**
+	 * Handle dynamic static method calls.
+	 *
+	 * @param  string  $method
+	 * @param  array  $parameters
+	 * @return mixed
+	 */
+	public static function __callStatic($method, $parameters)
+	{
+		return (new static)->$method(...$parameters);
+	}
 }
