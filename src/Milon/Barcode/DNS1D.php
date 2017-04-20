@@ -1424,8 +1424,7 @@ class DNS1D {
             // add check digit
             $code .= $r;
         } elseif ($r !== intval($code{$data_len})) {
-            // wrong checkdigit
-            return false;
+			throw new \Milon\Barcode\WrongCheckDigitException($r, intval($code{$data_len}));
         }
         if ($len == 12) {
             // UPC-A
