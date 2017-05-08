@@ -303,7 +303,7 @@ class DNS1D {
      * @protected
      */
     protected function getBarcodePNGUri($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
-        return url($this->getBarcodePNGPath($code, $type, $w, $h, $color));
+        return url(str_replace(base_path(), '', $this->getBarcodePNGPath($code, $type, $w, $h, $color)));
     }
 
     /**
