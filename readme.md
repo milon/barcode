@@ -148,6 +148,16 @@ echo DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T",3,33,array(255,255,0));
 echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+",3,33,array(1,1,1)) . '" alt="barcode"   />';
 ```
 
+## Show Text
+
+```php
+echo DNS1D::getBarcodeSVG("4445645656", "PHARMA2T",3,33,"green", true);
+echo DNS1D::getBarcodeHTML("4445645656", "PHARMA2T",3,33,"green", true);
+echo '<img src="' . DNS1D::getBarcodePNG("4", "C39+",3,33,array(1,1,1), true) . '" alt="barcode"   />';
+echo DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T",3,33,array(255,255,0), true);
+echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+",3,33,array(1,1,1), true) . '" alt="barcode"   />';
+```
+
 ## 2D Barcodes
 
 ```php
