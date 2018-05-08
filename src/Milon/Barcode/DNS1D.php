@@ -85,15 +85,18 @@ class DNS1D {
      * @return string SVG code.
      * @protected
      */
-    protected function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =true) {
+    protected function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
         $this->setBarcode($code, $type);
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
-        $svg = '<' . '?' . 'xml version="1.0" standalone="no"' . '?' . '>' . "\n";
-        $svg .= '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' . "\n";
+		if (!$inline)
+		{
+			$svg = '<' . '?' . 'xml version="1.0" standalone="no"' . '?' . '>' . "\n";
+			$svg .= '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' . "\n";
+		}
         $svg .= '<svg width="' . round(($this->barcode_array['maxw'] * $w), 3) . '" height="' . $h . '" version="1.1" xmlns="http://www.w3.org/2000/svg">' . "\n";
         $svg .= "\t" . '<desc>' . strtr($this->barcode_array['code'], $repstr) . '</desc>' . "\n";
         $svg .= "\t" . '<g id="bars" fill="' . $color . '" stroke="none">' . "\n";
