@@ -18,5 +18,19 @@
             "Milon\\Barcode": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Milon\\Barcode\\BarcodeServiceProvider"
+            ],
+            "aliases": {
+                "DNS1D": "Milon\\Barcode\\Facades\\DNS1DFacade",
+                "DNS2D": "Milon\\Barcode\\Facades\\DNS2DFacade"
+            }
+        }
+    }
 }
