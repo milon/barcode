@@ -105,7 +105,7 @@ class DNS1D {
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-	    if($showCode)      
+	    if($showCode)
                 $bh -= 12;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
@@ -114,7 +114,7 @@ class DNS1D {
             }
             $x += $bw;
         }
-	if($showCode) 
+	if($showCode)
             $svg .= "\t" .'<text x="'. (round(($this->barcode_array['maxw'] * $w), 3)/2)  .'" text-anchor="middle"  y="'.  ($bh + 12) .'" id="code" fill="' . $color . '" font-size ="12px" >'. $code .'</text>'. "\n";
 
         $svg .= "\t" . '</g>' . "\n";
@@ -144,7 +144,7 @@ class DNS1D {
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-	    if($showCode)      
+	    if($showCode)
                 $bh -= 12 ;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
@@ -153,7 +153,7 @@ class DNS1D {
             }
             $x += $bw;
         }
-	if($showCode) 
+	if($showCode)
             $html .= '<div style="position:absolute;bottom:0; text-align:center; width:' . ($this->barcode_array['maxw'] * $w) . 'px;  font-size: 0.6vw;">'. $code .'</div>';
 
         $html .= '</div>' . "\n";
@@ -215,7 +215,7 @@ class DNS1D {
             $x += $bw;
         }
         ob_start();
-	    
+
 	// Add Code String in bottom
         if($showCode)
         	if ($imagick) {
@@ -226,7 +226,7 @@ class DNS1D {
 		    $height_text = imagefontheight(3);
 		    imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
 
-		}    
+		}
         // get image out put
         if ($imagick) {
             $png->drawimage($bar);
@@ -292,7 +292,7 @@ class DNS1D {
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-	    
+
 	    if($showCode)
                  $bh -= imagefontheight(3) ;
             if ($v['t']) {
@@ -315,7 +315,7 @@ class DNS1D {
                 $height_text = imagefontheight(3);
                 imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
             }
-            
+
         $file_name= Str::slug($code);
         $save_file = $this->checkfile($this->store_path . $file_name . ".png");
 
@@ -343,7 +343,9 @@ class DNS1D {
      * @protected
      */
     protected function getBarcodePNGUri($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
-        return url($this->getBarcodePNGPath($code, $type, $w, $h, $color));
+        $path = $this->getBarcodePNGPath($code, $type, $w, $h, $color);
+        // Replace backslash (Windows) with forward slashes, to make it compatible with url().
+        return url(str_replace('\\', '/', $path));
     }
 
     /**
