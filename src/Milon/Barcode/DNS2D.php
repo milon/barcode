@@ -252,7 +252,9 @@ class DNS2D {
      * @protected
      */
     protected function getBarcodePNGUri($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
-        return url($this->getBarcodePNGPath($code, $type, $w, $h, $color));
+        $path = $this->getBarcodePNGPath($code, $type, $w, $h, $color);
+        // Replace backslash (Windows) with forward slashes, to make it compatible with url().
+        return url(str_replace('\\', '/', $path));
     }
 
     /**
