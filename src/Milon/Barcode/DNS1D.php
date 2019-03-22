@@ -1430,6 +1430,10 @@ class DNS1D {
      * @protected
      */
     protected function barcode_eanupc($code, $len = 13) {
+        if (!ctype_digit($code)) {
+            throw new \InvalidArgumentException('Code must be digit. get ' . $code);
+        }
+
         $upce = false;
         if ($len == 6) {
             $len = 12; // UPC-A
