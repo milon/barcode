@@ -13,7 +13,7 @@ class WrongCheckDigitException extends \LogicException {
 	 * @param Exception      $code
 	 * @param Exception|NULL $previous
 	 */
-	public function __construct($actual = NULL, $expected = NULL, $code, \Exception $previous = NULL) {
+	public function __construct($actual = NULL, $expected = NULL, $code = 0, \Exception $previous = NULL) {
 
 		$message = NULL;
 		if ($actual && $expected) {
