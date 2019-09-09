@@ -12,7 +12,7 @@ I used the following classes of that package.
 
 [Read More on TCPDF website](http://www.tcpdf.org)
 
-# This package is compatible with Laravel 5.2, 5.3 and 5.4
+# This package is compatible with Laravel `4.*` , `5.*` and `6.*`
 
 This package relies on [php-gd](http://php.net/manual/en/book.image.php) extension. So, make sure it is installed on your machine.
 
@@ -29,7 +29,7 @@ You can also edit your project's `composer.json` file to require `milon/barcode`
 ```
 "require": {
     ...
-    "milon/barcode": "^5.3"
+    "milon/barcode": "^6.0"
 }
 ```
 
