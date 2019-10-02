@@ -215,11 +215,11 @@ $d->setStorPath(__DIR__."/cache/");
 echo $d->getBarcodeHTML("9780691147727", "EAN13");
 ```
 
-## [Buy me a coffee ☕](https://paypal.me/tomilon?locale.x=en_US)
-
 ## License
 
 This package is published under `GNU LGPLv3` license and copyright to [Nuruzzaman Milon](http://milon.im). Original Barcode generation classes were written by Nicola Asuni. The license agreement is on project's root.
+
+### [Buy me a coffee ☕](https://paypal.me/tomilon?locale.x=en_US)
 
 License: GNU LGPLv3<br>
 Package Author: [Nuruzzaman Milon](http://milon.im)<br>
