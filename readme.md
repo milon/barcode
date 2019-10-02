@@ -215,7 +215,7 @@ $d->setStorPath(__DIR__."/cache/");
 echo $d->getBarcodeHTML("9780691147727", "EAN13");
 ```
 
-## [Buy me a coffee ☕](https://paypal.me/tomilon)
+## [Buy me a coffee ☕](https://paypal.me/tomilon?locale.x=en_US)
 
 ## License
 
