@@ -750,7 +750,7 @@ class QRcode {
      * @param $at (array) x,y position
      * @return value at specified position
      */
-    protected function getFrameAt($at) {
+    public function getFrameAt($at) {
         return ord($this->frame[$at['y']][$at['x']]);
     }
 
@@ -758,7 +758,7 @@ class QRcode {
      * Return the next frame position
      * @return array of x,y coordinates
      */
-    protected function getNextPosition() {
+    public function getNextPosition() {
         do {
             if ($this->bit == -1) {
                 $this->bit = 0;
@@ -864,7 +864,7 @@ class QRcode {
      * Return Reed-Solomon block code.
      * @return array rsblocks
      */
-    protected function getCode() {
+    public function getCode() {
         if ($this->count < $this->dataLength) {
             $row = $this->count % $this->blocks;
             $col = $this->count / $this->blocks;
@@ -2056,7 +2056,7 @@ class QRcode {
      * @param $items (int)
      * @return array padded merged byte stream
      */
-    protected function getBitStream($items) {
+    public function getBitStream($items) {
         $bstream = $this->mergeBitStream($items);
         return $this->appendPaddingBit($bstream);
     }
@@ -2066,7 +2066,7 @@ class QRcode {
      * @param $items (int)
      * @return array padded merged byte stream
      */
-    protected function getByteStream($items) {
+    public function getByteStream($items) {
         $bstream = $this->getBitStream($items);
         return $this->bitstreamToByte($bstream);
     }
@@ -2233,7 +2233,7 @@ class QRcode {
      * @param $level (int) error correction level
      * @return int maximum size (bytes)
      */
-    protected function getDataLength($version, $level) {
+    public function getDataLength($version, $level) {
         return $this->capacity[$version][QRCAP_WORDS] - $this->capacity[$version][QRCAP_EC][$level];
     }
 
@@ -2243,7 +2243,7 @@ class QRcode {
      * @param $level (int) error correction level
      * @return int ECC size (bytes)
      */
-    protected function getECCLength($version, $level) {
+    public function getECCLength($version, $level) {
         return $this->capacity[$version][QRCAP_EC][$level];
     }
 
@@ -2252,7 +2252,7 @@ class QRcode {
      * @param $version (int) version
      * @return int width
      */
-    protected function getWidth($version) {
+    public function getWidth($version) {
         return $this->capacity[$version][QRCAP_WIDTH];
     }
 
@@ -2261,7 +2261,7 @@ class QRcode {
      * @param $version (int) version
      * @return int number of remainder bits
      */
-    protected function getRemainder($version) {
+    public function getRemainder($version) {
         return $this->capacity[$version][QRCAP_REMINDER];
     }
 
@@ -2271,7 +2271,7 @@ class QRcode {
      * @param $level (int) error correction level
      * @return int version number
      */
-    protected function getMinimumVersion($size, $level) {
+    public function getMinimumVersion($size, $level) {
         for ($i = 1; $i <= QRSPEC_VERSION_MAX; ++$i) {
             $words = $this->capacity[$i][QRCAP_WORDS] - $this->capacity[$i][QRCAP_EC][$level];
             if ($words >= $size) {
@@ -2333,7 +2333,7 @@ class QRcode {
      * @param $spec (array) an array of ECC specification contains as following: {# of type1 blocks, # of data code, # of ecc code, # of type2 blocks, # of data code}
      * @return array spec
      */
-    protected function getEccSpec($version, $level, $spec) {
+    public function getEccSpec($version, $level, $spec) {
         if (count($spec) < 5) {
             $spec = array(0, 0, 0, 0, 0);
         }
@@ -2427,7 +2427,7 @@ class QRcode {
      * @param $version (int) version
      * @return BCH encoded version information pattern
      */
-    protected function getVersionPattern($version) {
+    public function getVersionPattern($version) {
         if (($version < 7) OR ($version > QRSPEC_VERSION_MAX)) {
             return 0;
         }
@@ -2440,7 +2440,7 @@ class QRcode {
      * @param $level (int) error correction level
      * @return BCH encoded format information pattern
      */
-    protected function getFormatInfo($mask, $level) {
+    public function getFormatInfo($mask, $level) {
         if (($mask < 0) OR ($mask > 7)) {
             return 0;
         }
