@@ -92,7 +92,7 @@ class DNS2D {
      * @return string SVG code.
      * @protected
      */
-    protected function getBarcodeSVG($code, $type, $w = 3, $h = 3, $color = 'black') {
+    public function getBarcodeSVG($code, $type, $w = 3, $h = 3, $color = 'black') {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -138,7 +138,7 @@ class DNS2D {
      * @return string HTML code.
      * @protected
      */
-    protected function getBarcodeHTML($code, $type, $w = 10, $h = 10, $color = 'black') {
+    public function getBarcodeHTML($code, $type, $w = 10, $h = 10, $color = 'black') {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -178,7 +178,7 @@ class DNS2D {
      * @return path or false in case of error.
      * @protected
      */
-    protected function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
+    public function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
