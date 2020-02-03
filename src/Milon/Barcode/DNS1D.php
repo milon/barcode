@@ -315,7 +315,7 @@ class DNS1D {
                 imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
             }
 
-        $file_name= Str::slug($code);
+        $file_name= Str::slug($code.$type);
         $save_file = $this->checkfile($this->store_path . $file_name . ".png");
 
         if ($imagick) {
