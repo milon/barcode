@@ -28,7 +28,6 @@ You can also edit your project's `composer.json` file to require `milon/barcode`
 
 ```json
 "require": {
-    ...
     "milon/barcode": "^8.0"
 }
 ```
@@ -37,7 +36,6 @@ For Laravel 7.* use this-
 
 ```json
 "require": {
-    ...
     "milon/barcode": "^7.0"
 }
 ```
@@ -46,7 +44,6 @@ For Laravel 6.* use this-
 
 ```json
 "require": {
-    ...
     "milon/barcode": "^6.0"
 }
 ```
@@ -55,7 +52,6 @@ For Laravel 5.0 and 5.1 use this-
 
 ```json
 "require": {
-    ...
     "milon/barcode": "^5.1"
 }
 ```
@@ -64,7 +60,6 @@ For Laravel 4.0, 4.1 and 4.2 use this-
 
 ```json
 "require": {
-    ...
     "milon/barcode": "^4.2"
 }
 ```
