@@ -85,18 +85,18 @@ class DNS1D {
      * @return string SVG code.
      * @protected
      */
-    public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
+    protected function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
         $this->setBarcode($code, $type);
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
-		if (!$inline)
-		{
-			$svg = '<' . '?' . 'xml version="1.0" standalone="no"' . '?' . '>' . "\n";
-			$svg .= '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' . "\n";
-		}
+        if (!$inline)
+        {
+            $svg = '<' . '?' . 'xml version="1.0" standalone="no"' . '?' . '>' . "\n";
+            $svg .= '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' . "\n";
+        }
         $svg .= '<svg width="' . round(($this->barcode_array['maxw'] * $w), 3) . '" height="' . $h . '" version="1.1" xmlns="http://www.w3.org/2000/svg">' . "\n";
         $svg .= "\t" . '<g id="bars" fill="' . $color . '" stroke="none">' . "\n";
         // print bars
@@ -104,7 +104,7 @@ class DNS1D {
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-	    if($showCode)
+        if($showCode)
                 $bh -= 12;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
@@ -113,7 +113,7 @@ class DNS1D {
             }
             $x += $bw;
         }
-	if($showCode)
+    if($showCode)
             $svg .= "\t" .'<text x="'. (round(($this->barcode_array['maxw'] * $w), 3)/2)  .'" text-anchor="middle"  y="'.  ($bh + 12) .'" id="code" fill="' . $color . '" font-size ="12px" >'. $code .'</text>'. "\n";
 
         $svg .= "\t" . '</g>' . "\n";
@@ -131,7 +131,7 @@ class DNS1D {
      * @return string HTML code.
      * @protected
      */
-    public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =false) {
+    protected function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =false) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -143,7 +143,7 @@ class DNS1D {
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-	    if($showCode)
+        if($showCode)
                 $bh -= 12 ;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
@@ -152,7 +152,7 @@ class DNS1D {
             }
             $x += $bw;
         }
-	if($showCode)
+    if($showCode)
             $html .= '<div style="position:absolute;bottom:0; text-align:center; width:' . ($this->barcode_array['maxw'] * $w) . 'px;  font-size: 0.6vw;">'. $code .'</div>';
 
         $html .= '</div>' . "\n";
@@ -169,7 +169,7 @@ class DNS1D {
      * @return image or false in case of error.
      * @protected
      */
-    public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
+    protected function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -200,8 +200,8 @@ class DNS1D {
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-	    if($showCode)
-            	$bh -= imagefontheight(3) ;
+        if($showCode)
+                $bh -= imagefontheight(3) ;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
                 // draw a vertical bar
@@ -215,17 +215,17 @@ class DNS1D {
         }
         ob_start();
 
-	// Add Code String in bottom
+    // Add Code String in bottom
         if($showCode)
-        	if ($imagick) {
-		    $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
-		    $bar->annotation( 10 , $h - $bh +10 , $code );
-		} else {
-		    $width_text = imagefontwidth(3) * strlen($code);
-		    $height_text = imagefontheight(3);
-		    imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
+            if ($imagick) {
+            $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
+            $bar->annotation( 10 , $h - $bh +10 , $code );
+        } else {
+            $width_text = imagefontwidth(3) * strlen($code);
+            $height_text = imagefontheight(3);
+            imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
 
-		}
+        }
         // get image out put
         if ($imagick) {
             $png->drawimage($bar);
@@ -245,7 +245,7 @@ class DNS1D {
      *
      * @return array
     */
-    public function getBarcodeArray()
+    protected function getBarcodeArray()
     {
         return $this->barcode_array;
     }
@@ -292,7 +292,7 @@ class DNS1D {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
 
-	    if($showCode)
+        if($showCode)
                  $bh -= imagefontheight(3) ;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
@@ -305,7 +305,7 @@ class DNS1D {
             }
             $x += $bw;
         }
-	if($showCode)
+    if($showCode)
             if ($imagick) {
                 $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
                 $bar->annotation( 10 , $h - $bh +10 , $code );
@@ -315,7 +315,7 @@ class DNS1D {
                 imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
             }
 
-        $file_name= Str::slug($code.$type);
+        $file_name= Str::slug($code);
         $save_file = $this->checkfile($this->store_path . $file_name . ".png");
 
         if ($imagick) {
@@ -1229,7 +1229,7 @@ class DNS1D {
                     }
                     for ($i = 0; $i < $len; $i+=2) {
                         $chrnum = $code[$i] . $code[$i + 1];
-                        if (preg_match('/([0-9]{2})/', $chrnum) > 0) {
+                        if (preg_match('/([0-9][2])/', $chrnum) > 0) {
                             $code_data[] = intval($chrnum);
                         } else {
                             return false;
@@ -1469,7 +1469,7 @@ class DNS1D {
             // add check digit
             $code .= $r;
         } elseif ($r !== intval($code[$data_len])) {
-			throw new \Milon\Barcode\WrongCheckDigitException($r, intval($code[$data_len]));
+            throw new \Milon\Barcode\WrongCheckDigitException($r, intval($code[$data_len]));
         }
         if ($len == 12) {
             // UPC-A
@@ -2419,7 +2419,7 @@ class DNS1D {
     }
 
     protected function setStorPath($path) {
-        $this->store_path = rtrim($path, '/' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->store_path = $path;
         return $this;
     }
 
@@ -2477,27 +2477,27 @@ class DNS1D {
         return '0' . $manufacturer . $itemNumber;
     }
 
-	/**
-	 * Handle dynamic method calls.
-	 *
-	 * @param  string  $method
-	 * @param  array  $parameters
-	 * @return mixed
-	 */
-	public function __call($method, $parameters)
-	{
-		return $this->$method(...$parameters);
-	}
+    /**
+     * Handle dynamic method calls.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->$method(...$parameters);
+    }
 
-	/**
-	 * Handle dynamic static method calls.
-	 *
-	 * @param  string  $method
-	 * @param  array  $parameters
-	 * @return mixed
-	 */
-	public static function __callStatic($method, $parameters)
-	{
-		return (new static)->$method(...$parameters);
-	}
+    /**
+     * Handle dynamic static method calls.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public static function __callStatic($method, $parameters)
+    {
+        return (new static)->$method(...$parameters);
+    }
 }
