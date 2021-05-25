@@ -92,6 +92,7 @@ class DNS1D {
         $this->setBarcode($code, $type);
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
+        $svg = '';
         if (!$inline)
         {
             $svg = '<' . '?' . 'xml version="1.0" standalone="no"' . '?' . '>' . "\n";
@@ -166,7 +167,7 @@ class DNS1D {
      * @param $w (int) Width of a single bar element in pixels.
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
-     * @return image or false in case of error.
+     * @return string|false in case of error.
      * @protected
      */
     protected function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
@@ -2418,7 +2419,7 @@ class DNS1D {
         return $path;
     }
 
-    protected function setStorPath($path) {
+    public function setStorPath($path) {
         $this->store_path = $path;
         return $this;
     }
