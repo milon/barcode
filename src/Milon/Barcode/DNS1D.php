@@ -129,10 +129,11 @@ class DNS1D {
      * @param $w (int) Width of a single bar element in pixels.
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (string) Foreground color for bar elements (background is transparent).
+     * @param $showcode (int) font size of the shown code, default 0.
      * @return string HTML code.
      * @protected
      */
-    protected function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =false) {
+    protected function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -145,7 +146,7 @@ class DNS1D {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
         if($showCode)
-                $bh -= 12 ;
+            $bh -= ($showCode + 12);
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
                 // draw a vertical bar
@@ -154,7 +155,7 @@ class DNS1D {
             $x += $bw;
         }
     if($showCode)
-            $html .= '<div style="position:absolute;bottom:0; text-align:center; width:' . ($this->barcode_array['maxw'] * $w) . 'px;  font-size: 0.6vw;">'. $code .'</div>';
+            $html .= '<div style="position:absolute;bottom:0; text-align:center;color:' . $color . '; width:' . ($this->barcode_array['maxw'] * $w) . 'px;  font-size: ' . $showCode . 'px;">' . $code . '</div>';
 
         $html .= '</div>' . "\n";
         return $html;
