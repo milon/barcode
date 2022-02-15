@@ -2,67 +2,15 @@
 
 namespace Milon\Barcode;
 
-//============================================================+
-// File name   : tcpdf_barcodes_1d.php
-// Version     : 1.0.027
-// Begin       : 2008-06-09
-// Last Update : 2014-10-20
-// Author      : Nicola Asuni - Tecnick.com LTD - www.tecnick.com - info@tecnick.com
-// License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
-// -------------------------------------------------------------------
-// Copyright (C) 2008-2014 Nicola Asuni - Tecnick.com LTD
-//
-// This file is part of TCPDF software library.
-//
-// TCPDF is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as
-// published by the Free Software Foundation, either version 3 of the
-// License, or (at your option) any later version.
-//
-// TCPDF is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-// See the GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with TCPDF.  If not, see <http://www.gnu.org/licenses/>.
-//
-// See LICENSE.TXT file for more information.
-// -------------------------------------------------------------------
-//
-// Description : PHP class to creates array representations for
-//               common 1D barcodes to be used with TCPDF.
-//
-//============================================================+
-/**
- * @file
- * PHP class to creates array representations for common 1D barcodes to be used with TCPDF.
- * @package com.tecnick.tcpdf
- * @author Nicola Asuni
- * @version 1.0.027
- */
-/**
- * @class TCPDFBarcode
- * PHP class to creates array representations for common 1D barcodes to be used with TCPDF (http://www.tcpdf.org).<br>
- * @package com.tecnick.tcpdf
- * @version 1.0.027
- * @author Nicola Asuni
- */
-
 use Illuminate\Support\Str;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  * Description of DNS1D
  *
  * @author dinesh
  */
-class DNS1D {
-
+class DNS1D
+{
     /**
      * Array representation of barcode.
      * @protected
@@ -77,21 +25,21 @@ class DNS1D {
 
     /**
      * Return a SVG string representation of barcode.
+     *
      * @param $code (string) code to print
      * @param $type (string) type of barcode: <ul><li>C39 : CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.</li><li>C39+ : CODE 39 with checksum</li><li>C39E : CODE 39 EXTENDED</li><li>C39E+ : CODE 39 EXTENDED + CHECKSUM</li><li>C93 : CODE 93 - USS-93</li><li>S25 : Standard 2 of 5</li><li>S25+ : Standard 2 of 5 + CHECKSUM</li><li>I25 : Interleaved 2 of 5</li><li>I25+ : Interleaved 2 of 5 + CHECKSUM</li><li>C128 : CODE 128</li><li>C128A : CODE 128 A</li><li>C128B : CODE 128 B</li><li>C128C : CODE 128 C</li><li>EAN2 : 2-Digits UPC-Based Extention</li><li>EAN5 : 5-Digits UPC-Based Extention</li><li>EAN8 : EAN 8</li><li>EAN13 : EAN 13</li><li>UPCA : UPC-A</li><li>UPCE : UPC-E</li><li>MSI : MSI (Variation of Plessey code)</li><li>MSI+ : MSI + CHECKSUM (modulo 11)</li><li>POSTNET : POSTNET</li><li>PLANET : PLANET</li><li>RMS4CC : RMS4CC (Royal Mail 4-state Customer Code) - CBC (Customer Bar Code)</li><li>KIX : KIX (Klant index - Customer index)</li><li>IMB: Intelligent Mail Barcode - Onecode - USPS-B-3200</li><li>CODABAR : CODABAR</li><li>CODE11 : CODE 11</li><li>PHARMA : PHARMACODE</li><li>PHARMA2T : PHARMACODE TWO-TRACKS</li></ul>
      * @param $w (int) Minimum width of a single bar in user units.
      * @param $h (int) Height of barcode in user units.
      * @param $color (string) Foreground color (in SVG format) for bar elements (background is transparent).
      * @return string SVG code.
-     * @protected
      */
-    public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
+    public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false)
+    {
         $this->setBarcode($code, $type);
         // replace table for special characters
-        $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
+        $repstr = ["\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;'];
         $svg = '';
-        if (!$inline)
-        {
+        if (!$inline) {
             $svg = '<' . '?' . 'xml version="1.0" standalone="no"' . '?' . '>' . "\n";
             $svg .= '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' . "\n";
         }
@@ -111,16 +59,19 @@ class DNS1D {
             }
             $x += $bw;
         }
-        if($showCode)
-            $svg .= "\t" .'<text x="'. (round(($this->barcode_array['maxw'] * $w), 3)/2)  .'" text-anchor="middle"  y="'.  ($bh + 12) .'" id="code" fill="' . $color . '" font-size ="12px" >'. $code .'</text>'. "\n";
+        if ($showCode) {
+            $svg .= "\t" . '<text x="' . (round(($this->barcode_array['maxw'] * $w), 3) / 2) . '" text-anchor="middle"  y="' . ($bh + 12) . '" id="code" fill="' . $color . '" font-size ="12px" >' . $code . '</text>' . "\n";
+        }
 
         $svg .= "\t" . '</g>' . "\n";
         $svg .= '</svg>' . "\n";
+
         return $svg;
     }
 
     /**
      * Return an HTML representation of barcode.
+     *
      * @param $code (string) code to print
      * @param $type (string) type of barcode: <ul><li>C39 : CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.</li><li>C39+ : CODE 39 with checksum</li><li>C39E : CODE 39 EXTENDED</li><li>C39E+ : CODE 39 EXTENDED + CHECKSUM</li><li>C93 : CODE 93 - USS-93</li><li>S25 : Standard 2 of 5</li><li>S25+ : Standard 2 of 5 + CHECKSUM</li><li>I25 : Interleaved 2 of 5</li><li>I25+ : Interleaved 2 of 5 + CHECKSUM</li><li>C128 : CODE 128</li><li>C128A : CODE 128 A</li><li>C128B : CODE 128 B</li><li>C128C : CODE 128 C</li><li>EAN2 : 2-Digits UPC-Based Extention</li><li>EAN5 : 5-Digits UPC-Based Extention</li><li>EAN8 : EAN 8</li><li>EAN13 : EAN 13</li><li>UPCA : UPC-A</li><li>UPCE : UPC-E</li><li>MSI : MSI (Variation of Plessey code)</li><li>MSI+ : MSI + CHECKSUM (modulo 11)</li><li>POSTNET : POSTNET</li><li>PLANET : PLANET</li><li>RMS4CC : RMS4CC (Royal Mail 4-state Customer Code) - CBC (Customer Bar Code)</li><li>KIX : KIX (Klant index - Customer index)</li><li>IMB: Intelligent Mail Barcode - Onecode - USPS-B-3200</li><li>CODABAR : CODABAR</li><li>CODE11 : CODE 11</li><li>PHARMA : PHARMACODE</li><li>PHARMA2T : PHARMACODE TWO-TRACKS</li></ul>
      * @param $w (int) Width of a single bar element in pixels.
@@ -129,17 +80,18 @@ class DNS1D {
      * @param $showcode (int) font size of the shown code, default 0.
      * @return string HTML code.
      */
-    public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0) {
+    public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0)
+    {
         $this->setBarcode($code, $type);
-        $html = '<div style="font-size:0;position:relative;">' . "\n";
         $html = '<div style="font-size:0;position:relative;width:' . ($this->barcode_array['maxw'] * $w) . 'px;height:' . ($h) . 'px;">' . "\n";
         // print bars
         $x = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-        if($showCode)
-            $bh -= ($showCode + 12);
+            if ($showCode) {
+                $bh -= ($showCode + 12);
+            }
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
                 // draw a vertical bar
@@ -147,10 +99,12 @@ class DNS1D {
             }
             $x += $bw;
         }
-    if($showCode)
+        if ($showCode) {
             $html .= '<div style="position:absolute;bottom:0; text-align:center;color:' . $color . '; width:' . ($this->barcode_array['maxw'] * $w) . 'px;  font-size: ' . $showCode . 'px;">' . $code . '</div>';
+        }
 
         $html .= '</div>' . "\n";
+
         return $html;
     }
 
@@ -163,7 +117,8 @@ class DNS1D {
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return string|false in case of error.
      */
-    public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = [0, 0, 0], $showCode = false) {
+    public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = [0, 0, 0], $showCode = false)
+    {
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
@@ -191,8 +146,9 @@ class DNS1D {
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-        if($showCode)
-                $bh -= imagefontheight(3) ;
+            if ($showCode) {
+                $bh -= imagefontheight(3);
+            }
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
                 // draw a vertical bar
@@ -206,16 +162,16 @@ class DNS1D {
         }
         ob_start();
 
-    // Add Code String in bottom
-        if($showCode)
+        // Add Code String in bottom
+        if ($showCode) {
             if ($imagick) {
-            $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
-            $bar->annotation( 10 , $h - $bh +10 , $code );
-        } else {
-            $width_text = imagefontwidth(3) * strlen($code);
-            $height_text = imagefontheight(3);
-            imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
-
+                $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
+                $bar->annotation(10, $h - $bh + 10, $code);
+            } else {
+                $width_text = imagefontwidth(3) * strlen($code);
+                $height_text = imagefontheight(3);
+                imagestring($png, 3, ($width / 2) - ($width_text / 2), ($height - $height_text), $code, $fgcol);
+            }
         }
         // get image out put
         if ($imagick) {
@@ -228,6 +184,7 @@ class DNS1D {
         $image = ob_get_clean();
         $image = base64_encode($image);
         //$image = 'data:image/png;base64,' . base64_encode($image);
+
         return $image;
     }
 
@@ -250,7 +207,8 @@ class DNS1D {
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return path or false in case of error.
      */
-    public function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = [0, 0, 0], $showCode = false) {
+    public function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = [0, 0, 0], $showCode = false)
+    {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -267,7 +225,6 @@ class DNS1D {
             $fgcol = imagecolorallocate($png, $color[0], $color[1], $color[2]);
         } elseif (extension_loaded('imagick')) {
             $imagick = true;
-            $bgcol = new imagickpixel('rgb(255,255,255');
             $fgcol = new imagickpixel('rgb(' . $color[0] . ',' . $color[1] . ',' . $color[2] . ')');
             $png = new Imagick();
             $png->newImage($width, $height, 'none', 'png');
@@ -282,8 +239,9 @@ class DNS1D {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
 
-        if($showCode)
-                 $bh -= imagefontheight(3) ;
+            if ($showCode) {
+                $bh -= imagefontheight(3);
+            }
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
                 // draw a vertical bar
@@ -295,15 +253,16 @@ class DNS1D {
             }
             $x += $bw;
         }
-        if($showCode)
+        if ($showCode) {
             if ($imagick) {
                 $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
-                $bar->annotation( 10 , $h - $bh +10 , $code );
+                $bar->annotation(10, $h - $bh + 10, $code);
             } else {
                 $width_text = imagefontwidth(3) * strlen($code);
                 $height_text = imagefontheight(3);
-                imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
+                imagestring($png, 3, ($width / 2) - ($width_text / 2), ($height - $height_text), $code, $fgcol);
             }
+        }
 
         $file_name= Str::slug($code);
         $save_file = $this->checkfile($this->store_path . $file_name . ".png");
@@ -318,10 +277,11 @@ class DNS1D {
                 return str_replace(public_path(), '', $save_file);
             }
             return $save_file;
-        } else {
-            imagedestroy($png);
-            return $code;
         }
+
+        imagedestroy($png);
+
+        return $code;
     }
 
     /**
@@ -334,7 +294,8 @@ class DNS1D {
      * @return url or false in case of error.
      * @protected
      */
-    protected function getBarcodePNGUri($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
+    public function getBarcodePNGUri($code, $type, $w = 2, $h = 30, $color = [0, 0, 0])
+    {
         $path = $this->getBarcodePNGPath($code, $type, $w, $h, $color);
         // Replace backslash (Windows) with forward slashes, to make it compatible with url().
         return url(str_replace('\\', '/', $path));
@@ -347,7 +308,8 @@ class DNS1D {
      * @return array barcode array
      * @protected
      */
-    protected function setBarcode($code, $type) {
+    protected function setBarcode($code, $type)
+    {
         switch (strtoupper($type)) {
             case 'C39': { // CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.
                     $arrcode = $this->barcode_code39($code, false, false);
@@ -487,7 +449,8 @@ class DNS1D {
      * @return array barcode representation.
      * @protected
      */
-    protected function barcode_code39($code, $extended = false, $checksum = false) {
+    protected function barcode_code39($code, $extended = false, $checksum = false)
+    {
         $chr['0'] = '111331311';
         $chr['1'] = '311311113';
         $chr['2'] = '113311113';
@@ -571,6 +534,7 @@ class DNS1D {
             $bararray['maxw'] += 1;
             ++$k;
         }
+
         return $bararray;
     }
 
@@ -578,10 +542,10 @@ class DNS1D {
      * Encode a string to be used for CODE 39 Extended mode.
      * @param $code (string) code to represent.
      * @return encoded string.
-     * @protected
      */
-    protected function encode_code39_ext($code) {
-        $encode = array(
+    protected function encode_code39_ext($code)
+    {
+        $encode = [
             chr(0) => '%U', chr(1) => '$A', chr(2) => '$B', chr(3) => '$C',
             chr(4) => '$D', chr(5) => '$E', chr(6) => '$F', chr(7) => '$G',
             chr(8) => '$H', chr(9) => '$I', chr(10) => '$J', chr(11) => '£K',
@@ -613,7 +577,9 @@ class DNS1D {
             chr(112) => '+P', chr(113) => '+Q', chr(114) => '+R', chr(115) => '+S',
             chr(116) => '+T', chr(117) => '+U', chr(118) => '+V', chr(119) => '+W',
             chr(120) => '+X', chr(121) => '+Y', chr(122) => '+Z', chr(123) => '%P',
-            chr(124) => '%Q', chr(125) => '%R', chr(126) => '%S', chr(127) => '%T');
+            chr(124) => '%Q', chr(125) => '%R', chr(126) => '%S', chr(127) => '%T'
+        ];
+
         $code_ext = '';
         $clen = strlen($code);
         for ($i = 0; $i < $clen; ++$i) {
@@ -622,6 +588,7 @@ class DNS1D {
             }
             $code_ext .= $encode[$code[$i]];
         }
+
         return $code_ext;
     }
 
@@ -629,9 +596,9 @@ class DNS1D {
      * Calculate CODE 39 checksum (modulo 43).
      * @param $code (string) code to represent.
      * @return char checksum.
-     * @protected
      */
-    protected function checksum_code39($code) {
+    protected function checksum_code39($code)
+    {
         $chars = array(
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
@@ -652,9 +619,9 @@ class DNS1D {
      * Compact code similar to Code 39
      * @param $code (string) code to represent.
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_code93($code) {
+    protected function barcode_code93($code)
+    {
         $chr[48] = '131112'; // 0
         $chr[49] = '111213'; // 1
         $chr[50] = '111312'; // 2
@@ -704,7 +671,7 @@ class DNS1D {
         $chr[131] = '312111'; // (%)
         $chr[42] = '111141'; // start-stop
         $code = strtoupper($code);
-        $encode = array(
+        $encode = [
             chr(0) => chr(131) . 'U', chr(1) => chr(128) . 'A', chr(2) => chr(128) . 'B', chr(3) => chr(128) . 'C',
             chr(4) => chr(128) . 'D', chr(5) => chr(128) . 'E', chr(6) => chr(128) . 'F', chr(7) => chr(128) . 'G',
             chr(8) => chr(128) . 'H', chr(9) => chr(128) . 'I', chr(10) => chr(128) . 'J', chr(11) => '£K',
@@ -736,7 +703,9 @@ class DNS1D {
             chr(112) => chr(130) . 'P', chr(113) => chr(130) . 'Q', chr(114) => chr(130) . 'R', chr(115) => chr(130) . 'S',
             chr(116) => chr(130) . 'T', chr(117) => chr(130) . 'U', chr(118) => chr(130) . 'V', chr(119) => chr(130) . 'W',
             chr(120) => chr(130) . 'X', chr(121) => chr(130) . 'Y', chr(122) => chr(130) . 'Z', chr(123) => chr(131) . 'P',
-            chr(124) => chr(131) . 'Q', chr(125) => chr(131) . 'R', chr(126) => chr(131) . 'S', chr(127) => chr(131) . 'T');
+            chr(124) => chr(131) . 'Q', chr(125) => chr(131) . 'R', chr(126) => chr(131) . 'S', chr(127) => chr(131) . 'T'
+        ];
+
         $code_ext = '';
         $clen = strlen($code);
         for ($i = 0; $i < $clen; ++$i) {
@@ -772,7 +741,7 @@ class DNS1D {
         }
         $bararray['bcode'][$k] = array('t' => true, 'w' => 1, 'h' => 1, 'p' => 0);
         $bararray['maxw'] += 1;
-        ++$k;
+
         return $bararray;
     }
 
@@ -780,9 +749,9 @@ class DNS1D {
      * Calculate CODE 93 checksum (modulo 47).
      * @param $code (string) code to represent.
      * @return string checksum code.
-     * @protected
      */
-    protected function checksum_code93($code) {
+    protected function checksum_code93($code)
+    {
         $chars = array(
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
@@ -822,6 +791,7 @@ class DNS1D {
         $checksum = $c . $k;
         // resto respecial characters
         $checksum = strtr($checksum, '<=>?', chr(128) . chr(131) . chr(129) . chr(130));
+
         return $checksum;
     }
 
@@ -829,9 +799,9 @@ class DNS1D {
      * Checksum for standard 2 of 5 barcodes.
      * @param $code (string) code to process.
      * @return int checksum.
-     * @protected
      */
-    protected function checksum_s25($code) {
+    protected function checksum_s25($code)
+    {
         $len = strlen($code);
         $sum = 0;
         for ($i = 0; $i < $len; $i+=2) {
@@ -855,9 +825,9 @@ class DNS1D {
      * @param $code (string) code to represent.
      * @param $checksum (boolean) if true add a checksum to the code (modulo 11)
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_msi($code, $checksum = false) {
+    protected function barcode_msi($code, $checksum = false)
+    {
         $chr['0'] = '100100100100';
         $chr['1'] = '100100100110';
         $chr['2'] = '100100110100';
@@ -874,6 +844,7 @@ class DNS1D {
         $chr['D'] = '110110100110';
         $chr['E'] = '110110110100';
         $chr['F'] = '110110110110';
+
         if ($checksum) {
             // add checksum
             $clen = strlen($code);
@@ -892,6 +863,7 @@ class DNS1D {
             }
             $code .= $check;
         }
+
         $seq = '110'; // left guard
         $clen = strlen($code);
         for ($i = 0; $i < $clen; ++$i) {
@@ -903,7 +875,8 @@ class DNS1D {
             $seq .= $chr[$digit];
         }
         $seq .= '1001'; // right guard
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
+
         return $this->binseq_to_array($seq, $bararray);
     }
 
@@ -916,7 +889,8 @@ class DNS1D {
      * @return array barcode representation.
      * @protected
      */
-    protected function barcode_s25($code, $checksum = false) {
+    protected function barcode_s25($code, $checksum = false)
+    {
         $chr['0'] = '10101110111010';
         $chr['1'] = '11101010101110';
         $chr['2'] = '10111010101110';
@@ -946,7 +920,8 @@ class DNS1D {
             $seq .= $chr[$digit];
         }
         $seq .= '1101011';
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
+
         return $this->binseq_to_array($seq, $bararray);
     }
 
@@ -956,9 +931,9 @@ class DNS1D {
      * @param $bararray (array) barcode array.
      * òparam array $bararray DNS1DBarcode barcode array to fill up
      * @return array barcode representation.
-     * @protected
      */
-    protected function binseq_to_array($seq, $bararray) {
+    protected function binseq_to_array($seq, $bararray)
+    {
         $len = strlen($seq);
         $w = 0;
         $k = 0;
@@ -970,12 +945,13 @@ class DNS1D {
                 } else {
                     $t = false; // space
                 }
-                $bararray['bcode'][$k] = array('t' => $t, 'w' => $w, 'h' => 1, 'p' => 0);
+                $bararray['bcode'][$k] = ['t' => $t, 'w' => $w, 'h' => 1, 'p' => 0];
                 $bararray['maxw'] += $w;
                 ++$k;
                 $w = 0;
             }
         }
+
         return $bararray;
     }
 
@@ -986,9 +962,9 @@ class DNS1D {
      * @param $code (string) code to represent.
      * @param $checksum (boolean) if true add a checksum to the code
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_i25($code, $checksum = false) {
+    protected function barcode_i25($code, $checksum = false)
+    {
         $chr['0'] = '11221';
         $chr['1'] = '21112';
         $chr['2'] = '12112';
@@ -1012,7 +988,7 @@ class DNS1D {
         // add start and stop codes
         $code = 'AA' . strtolower($code) . 'ZA';
 
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
         $k = 0;
         $clen = strlen($code);
         for ($i = 0; $i < $clen; $i = ($i + 2)) {
@@ -1041,6 +1017,7 @@ class DNS1D {
                 ++$k;
             }
         }
+
         return $bararray;
     }
 
@@ -1050,9 +1027,9 @@ class DNS1D {
      * @param $code (string) code to represent.
      * @param $type (string) barcode type: A, B, C or empty for automatic switch (AUTO mode)
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_c128($code, $type = '') {
+    protected function barcode_c128($code, $type = '')
+    {
         $chr = array(
             '212222', /* 00 */
             '222122', /* 01 */
@@ -1172,10 +1149,10 @@ class DNS1D {
         // ASCII characters for code B (ASCII 32 - 127)
         $keys_b = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~' . chr(127);
         // special codes
-        $fnc_a = array(241 => 102, 242 => 97, 243 => 96, 244 => 101);
-        $fnc_b = array(241 => 102, 242 => 97, 243 => 96, 244 => 100);
+        $fnc_a = [241 => 102, 242 => 97, 243 => 96, 244 => 101];
+        $fnc_b = [241 => 102, 242 => 97, 243 => 96, 244 => 100];
         // array of symbols
-        $code_data = array();
+        $code_data = [];
         // lenght of the code
         $len = strlen($code);
         switch (strtoupper($type)) {
@@ -1359,7 +1336,7 @@ class DNS1D {
         // add start code at the beginning
         array_unshift($code_data, $startid);
         // build barcode array
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
         foreach ($code_data as $val) {
             $seq = $chr[$val];
             for ($j = 0; $j < 6; ++$j) {
@@ -1373,6 +1350,7 @@ class DNS1D {
                 $bararray['maxw'] += $w;
             }
         }
+
         return $bararray;
     }
 
@@ -1380,13 +1358,13 @@ class DNS1D {
      * Split text code in A/B sequence for 128 code
      * @param $code (string) code to split.
      * @return array sequence
-     * @protected
      */
-    protected function get128ABsequence($code) {
+    protected function get128ABsequence($code)
+    {
         $len = strlen($code);
-        $sequence = array();
+        $sequence = [];
         // get A sequences (if any)
-        $numseq = array();
+        $numseq = [];
         preg_match_all('/([\0-\31])/', $code, $numseq, PREG_OFFSET_CAPTURE);
         if (isset($numseq[1]) AND !empty($numseq[1])) {
             $end_offset = 0;
@@ -1394,20 +1372,21 @@ class DNS1D {
                 $offset = $val[1];
                 if ($offset > $end_offset) {
                     // B sequence
-                    $sequence[] = array('B', substr($code, $end_offset, ($offset - $end_offset)), ($offset - $end_offset));
+                    $sequence[] = ['B', substr($code, $end_offset, ($offset - $end_offset)), ($offset - $end_offset)];
                 }
                 // A sequence
                 $slen = strlen($val[0]);
-                $sequence[] = array('A', substr($code, $offset, $slen), $slen);
+                $sequence[] = ['A', substr($code, $offset, $slen), $slen];
                 $end_offset = $offset + $slen;
             }
             if ($end_offset < $len) {
-                $sequence[] = array('B', substr($code, $end_offset), ($len - $end_offset));
+                $sequence[] = ['B', substr($code, $end_offset), ($len - $end_offset)];
             }
         } else {
             // only B sequence
-            $sequence[] = array('B', $code, $len);
+            $sequence[] = ['B', $code, $len];
         }
+
         return $sequence;
     }
 
@@ -1419,9 +1398,9 @@ class DNS1D {
      * @param $code (string) code to represent.
      * @param $len (string) barcode type: 6 = UPC-E, 8 = EAN8, 13 = EAN13, 12 = UPC-A
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_eanupc($code, $len = 13) {
+    protected function barcode_eanupc($code, $len = 13)
+    {
         if (!ctype_digit($code)) {
             throw new \InvalidArgumentException('Code must be digit. get ' . $code);
         }
@@ -1568,14 +1547,14 @@ class DNS1D {
         $k = 0;
         $seq = '101'; // left guard bar
         if ($upce) {
-            $bararray = array('code' => $upce_code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+            $bararray = ['code' => $upce_code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
             $p = $upce_parities[$code[1]][$r];
             for ($i = 0; $i < 6; ++$i) {
                 $seq .= $codes[$p[$i]][$upce_code[$i]];
             }
             $seq .= '010101'; // right guard bar
         } else {
-            $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+            $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
             $half_len = ceil($len / 2);
             if ($len == 8) {
                 for ($i = 0; $i < $half_len; ++$i) {
@@ -1619,9 +1598,9 @@ class DNS1D {
      * @param $code (string) code to represent.
      * @param $len (string) barcode type: 2 = 2-Digit, 5 = 5-Digit
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_eanext($code, $len = 5) {
+    protected function barcode_eanext($code, $len = 5)
+    {
         //Padding
         $code = str_pad($code, $len, '0', STR_PAD_LEFT);
         // calculate check digit
@@ -1684,7 +1663,7 @@ class DNS1D {
             $seq .= '01'; // separator
             $seq .= $codes[$p[$i]][$code[$i]];
         }
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
         return $this->binseq_to_array($seq, $bararray);
     }
 
@@ -1694,9 +1673,9 @@ class DNS1D {
      * @param $code (string) zip code to represent. Must be a string containing a zip code of the form DDDDD or DDDDD-DDDD.
      * @param $planet (boolean) if true print the PLANET barcode, otherwise print POSTNET
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_postnet($code, $planet = false) {
+    protected function barcode_postnet($code, $planet = false)
+    {
         // bar lenght
         if ($planet) {
             $barlen = Array(
@@ -1757,6 +1736,7 @@ class DNS1D {
         // end bar
         $bararray['bcode'][$k++] = array('t' => 1, 'w' => 1, 'h' => 2, 'p' => 0);
         $bararray['maxw'] += 1;
+
         return $bararray;
     }
 
@@ -1767,9 +1747,9 @@ class DNS1D {
      * @param $code (string) code to print
      * @param $kix (boolean) if true prints the KIX variation (doesn't use the start and end symbols, and the checksum) - in this case the house number must be sufficed with an X and placed at the end of the code.
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_rms4cc($code, $kix = false) {
+    protected function barcode_rms4cc($code, $kix = false)
+    {
         $notkix = !$kix;
         // bar mode
         // 1 = pos 1, length 2
@@ -1918,9 +1898,9 @@ class DNS1D {
      * Older code often used in library systems, sometimes in blood banks
      * @param $code (string) code to represent.
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_codabar($code) {
+    protected function barcode_codabar($code)
+    {
         $chr = array(
             '0' => '11111221',
             '1' => '11112211',
@@ -1943,7 +1923,7 @@ class DNS1D {
             'C' => '11121221',
             'D' => '11122211'
         );
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
         $k = 0;
         $w = 0;
         $seq = '';
@@ -1961,7 +1941,7 @@ class DNS1D {
                     $t = false; // space
                 }
                 $w = $seq[$j];
-                $bararray['bcode'][$k] = array('t' => $t, 'w' => $w, 'h' => 1, 'p' => 0);
+                $bararray['bcode'][$k] = ['t' => $t, 'w' => $w, 'h' => 1, 'p' => 0];
                 $bararray['maxw'] += $w;
                 ++$k;
             }
@@ -1974,10 +1954,10 @@ class DNS1D {
      * Used primarily for labeling telecommunications equipment
      * @param $code (string) code to represent.
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_code11($code) {
-        $chr = array(
+    protected function barcode_code11($code)
+    {
+        $chr = [
             '0' => '111121',
             '1' => '211121',
             '2' => '121121',
@@ -1989,9 +1969,9 @@ class DNS1D {
             '8' => '211211',
             '9' => '211111',
             '-' => '112111',
-            'S' => '112211'
-        );
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+            'S' => '112211',
+        ];
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
         $k = 0;
         $w = 0;
         $seq = '';
@@ -2057,6 +2037,7 @@ class DNS1D {
                 ++$k;
             }
         }
+
         return $bararray;
     }
 
@@ -2065,9 +2046,9 @@ class DNS1D {
      * Contains digits (0 to 9)
      * @param $code (string) code to represent.
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_pharmacode($code) {
+    protected function barcode_pharmacode($code)
+    {
         $seq = '';
         $code = intval($code);
         while ($code > 0) {
@@ -2082,7 +2063,8 @@ class DNS1D {
         }
         $seq = substr($seq, 0, -2);
         $seq = strrev($seq);
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => array());
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 1, 'bcode' => []];
+
         return $this->binseq_to_array($seq, $bararray);
     }
 
@@ -2091,9 +2073,9 @@ class DNS1D {
      * Contains digits (0 to 9)
      * @param $code (string) code to represent.
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_pharmacode2t($code) {
+    protected function barcode_pharmacode2t($code)
+    {
         $seq = '';
         $code = intval($code);
         do {
@@ -2117,7 +2099,7 @@ class DNS1D {
         } while ($code != 0);
         $seq = strrev($seq);
         $k = 0;
-        $bararray = array('code' => $code, 'maxw' => 0, 'maxh' => 2, 'bcode' => array());
+        $bararray = ['code' => $code, 'maxw' => 0, 'maxh' => 2, 'bcode' => []];
         $len = strlen($seq);
         for ($i = 0; $i < $len; ++$i) {
             switch ($seq[$i]) {
@@ -2143,6 +2125,7 @@ class DNS1D {
         }
         unset($bararray['bcode'][($k - 1)]);
         --$bararray['maxw'];
+
         return $bararray;
     }
 
@@ -2153,9 +2136,9 @@ class DNS1D {
      * The fields are described as follows:<ul><li>The Barcode Identifier shall be assigned by USPS to encode the presort identification that is currently printed in human readable form on the optional endorsement line (OEL) as well as for future USPS use. This shall be two digits, with the second digit in the range of 0–4. The allowable encoding ranges shall be 00–04, 10–14, 20–24, 30–34, 40–44, 50–54, 60–64, 70–74, 80–84, and 90–94.</li><li>The Service Type Identifier shall be assigned by USPS for any combination of services requested on the mailpiece. The allowable encoding range shall be 000http://it2.php.net/manual/en/function.dechex.php–999. Each 3-digit value shall correspond to a particular mail class with a particular combination of service(s). Each service program, such as OneCode Confirm and OneCode ACS, shall provide the list of Service Type Identifier values.</li><li>The Mailer or Customer Identifier shall be assigned by USPS as a unique, 6 or 9 digit number that identifies a business entity. The allowable encoding range for the 6 digit Mailer ID shall be 000000- 899999, while the allowable encoding range for the 9 digit Mailer ID shall be 900000000-999999999.</li><li>The Serial or Sequence Number shall be assigned by the mailer for uniquely identifying and tracking mailpieces. The allowable encoding range shall be 000000000–999999999 when used with a 6 digit Mailer ID and 000000-999999 when used with a 9 digit Mailer ID. e. The Delivery Point ZIP Code shall be assigned by the mailer for routing the mailpiece. This shall replace POSTNET for routing the mailpiece to its final delivery point. The length may be 0, 5, 9, or 11 digits. The allowable encoding ranges shall be no ZIP Code, 00000–99999,  000000000–999999999, and 00000000000–99999999999.</li></ul>
      * @param $code (string) code to print, separate the ZIP (routing code) from the rest using a minus char '-' (BarcodeID_ServiceTypeID_MailerID_SerialNumber-RoutingCode)
      * @return array barcode representation.
-     * @protected
      */
-    protected function barcode_imb($code) {
+    protected function barcode_imb($code)
+    {
         $asc_chr = array(4, 0, 2, 6, 3, 5, 1, 9, 8, 7, 1, 2, 0, 6, 4, 8, 2, 9, 5, 3, 0, 1, 3, 7, 4, 6, 8, 9, 2, 0, 5, 1, 9, 4, 3, 8, 6, 7, 1, 2, 4, 3, 9, 5, 7, 8, 3, 0, 2, 1, 4, 0, 9, 1, 7, 0, 2, 4, 6, 3, 7, 1, 9, 5, 8);
         $dsc_chr = array(7, 1, 9, 5, 8, 0, 2, 4, 6, 3, 5, 8, 9, 7, 3, 0, 6, 1, 7, 4, 6, 8, 9, 2, 5, 1, 7, 5, 4, 3, 8, 7, 6, 0, 2, 5, 4, 9, 3, 0, 1, 6, 8, 2, 0, 4, 5, 9, 6, 7, 5, 2, 6, 3, 8, 5, 1, 9, 8, 7, 4, 0, 2, 6, 3);
         $asc_pos = array(3, 0, 8, 11, 1, 12, 8, 11, 10, 6, 4, 12, 2, 7, 9, 6, 7, 9, 2, 8, 4, 0, 12, 7, 10, 9, 0, 7, 10, 5, 7, 9, 6, 8, 2, 12, 1, 4, 2, 0, 1, 5, 4, 6, 12, 1, 0, 9, 4, 7, 5, 10, 2, 6, 9, 11, 2, 12, 6, 7, 5, 11, 0, 3, 2);
@@ -2270,6 +2253,7 @@ class DNS1D {
         }
         unset($bararray['bcode'][($k - 1)]);
         --$bararray['maxw'];
+
         return $bararray;
     }
 
@@ -2279,8 +2263,8 @@ class DNS1D {
      * @param $number (string) number to convert specified as a string
      * @return string hexadecimal representation
      */
-    protected function dec_to_hex($number) {
-        $i = 0;
+    protected function dec_to_hex($number)
+    {
         $hex = array();
         if ($number == 0) {
             return '00';
@@ -2294,6 +2278,7 @@ class DNS1D {
             }
         }
         $hex = array_reverse($hex);
+
         return implode($hex);
     }
 
@@ -2303,7 +2288,8 @@ class DNS1D {
      * @param $hex (string) hexadecimal number to convert specified as a string
      * @return string hexadecimal representation
      */
-    protected function hex_to_dec($hex) {
+    protected function hex_to_dec($hex)
+    {
         $dec = 0;
         $bitval = 1;
         $len = strlen($hex);
@@ -2318,9 +2304,9 @@ class DNS1D {
      * Intelligent Mail Barcode calculation of Frame Check Sequence
      * @param $code_arr (string) array of hexadecimal values (13 bytes holding 102 bits right justified).
      * @return int 11 bit Frame Check Sequence as integer (decimal base)
-     * @protected
      */
-    protected function imb_crc11fcs($code_arr) {
+    protected function imb_crc11fcs($code_arr)
+    {
         $genpoly = 0x0F35; // generator polynomial
         $fcs = 0x07FF; // Frame Check Sequence
         // do most significant byte skipping the 2 most significant bits
@@ -2354,9 +2340,9 @@ class DNS1D {
      * Reverse unsigned short value
      * @param $num (int) value to reversr
      * @return int reversed value
-     * @protected
      */
-    protected function imb_reverse_us($num) {
+    protected function imb_reverse_us($num)
+    {
         $rev = 0;
         for ($i = 0; $i < 16; ++$i) {
             $rev <<= 1;
@@ -2371,10 +2357,10 @@ class DNS1D {
      * @param $n (int) is the type of table: 2 for 2of13 table, 5 for 5of13table
      * @param $size (int) size of table (78 for n=2 and 1287 for n=5)
      * @return array requested table
-     * @protected
      */
-    protected function imb_tables($n, $size) {
-        $table = array();
+    protected function imb_tables($n, $size)
+    {
+        $table = [];
         $lli = 0; // LUT lower index
         $lui = $size - 1; // LUT upper index
         for ($count = 0; $count < 8192; ++$count) {
@@ -2404,14 +2390,16 @@ class DNS1D {
         return $table;
     }
 
-    protected function checkfile($path) {
+    protected function checkfile($path)
+    {
         if (file_exists($path)) {
             unlink($path);
         }
         return $path;
     }
 
-    public function setStorPath($path) {
+    public function setStorPath($path)
+    {
         $this->store_path = $path;
         return $this;
     }
@@ -2420,9 +2408,9 @@ class DNS1D {
      * Convert UPC-E to UPC-A
      * @param $code (string) code to represent.
      * @return string upc-a value of upc-e
-     * @protected
      */
-    protected function upce2a($code) {
+    protected function upce2a($code)
+    {
         $manufacturer = '';
         $itemNumber = '';
 

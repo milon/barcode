@@ -2,70 +2,18 @@
 
 namespace Milon\Barcode;
 
-//============================================================+
-// File name   : tcpdf_barcodes_2d.php
-// Version     : 1.0.015
-// Begin       : 2009-04-07
-// Last Update : 2014-05-20
-// Author      : Nicola Asuni - Tecnick.com LTD - www.tecnick.com - info@tecnick.com
-// License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
-// -------------------------------------------------------------------
-// Copyright (C) 2009-2014 Nicola Asuni - Tecnick.com LTD
-//
-// This file is part of TCPDF software library.
-//
-// TCPDF is free software: you can redistribute it and/or modify it
-// under the terms of the GNU Lesser General Public License as
-// published by the Free Software Foundation, either version 3 of the
-// License, or (at your option) any later version.
-//
-// TCPDF is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-// See the GNU Lesser General Public License for more details.
-//
-// You should have received a copy of the GNU Lesser General Public License
-// along with TCPDF.  If not, see <http://www.gnu.org/licenses/>.
-//
-// See LICENSE.TXT file for more information.
-// -------------------------------------------------------------------
-//
-// Description : PHP class to creates array representations for
-//               2D barcodes to be used with TCPDF.
-//
-//============================================================+
-/**
- * @file
- * PHP class to creates array representations for 2D barcodes to be used with TCPDF.
- * @package com.tecnick.tcpdf
- * @author Nicola Asuni
- * @version 1.0.015
- */
-/**
- * @class TCPDF2DBarcode
- * PHP class to creates array representations for 2D barcodes to be used with TCPDF (http://www.tcpdf.org).
- * @package com.tecnick.tcpdf
- * @version 1.0.015
- * @author Nicola Asuni
- */
-
 use Milon\Barcode\QRcode;
 use Milon\Barcode\Datamatrix;
 use Milon\Barcode\PDF417;
 use Illuminate\Support\Str;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  * Description of DNS2D
  *
  * @author dinesh
  */
-class DNS2D {
-
+class DNS2D
+{
     /**
      * Array representation of barcode.
      * @protected
@@ -90,9 +38,9 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in user units.
      * @param $color (string) Foreground color (in SVG format) for bar elements (background is transparent).
      * @return string SVG code.
-     * @protected
      */
-    public function getBarcodeSVG($code, $type, $w = 3, $h = 3, $color = 'black') {
+    public function getBarcodeSVG($code, $type, $w = 3, $h = 3, $color = 'black')
+    {
         //set barcode code and type
         $this->setBarcode($code, $type);
         // replace table for special characters
@@ -118,6 +66,7 @@ class DNS2D {
         }
         $svg .= "\t" . '</g>' . "\n";
         $svg .= '</svg>' . "\n";
+
         return $svg;
     }
 
@@ -133,9 +82,9 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (string) Foreground color for bar elements (background is transparent).
      * @return string HTML code.
-     * @protected
      */
-    public function getBarcodeHTML($code, $type, $w = 10, $h = 10, $color = 'black') {
+    public function getBarcodeHTML($code, $type, $w = 10, $h = 10, $color = 'black')
+    {
         //set barcode code and type
         $this->setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;width:' . ($w * $this->barcode_array['num_cols']) . 'px;height:' . ($h * $this->barcode_array['num_rows']) . 'px;">' . "\n";
@@ -155,6 +104,7 @@ class DNS2D {
             $y += $h;
         }
         $html .= '</div>' . "\n";
+
         return $html;
     }
 
@@ -170,9 +120,9 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return path or false in case of error.
-     * @protected
      */
-    public function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
+    public function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = [0, 0, 0])
+    {
         //set barcode code and type
         $this->setBarcode($code, $type);
         // calculate image size
@@ -228,6 +178,7 @@ class DNS2D {
         $image = ob_get_clean();
         $image = base64_encode($image);
         //$image = 'data:image/png;base64,' . base64_encode($image);
+
         return $image;
     }
 
@@ -239,9 +190,9 @@ class DNS2D {
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return url or false in case of error.
-     * @protected
      */
-    protected function getBarcodePNGUri($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
+    public function getBarcodePNGUri($code, $type, $w = 3, $h = 3, $color = [0, 0, 0])
+    {
         $path = $this->getBarcodePNGPath($code, $type, $w, $h, $color);
         // Replace backslash (Windows) with forward slashes, to make it compatible with url().
         return url(str_replace('\\', '/', $path));
@@ -259,9 +210,9 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return path of image whice created
-     * @protected
      */
-    protected function getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
+    public function getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = [0, 0, 0])
+    {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -320,10 +271,10 @@ class DNS2D {
                 return str_replace(public_path(), '', $save_file);
             }
             return $save_file;
-        } else {
-            imagedestroy($png);
-            return $code;
         }
+
+        imagedestroy($png);
+        return $code;
     }
 
     /**
@@ -332,7 +283,8 @@ class DNS2D {
      * @param $type (string) type of barcode: <ul><li>DATAMATRIX : Datamatrix (ISO/IEC 16022)</li><li>PDF417 : PDF417 (ISO/IEC 15438:2006)</li><li>PDF417,a,e,t,s,f,o0,o1,o2,o3,o4,o5,o6 : PDF417 with parameters: a = aspect ratio (width/height); e = error correction level (0-8); t = total number of macro segments; s = macro segment index (0-99998); f = file ID; o0 = File Name (text); o1 = Segment Count (numeric); o2 = Time Stamp (numeric); o3 = Sender (text); o4 = Addressee (text); o5 = File Size (numeric); o6 = Checksum (numeric). NOTES: Parameters t, s and f are required for a Macro Control Block, all other parametrs are optional. To use a comma character ',' on text options, replace it with the character 255: "\xff".</li><li>QRCODE : QRcode Low error correction</li><li>QRCODE,L : QRcode Low error correction</li><li>QRCODE,M : QRcode Medium error correction</li><li>QRCODE,Q : QRcode Better error correction</li><li>QRCODE,H : QR-CODE Best error correction</li><li>RAW: raw mode - comma-separad list of array rows</li><li>RAW2: raw mode - array rows are surrounded by square parenthesis.</li><li>TEST : Test matrix</li></ul>
      * @return array
      */
-    protected function setBarcode($code, $type) {
+    protected function setBarcode($code, $type)
+    {
         $mode = explode(',', $type);
         $qrtype = strtoupper($mode[0]);
         switch ($qrtype) {
@@ -388,45 +340,44 @@ class DNS2D {
     }
 
     /**
-     *
      * @param type $path
      * @return type
      */
-    protected function checkfile($path) {
+    protected function checkfile($path)
+    {
         if (file_exists($path)) {
             unlink($path);
         }
         return $path;
     }
 
-    protected function setStorPath($path) {
+    protected function setStorPath($path)
+    {
         $this->store_path = rtrim($path, '/' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
     }
 
+    /**
+     * Handle dynamic method calls.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->$method(...$parameters);
+    }
 
-
-	/**
-	 * Handle dynamic method calls.
-	 *
-	 * @param  string  $method
-	 * @param  array  $parameters
-	 * @return mixed
-	 */
-	public function __call($method, $parameters)
-	{
-		return $this->$method(...$parameters);
-	}
-
-	/**
-	 * Handle dynamic static method calls.
-	 *
-	 * @param  string  $method
-	 * @param  array  $parameters
-	 * @return mixed
-	 */
-	public static function __callStatic($method, $parameters)
-	{
-		return (new static)->$method(...$parameters);
-	}
+    /**
+     * Handle dynamic static method calls.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public static function __callStatic($method, $parameters)
+    {
+        return (new static)->$method(...$parameters);
+    }
 }
