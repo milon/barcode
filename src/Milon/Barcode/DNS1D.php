@@ -2398,10 +2398,25 @@ class DNS1D
         return $path;
     }
 
+    /**
+     * @param string $path
+     * @return static self reference.
+     */
+    public function setStorePath($path)
+    {
+        $this->store_path = rtrim($path, '/' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        return $this;
+    }
+
+    /**
+     * @deprecated use {@see setStorePath()} instead
+     *
+     * @param string $path
+     * @return static
+     */
     public function setStorPath($path)
     {
-        $this->store_path = $path;
-        return $this;
+        return $this->setStorePath($path);
     }
 
     /**

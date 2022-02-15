@@ -351,10 +351,21 @@ class DNS2D
         return $path;
     }
 
-    protected function setStorPath($path)
+    protected function setStorePath($path)
     {
         $this->store_path = rtrim($path, '/' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
+    }
+
+    /**
+     * @deprecated use {@see setStorePath()} instead
+     *
+     * @param string $path
+     * @return static
+     */
+    public function setStorPath($path)
+    {
+        return $this->setStorePath($path);
     }
 
     /**

@@ -41,7 +41,7 @@ class DNS2DTest extends TestCase
     public function testGetBarcodePngPath()
     {
         $generator = new DNS2D();
-        $generator->setStorPath(__DIR__ . '/storage/');
+        $generator->setStorePath(__DIR__ . '/storage/');
 
         $pngContent = $generator->getBarcodePNGPath('4445645656', 'QRCODE',3,33, [1, 1, 1], true);
         $this->assertNotEmpty($pngContent);

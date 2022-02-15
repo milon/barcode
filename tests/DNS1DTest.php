@@ -43,7 +43,7 @@ class DNS1DTest extends TestCase
     public function testGetBarcodePngPath()
     {
         $generator = new DNS1D();
-        $generator->setStorPath(__DIR__ . '/storage/');
+        $generator->setStorePath(__DIR__ . '/storage/');
 
         $pngContent = $generator->getBarcodePNGPath('4445645656', 'C39+',3,33, [1, 1, 1], true);
         $this->assertNotEmpty($pngContent);
