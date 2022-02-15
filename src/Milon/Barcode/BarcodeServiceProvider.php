@@ -2,26 +2,19 @@
 
 namespace Milon\Barcode;
 
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
-class BarcodeServiceProvider extends ServiceProvider {
-
+class BarcodeServiceProvider extends ServiceProvider implements DeferrableProvider
+{
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
+     * Publish asset
      */
-    protected $defer = false;
-
-
-/**
- * Publish asset
- */
-	public function boot() {
-		$this->publishes([
-		 	 __DIR__.'/../../config/config.php' => config_path('barcode.php'),
-		]);
-	}
+    public function boot() {
+        $this->publishes([
+              __DIR__.'/../../config/config.php' => config_path('barcode.php'),
+        ]);
+    }
 
     /**
      * Register the service provider.
@@ -31,11 +24,11 @@ class BarcodeServiceProvider extends ServiceProvider {
     public function register() {
 
         $this->app->singleton('DNS1D', function() {
-		return new DNS1D;
-	});
-	$this->app->singleton('DNS2D', function() {
-		return new DNS2D;
-	});
+            return new DNS1D;
+        });
+        $this->app->singleton('DNS2D', function() {
+            return new DNS2D;
+        });
     }
 
     /**
@@ -44,7 +37,6 @@ class BarcodeServiceProvider extends ServiceProvider {
      * @return array
      */
     public function provides() {
-        return array("DNS1D", "DNS2D");
+        return ['DNS1D', 'DNS2D'];
     }
-
 }

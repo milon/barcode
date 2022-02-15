@@ -85,10 +85,7 @@ class DNS1D {
      * @return string SVG code.
      * @protected
      */
-    protected function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+    public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
         $this->setBarcode($code, $type);
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
@@ -105,7 +102,7 @@ class DNS1D {
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-        if($showCode)
+            if($showCode)
                 $bh -= 12;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
@@ -114,7 +111,7 @@ class DNS1D {
             }
             $x += $bw;
         }
-    if($showCode)
+        if($showCode)
             $svg .= "\t" .'<text x="'. (round(($this->barcode_array['maxw'] * $w), 3)/2)  .'" text-anchor="middle"  y="'.  ($bh + 12) .'" id="code" fill="' . $color . '" font-size ="12px" >'. $code .'</text>'. "\n";
 
         $svg .= "\t" . '</g>' . "\n";
@@ -131,12 +128,8 @@ class DNS1D {
      * @param $color (string) Foreground color for bar elements (background is transparent).
      * @param $showcode (int) font size of the shown code, default 0.
      * @return string HTML code.
-     * @protected
      */
-    protected function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+    public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0) {
         $this->setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;">' . "\n";
         $html = '<div style="font-size:0;position:relative;width:' . ($this->barcode_array['maxw'] * $w) . 'px;height:' . ($h) . 'px;">' . "\n";
@@ -169,12 +162,8 @@ class DNS1D {
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return string|false in case of error.
-     * @protected
      */
-    protected function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+    public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = [0, 0, 0], $showCode = false) {
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
@@ -260,9 +249,8 @@ class DNS1D {
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
      * @return path or false in case of error.
-     * @protected
      */
-    protected function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
+    public function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = [0, 0, 0], $showCode = false) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -307,7 +295,7 @@ class DNS1D {
             }
             $x += $bw;
         }
-    if($showCode)
+        if($showCode)
             if ($imagick) {
                 $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
                 $bar->annotation( 10 , $h - $bh +10 , $code );
@@ -326,7 +314,10 @@ class DNS1D {
         }
         if (ImagePng($png, $save_file)) {
             imagedestroy($png);
-            return str_replace(public_path(), '', $save_file);
+            if (function_exists('public_path')) {
+                return str_replace(public_path(), '', $save_file);
+            }
+            return $save_file;
         } else {
             imagedestroy($png);
             return $code;

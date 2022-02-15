@@ -93,9 +93,6 @@ class DNS2D {
      * @protected
      */
     public function getBarcodeSVG($code, $type, $w = 3, $h = 3, $color = 'black') {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
         //set barcode code and type
         $this->setBarcode($code, $type);
         // replace table for special characters
@@ -139,9 +136,6 @@ class DNS2D {
      * @protected
      */
     public function getBarcodeHTML($code, $type, $w = 10, $h = 10, $color = 'black') {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
         //set barcode code and type
         $this->setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;width:' . ($w * $this->barcode_array['num_cols']) . 'px;height:' . ($h * $this->barcode_array['num_rows']) . 'px;">' . "\n";
@@ -179,9 +173,6 @@ class DNS2D {
      * @protected
      */
     public function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
         //set barcode code and type
         $this->setBarcode($code, $type);
         // calculate image size
@@ -325,7 +316,10 @@ class DNS2D {
         }
         if (ImagePng($png, $save_file)) {
             imagedestroy($png);
-            return str_replace(public_path(), '', $save_file);
+            if (function_exists('public_path')) {
+                return str_replace(public_path(), '', $save_file);
+            }
+            return $save_file;
         } else {
             imagedestroy($png);
             return $code;
