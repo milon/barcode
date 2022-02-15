@@ -12,7 +12,7 @@ I used the following classes of that package.
 
 [Read More on TCPDF website](http://www.tcpdf.org)
 
-# This package is compatible with Laravel `4.*` , `5.*`, `6.*`, `7.*` and `8.*`
+# This package is compatible with Laravel `4.*` , `5.*`, `6.*`, `7.*`, `8.*` and `9.*`
 
 This package relies on [php-gd](http://php.net/manual/en/book.image.php) extension. So, make sure it is installed on your machine.
 
@@ -25,6 +25,14 @@ composer require milon/barcode
 ```
 
 You can also edit your project's `composer.json` file to require `milon/barcode`.
+
+```json
+"require": {
+    "milon/barcode": "^9.0"
+}
+```
+
+For Laravel 8.* use this-
 
 ```json
 "require": {
