@@ -10,9 +10,14 @@ class BarcodeServiceProvider extends ServiceProvider implements DeferrableProvid
     /**
      * Publish asset
      */
-    public function boot() {
+    public function boot()
+    {
+        if (! $this->app->runningInConsole()) {
+            return;
+        }
+
         $this->publishes([
-              __DIR__.'/../../config/config.php' => config_path('barcode.php'),
+              __DIR__ . '/../../config/config.php' => $this->app->make('path.config') . DIRECTORY_SEPARATOR . 'barcode.php',
         ]);
     }
 
@@ -21,8 +26,8 @@ class BarcodeServiceProvider extends ServiceProvider implements DeferrableProvid
      *
      * @return void
      */
-    public function register() {
-
+    public function register()
+    {
         $this->app->singleton('DNS1D', function() {
             return new DNS1D;
         });
@@ -36,7 +41,8 @@ class BarcodeServiceProvider extends ServiceProvider implements DeferrableProvid
      *
      * @return array
      */
-    public function provides() {
+    public function provides()
+    {
         return ['DNS1D', 'DNS2D'];
     }
 }
