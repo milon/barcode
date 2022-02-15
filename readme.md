@@ -1,4 +1,7 @@
-[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) [![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) [![License](https://img.shields.io/packagist/l/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![License](https://img.shields.io/packagist/l/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![Build Status](https://github.com/milon/barcode/workflows/build/badge.svg)](https://github.com/milon/barcode/actions)
 
 This is a barcode generation package inspired by <https://github.com/tecnickcom/TCPDF>. Actually, I use that package's underline classes for generating barcodes. This package is just a wrapper of that package and adds compatibility with Laravel 5.
 
