@@ -1231,7 +1231,7 @@ class DNS1D {
                     }
                     for ($i = 0; $i < $len; $i+=2) {
                         $chrnum = $code[$i] . $code[$i + 1];
-                        if (preg_match('/([0-9][2])/', $chrnum) > 0) {
+                        if (preg_match('/([0-9]{2})/', $chrnum) > 0) {
                             $code_data[] = intval($chrnum);
                         } else {
                             return false;
