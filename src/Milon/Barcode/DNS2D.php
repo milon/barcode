@@ -406,7 +406,7 @@ class DNS2D {
     }
 
     public function setStorPath($path) {
-        $this->store_path = rtrim($path, '/' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->store_path = rtrim((string) $path, '/' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         return $this;
     }
 
