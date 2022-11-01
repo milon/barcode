@@ -175,7 +175,7 @@ class DNS2D {
      * @param $w (int) Width of a single rectangle element in pixels.
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
-     * @return path or false in case of error.
+     * @return string|false path or false in case of error.
      * @protected
      */
     public function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
@@ -247,7 +247,7 @@ class DNS2D {
      * @param $w (int) Width of a single bar element in pixels.
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
-     * @return url or false in case of error.
+     * @return string|false url or false in case of error.
      * @protected
      */
     protected function getBarcodePNGUri($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
@@ -267,7 +267,7 @@ class DNS2D {
      * @param $w (int) Width of a single rectangle element in pixels.
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
-     * @return path of image whice created
+     * @return string|false path of image which was created or false in case of error
      * @protected
      */
     protected function getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0)) {
