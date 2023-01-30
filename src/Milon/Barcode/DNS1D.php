@@ -85,7 +85,7 @@ class DNS1D {
      * @return string SVG code.
      * @protected
      */
-    protected function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
+    public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -133,7 +133,7 @@ class DNS1D {
      * @return string HTML code.
      * @protected
      */
-    protected function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0) {
+    public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
@@ -171,7 +171,7 @@ class DNS1D {
      * @return string|false in case of error.
      * @protected
      */
-    protected function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
+    public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
         if (!$this->store_path) {
             $this->setStorPath(app('config')->get("barcode.store_path"));
         }
