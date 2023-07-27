@@ -202,6 +202,7 @@ echo DNS1D::getBarcodeHTML('4445645656', 'C128');
 echo DNS1D::getBarcodeHTML('4445645656', 'C128A');
 echo DNS1D::getBarcodeHTML('4445645656', 'C128B');
 echo DNS1D::getBarcodeHTML('4445645656', 'C128C');
+echo DNS1D::getBarcodeHTML('4445645656', 'GS1-128');
 echo DNS1D::getBarcodeHTML('44455656', 'EAN2');
 echo DNS1D::getBarcodeHTML('4445656', 'EAN5');
 echo DNS1D::getBarcodeHTML('4445', 'EAN8');
