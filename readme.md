@@ -130,7 +130,7 @@ For version 4.2 alias will be like this-
 
 Bar-code generator like Qr Code, PDF417, C39, C39+, C39E, C39E+, C93, S25, S25+, I25, I25+, C128, C128A, C128B, C128C, 2-Digits UPC-Based Extention, 5-Digits UPC-Based Extention, EAN 8, EAN 13, UPC-A, UPC-E, MSI (Variation of Plessey code)
 
-generator in html, png embedded base64 code and SVG canvas
+generator in html, png , jpeg embedded base64 code and SVG canvas
 
 ```php
 echo DNS1D::getBarcodeSVG('4445645656', 'PHARMA2T');
@@ -138,6 +138,8 @@ echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T');
 echo '<img src="data:image/png,' . DNS1D::getBarcodePNG('4', 'C39+') . '" alt="barcode"   />';
 echo DNS1D::getBarcodePNGPath('4445645656', 'PHARMA2T');
 echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('4', 'C39+') . '" alt="barcode"   />';
+echo DNS1D::getBarcodeJPGPath('4445645656', 'PHARMA2T');
+echo '<img src="data:image/jpeg;base64,' . DNS1D::getBarcodeJPG('4', 'C39+') . '" alt="barcode"   />';
 ```
 
 ```php
@@ -156,6 +158,8 @@ echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T',3,33);
 echo '<img src="' . DNS1D::getBarcodePNG('4', 'C39+',3,33) . '" alt="barcode"   />';
 echo DNS1D::getBarcodePNGPath('4445645656', 'PHARMA2T',3,33);
 echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('4', 'C39+',3,33) . '" alt="barcode"   />';
+echo DNS1D::getBarcodeJPGPath('4445645656', 'PHARMA2T',3,33);
+echo '<img src="data:image/jpeg;base64,' . DNS1D::getBarcodeJPG('4', 'C39+',3,33) . '" alt="barcode"   />';
 ```
 
 ## Color
@@ -166,6 +170,8 @@ echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T',3,33,'green');
 echo '<img src="' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1)) . '" alt="barcode"   />';
 echo DNS1D::getBarcodePNGPath('4445645656', 'PHARMA2T',3,33,array(255,255,0));
 echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1)) . '" alt="barcode"   />';
+echo DNS1D::getBarcodeJPGPath('4445645656', 'PHARMA2T',3,33,array(255,255,0));
+echo '<img src="data:image/jpeg;base64,' . DNS1D::getBarcodeJPG('4', 'C39+',3,33,array(1,1,1)) . '" alt="barcode"   />';
 ```
 
 ## Show Text
@@ -176,6 +182,8 @@ echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T',3,33,'green', true);
 echo '<img src="' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1), true) . '" alt="barcode"   />';
 echo DNS1D::getBarcodePNGPath('4445645656', 'PHARMA2T',3,33,array(255,255,0), true);
 echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1), true) . '" alt="barcode"   />';
+echo DNS1D::getBarcodeJPGPath('4445645656', 'PHARMA2T',3,33,array(255,255,0), true);
+echo '<img src="data:image/jpeg;base64,' . DNS1D::getBarcodeJPG('4', 'C39+',3,33,array(1,1,1), true) . '" alt="barcode"   />';
 ```
 
 ## 2D Barcodes
