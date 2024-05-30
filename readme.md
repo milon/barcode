@@ -12,7 +12,7 @@ I used the following classes of that package.
 
 [Read More on TCPDF website](http://www.tcpdf.org)
 
-# This package is compatible with Laravel `4.*` , `5.*`, `6.*`, `7.*`, `8.*`, `9.*` and `10.*`
+# This package is compatible with Laravel `4.*` , `5.*`, `6.*`, `7.*`, `8.*`, `9.*`, `10.*` and `11.*`
 
 This package relies on [php-gd](http://php.net/manual/en/book.image.php) extension. So, make sure it is installed on your machine.
 
