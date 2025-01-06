@@ -1,4 +1,6 @@
-[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) [![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) [![License](https://img.shields.io/packagist/l/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) 
+[![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) 
+[![License](https://img.shields.io/packagist/l/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
 
 This is a barcode generation package inspired by <https://github.com/tecnickcom/TCPDF>. Actually, I use that package's underline classes for generating barcodes. This package is just a wrapper of that package and adds compatibility with Laravel 5.
 
@@ -12,8 +14,6 @@ I used the following classes of that package.
 
 [Read More on TCPDF website](http://www.tcpdf.org)
 
-# This package is compatible with Laravel `4.*` , `5.*`, `6.*`, `7.*`, `8.*`, `9.*`, `10.*` and `11.*`
-
 This package relies on [php-gd](http://php.net/manual/en/book.image.php) extension. So, make sure it is installed on your machine.
 
 ## Installation
@@ -24,61 +24,26 @@ Begin by installing this package through Composer. Just run following command to
 composer require milon/barcode
 ```
 
-You can also edit your project's `composer.json` file to require `milon/barcode`.
+You can also edit your project's `composer.json` file to require `milon/barcode`. Just make sure you choosed the compatible version of the package from the following table.
 
-```json
-"require": {
-    "milon/barcode": "^9.0"
-}
-```
+## Compatibility
 
-For Laravel 8.* use this-
+| Laravel Version | Barcode Package Version |
+|-----------------|-------------------------|
+| 11.*            | ^11.0                   |
+| 10.*            | ^10.0                   |
+| 9.*             | ^9.0                    |
+| 8.*             | ^8.0                    |
+| 7.*             | ^7.0                    |
+| 6.*             | ^6.0                    |
+| 5.0 and 5.1     | ^5.1                    |
+| 4.0, 4.1, 4.2   | ^4.2                    |
 
-```json
-"require": {
-    "milon/barcode": "^8.0"
-}
-```
+## Configuration
 
-For Laravel 7.* use this-
+> If you are using version 6 or above, then the Service Provider and aliases will be published automatically. For prior versions, please follow the below instruction.
 
-```json
-"require": {
-    "milon/barcode": "^7.0"
-}
-```
-
-For Laravel 6.* use this-
-
-```json
-"require": {
-    "milon/barcode": "^6.0"
-}
-```
-
-For Laravel 5.0 and 5.1 use this-
-
-```json
-"require": {
-    "milon/barcode": "^5.1"
-}
-```
-
-For Laravel 4.0, 4.1 and 4.2 use this-
-
-```json
-"require": {
-    "milon/barcode": "^4.2"
-}
-```
-
-Next, update Composer from the Terminal:
-
-```shell script
-composer update
-```
-
-Once this operation completes, the final step is to add the service provider. Open `config/app.php`, and add a new item to the providers array.
+After updating Composer, add the service provider to your `config/app.php` file:
 
 ```php
 'providers' => [
@@ -87,7 +52,7 @@ Once this operation completes, the final step is to add the service provider. Op
 ]
 ```
 
-For version 4.* add these lines on `app/config/app.php` file-
+For Laravel version 4.*, add the following lines to your `app/config/app.php` file:
 
 ```php
 'providers' => array(
@@ -96,19 +61,7 @@ For version 4.* add these lines on `app/config/app.php` file-
 )
 ```
 
-If you want to change Bar-code's settings (Store Path etc.), you need to publish its config file(s). For that you need to run in the terminal-
-
-```shell script
-# Laravel 5.x
-php artisan vendor:publish
-
-# Laravel 4.x
-php artisan config:publish milon/barcode
-```
-
-Make sure you have write permission to the storage path. By default it sets to `/storage` folder.
-
-Now add the alias.
+**Make sure you have write permission to the storage path. By default it sets to `/storage` folder.**
 
 ```php
 'aliases' => [
@@ -127,6 +80,20 @@ For version 4.2 alias will be like this-
     'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
 )
 ```
+
+## Publishing Configuration
+
+To customize the barcode settings (e.g., store path), publish the configuration file(s) by running the appropriate command in the terminal:
+
+```shell
+# Laravel 5.x
+php artisan vendor:publish
+
+# Laravel 4.x
+php artisan config:publish milon/barcode
+```
+
+## Usage
 
 Bar-code generator like Qr Code, PDF417, C39, C39+, C39E, C39E+, C93, S25, S25+, I25, I25+, C128, C128A, C128B, C128C, 2-Digits UPC-Based Extention, 5-Digits UPC-Based Extention, EAN 8, EAN 13, UPC-A, UPC-E, MSI (Variation of Plessey code)
 
