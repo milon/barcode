@@ -2,7 +2,7 @@
 [![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) 
 [![License](https://img.shields.io/packagist/l/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
 
-This is a barcode generation package inspired by <https://github.com/tecnickcom/TCPDF>. Actually, I use that package's underline classes for generating barcodes. This package is just a wrapper of that package and adds compatibility with Laravel 5.
+This is a barcode generation package inspired by <https://github.com/tecnickcom/TCPDF>. Actually, I use that package's underline classes for generating barcodes. This package is just a wrapper of that package and adds compatibility with Laravel.
 
 I used the following classes of that package.
 
@@ -30,6 +30,7 @@ You can also edit your project's `composer.json` file to require `milon/barcode`
 
 | Laravel Version | Barcode Package Version |
 |-----------------|-------------------------|
+| 12.*            | ^12.0                   |
 | 11.*            | ^11.0                   |
 | 10.*            | ^10.0                   |
 | 9.*             | ^9.0                    |
