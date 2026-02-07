@@ -280,7 +280,7 @@ class DNS1D {
             $fgcol = imagecolorallocate($png, $color[0], $color[1], $color[2]);
         } elseif (extension_loaded('imagick')) {
             $imagick = true;
-            $bgcol = new imagickpixel('rgb(255,255,255');
+            $bgcol = new imagickpixel('rgb(255,255,255)');
             $fgcol = new imagickpixel('rgb(' . $color[0] . ',' . $color[1] . ',' . $color[2] . ')');
             $png = new Imagick();
             $png->newImage($width, $height, 'none', 'png');
@@ -2736,7 +2736,7 @@ class DNS1D {
             $fgcol = imagecolorallocate($jpg, $color[0], $color[1], $color[2]);
         } elseif (extension_loaded('imagick')) {
             $imagick = true;
-            $bgcol = new imagickpixel('rgb(255,255,255');
+            $bgcol = new imagickpixel('rgb(255,255,255)');
             $fgcol = new \imagickpixel('rgb(' . implode(',', $color) .')');
             $jpg = new Imagick();
             $jpg->newImage($width, $height, 'white', 'jpg');
