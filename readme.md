@@ -32,6 +32,7 @@ You can also edit your project's `composer.json` file to require `milon/barcode`
 
 | Laravel Version | Barcode Package Version |
 |-----------------|-------------------------|
+| 13.*            | ^13.0                   |
 | 12.*            | ^12.0                   |
 | 11.*            | ^11.0                   |
 | 10.*            | ^10.0                   |
