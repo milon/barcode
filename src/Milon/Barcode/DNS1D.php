@@ -235,7 +235,9 @@ class DNS1D {
             echo $png;
         } else {
             imagepng($png);
-            imagedestroy($png);
+            if (is_resource($png)) {
+                imagedestroy($png);
+            }
         }
         $image = ob_get_clean();
         $image = base64_encode($image);
@@ -326,10 +328,14 @@ class DNS1D {
             //echo $png;
         }
         if (ImagePng($png, $save_file)) {
-            imagedestroy($png);
+            if (is_resource($png)) {
+                imagedestroy($png);
+            }
             return str_replace(public_path(), '', $save_file);
         } else {
-            imagedestroy($png);
+            if (is_resource($png)) {
+                imagedestroy($png);
+            }
             return $code;
         }
     }
@@ -2700,7 +2706,9 @@ class DNS1D {
             echo $jpg;
         } else {
             imagejpeg($jpg);
-            imagedestroy($jpg);
+            if (is_resource($jpg)) {
+                imagedestroy($jpg);
+            }
         }
         $image = ob_get_clean();
         $image = base64_encode($image);
@@ -2782,10 +2790,14 @@ class DNS1D {
             //echo $jpg;
         }
         if (imagejpeg($jpg, $save_file)) {
-            imagedestroy($jpg);
+            if (is_resource($jpg)) {
+                imagedestroy($jpg);
+            }
             return str_replace(public_path(), '', $save_file);
         } else {
-            imagedestroy($jpg);
+            if (is_resource($jpg)) {
+                imagedestroy($jpg);
+            }
             return $code;
         }
     }
