@@ -62,11 +62,36 @@ foreach ($ones as $name => $cfg) {
 }
 
 saveScaled($dir . '/c128-white-bg.png', $d1->getBarcodePNG('WHITEBG', 'C128', 3, 70, array(0, 0, 0), false, array(255, 255, 255)), 2);
+
+$d1->setPadding(20);
+saveScaled($dir . '/c128-padding.png', $d1->getBarcodePNG('QUIETZONE', 'C128', 2, 70, array(0, 0, 0), true, array(255, 255, 255)), 2);
+$d1->setPadding(0);
+
+saveScaled($dir . '/upca-retail.png', $d1->getBarcodePNG('042100005264', 'UPCA', 3, 90, array(0, 0, 0), true, array(255, 255, 255)), 2);
+
 saveScaled($dir . '/qrcode.png', $d2->getBarcodePNG('https://milon.im', 'QRCODE', 6, 6, array(0, 0, 0), array(255, 255, 255)), 2);
 saveScaled($dir . '/qrcode-on-white.png', $d2->getBarcodePNG('https://milon.im', 'QRCODE', 6, 6, array(0, 0, 0), array(255, 255, 255)), 2);
 saveScaled($dir . '/qrcode-transparent.png', $d2->getBarcodePNG('https://milon.im', 'QRCODE', 6, 6, array(0, 0, 0), null), 2);
 saveScaled($dir . '/datamatrix.png', $d2->getBarcodePNG('DM-DEMO-12345', 'DATAMATRIX', 6, 6, array(0, 0, 0), array(255, 255, 255)), 2);
 saveScaled($dir . '/pdf417.png', $d2->getBarcodePNG('PDF417 Demo Payload', 'PDF417', 3, 3, array(0, 0, 0), array(255, 255, 255)), 2);
+
+// Demo logo for centered QR overlay screenshots
+$logoPath = $dir . '/logo-demo.png';
+$logo = imagecreatetruecolor(128, 128);
+imagealphablending($logo, false);
+imagesavealpha($logo, true);
+$clear = imagecolorallocatealpha($logo, 0, 0, 0, 127);
+imagefilledrectangle($logo, 0, 0, 127, 127, $clear);
+imagealphablending($logo, true);
+$ink = imagecolorallocate($logo, 17, 17, 17);
+$paper = imagecolorallocate($logo, 255, 255, 255);
+imagefilledellipse($logo, 64, 64, 120, 120, $ink);
+imagefilledrectangle($logo, 34, 54, 94, 74, $paper);
+imagepng($logo, $logoPath);
+
+$d2->setLogo($logoPath, 0.22);
+saveScaled($dir . '/qrcode-logo.png', $d2->getBarcodePNG('https://milon.im', 'QRCODE,H', 8, 8, array(0, 0, 0), array(255, 255, 255)), 2);
+$d2->setLogo(null);
 
 $items = array(
     array('CODE 39', 'c39.png', "DNS1D::getBarcodePNG('CODE39DEMO', 'C39', 3, 80, [0,0,0], true, [255,255,255])"),
@@ -83,6 +108,9 @@ $items = array(
     array('Pharmacode', 'pharma.png', "DNS1D::getBarcodePNG('123456', 'PHARMA', 3, 80, [0,0,0], true, [255,255,255])"),
     array('Green CODE 39', 'c39-green.png', "DNS1D::getBarcodePNG('GREENDEMO', 'C39', 3, 80, [0,128,0], true, [255,255,255])"),
     array('CODE 128 white background', 'c128-white-bg.png', "DNS1D::getBarcodePNG('WHITEBG', 'C128', 3, 70, [0,0,0], false, [255,255,255])"),
+    array('UPC-A retail layout', 'upca-retail.png', "DNS1D::getBarcodePNG('042100005264', 'UPCA', 3, 90, [0,0,0], true, [255,255,255])"),
+    array('Quiet zone padding', 'c128-padding.png', "DNS1D::setPadding(20); DNS1D::getBarcodePNG('QUIETZONE', 'C128', 2, 70, [0,0,0], true, [255,255,255])"),
+    array('QR Code with logo', 'qrcode-logo.png', "DNS2D::setLogo('logo.png', 0.22); DNS2D::getBarcodePNG('https://milon.im', 'QRCODE,H', 8, 8, [0,0,0], [255,255,255])"),
     array('QR Code', 'qrcode.png', "DNS2D::getBarcodePNG('https://milon.im', 'QRCODE', 6, 6, [0,0,0], [255,255,255])"),
     array('Data Matrix', 'datamatrix.png', "DNS2D::getBarcodePNG('DM-DEMO-12345', 'DATAMATRIX', 6, 6, [0,0,0], [255,255,255])"),
     array('PDF417', 'pdf417.png', "DNS2D::getBarcodePNG('PDF417 Demo Payload', 'PDF417', 3, 3, [0,0,0], [255,255,255])"),

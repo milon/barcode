@@ -50,7 +50,12 @@ class DNS1DTest extends TestCase
         $svg = $this->dns1d->getBarcodeSVG('5901234123457', 'EAN13', 2, 30, 'black', true, false);
 
         $this->assertStringContainsString('<svg', $svg);
-        $this->assertStringContainsString('5901234123457', $svg);
+        $this->assertStringContainsString('>5<', $svg);
+        $this->assertStringContainsString('>901234<', $svg);
+        $this->assertStringContainsString('>123457<', $svg);
+        // Guard bars taller than digit bars
+        $this->assertStringContainsString('height="30"', $svg);
+        $this->assertMatchesRegularExpression('/height="19\.0/', $svg);
     }
 
     public function testGetBarcodeSVGForC128(): void

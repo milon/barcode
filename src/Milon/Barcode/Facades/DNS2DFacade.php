@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Milon\Barcode\DNS2D setStorPath(string $path)
  * @method static \Milon\Barcode\DNS2D setPadding(int $padding)
  * @method static int getPadding()
+ * @method static \Milon\Barcode\DNS2D setLogo(?string $path, float $widthPercent = 0.2)
+ * @method static string|null getLogoPath()
  */
 class DNS2DFacade extends Facade
 {

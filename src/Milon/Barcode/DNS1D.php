@@ -96,6 +96,8 @@ class DNS1D {
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
         $pad = $this->getPadding();
+        $eanLayout = $this->usesEanUpcLayout();
+        $labelMargin = ($showCode && $eanLayout) ? max(10, $w * 6) : 0;
         $contentWidth = round(($this->barcode_array['maxw'] * $w), 3);
         $svg = '';
         if (!$inline)
@@ -103,15 +105,15 @@ class DNS1D {
             $svg = '<' . '?' . 'xml version="1.0" standalone="no"' . '?' . '>' . "\n";
             $svg .= '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' . "\n";
         }
-        $svg .= '<svg width="' . ($contentWidth + (2 * $pad)) . '" height="' . ($h + (2 * $pad)) . '" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">' . "\n";
+        $svg .= '<svg width="' . ($contentWidth + (2 * $pad) + (2 * $labelMargin)) . '" height="' . ($h + (2 * $pad)) . '" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">' . "\n";
         $svg .= "\t" . '<g id="bars" fill="' . $color . '" stroke="none">' . "\n";
         // print bars
-        $x = $pad;
+        $x = $pad + $labelMargin;
         $bh = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-        if($showCode)
+        if($showCode && !$eanLayout)
                 $bh -= 12;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
@@ -121,7 +123,11 @@ class DNS1D {
             $x += $bw;
         }
     if($showCode)
+            if ($eanLayout) {
+                $svg .= $this->buildEanUpcHriSvg($color, $w, $h, $pad, $labelMargin, $contentWidth);
+            } else {
             $svg .= "\t" .'<text x="'. (($contentWidth / 2) + $pad)  .'" text-anchor="middle"  y="'.  ($bh + 12 + $pad) .'" id="code" fill="' . $color . '" font-size ="12px" >'. $code .'</text>'. "\n";
+            }
 
         $svg .= "\t" . '</g>' . "\n";
         $svg .= '</svg>' . "\n";
@@ -182,8 +188,10 @@ class DNS1D {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
         $pad = $this->getPadding();
+        $eanLayout = $this->usesEanUpcLayout();
+        $labelMargin = ($showCode && $eanLayout) ? (int) max(10, $w * 6) : 0;
         // calculate image size
-        $width = ($this->barcode_array['maxw'] * $w) + (2 * $pad);
+        $width = ($this->barcode_array['maxw'] * $w) + (2 * $pad) + (2 * $labelMargin);
         $height = $h + (2 * $pad);
         if (function_exists('imagecreate')) {
             // GD library
@@ -206,12 +214,12 @@ class DNS1D {
             return false;
         }
         // print bars
-        $x = $pad;
+        $x = $pad + $labelMargin;
         $bh = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-        if($showCode)
+        if($showCode && !$eanLayout)
                 $bh -= imagefontheight(3) ;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
@@ -228,7 +236,9 @@ class DNS1D {
 
     // Add Code String in bottom
         if($showCode)
-            if ($imagick) {
+            if ($eanLayout && !$imagick) {
+                $this->drawEanUpcHriGd($png, $fgcol, $w, $h, $pad, $labelMargin);
+            } elseif ($imagick) {
             $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
             $bar->annotation( 10 , $h - $bh +10 + $pad , $code );
         } else {
@@ -262,6 +272,137 @@ class DNS1D {
     }
 
     /**
+     * @return bool
+     */
+    protected function usesEanUpcLayout()
+    {
+        return isset($this->barcode_array['layout']) && $this->barcode_array['layout'] === 'eanupc';
+    }
+
+    /**
+     * Draw retail-style human-readable digits for EAN/UPC (GD).
+     *
+     * @param resource|\GdImage $img
+     * @param int $fgcol
+     * @param float|int $w
+     * @param float|int $h
+     * @param int $pad
+     * @param int $labelMargin
+     * @return void
+     */
+    protected function drawEanUpcHriGd($img, $fgcol, $w, $h, $pad, $labelMargin)
+    {
+        if (empty($this->barcode_array['hri']) || !is_array($this->barcode_array['hri'])) {
+            return;
+        }
+
+        $hri = $this->barcode_array['hri'];
+        $font = 3;
+        $fh = imagefontheight($font);
+        $fw = imagefontwidth($font);
+        $contentW = $this->barcode_array['maxw'] * $w;
+        $barsLeft = $pad + $labelMargin;
+        $textY = (int) ($pad + $h - $fh);
+
+        if (isset($hri['left']) && $hri['left'] !== '') {
+            imagestring($img, $font, (int) ($barsLeft - (strlen($hri['left']) * $fw) - 2), $textY, $hri['left'], $fgcol);
+        }
+        if (isset($hri['right']) && $hri['right'] !== '') {
+            imagestring($img, $font, (int) ($barsLeft + $contentW + 2), $textY, $hri['right'], $fgcol);
+        }
+
+        if (isset($hri['middle']) && $hri['middle'] !== '') {
+            $tw = strlen($hri['middle']) * $fw;
+            imagestring($img, $font, (int) ($barsLeft + (($contentW - $tw) / 2)), $textY, $hri['middle'], $fgcol);
+            return;
+        }
+
+        $type = isset($this->barcode_array['ean_type']) ? $this->barcode_array['ean_type'] : 'EAN13';
+        if ($type === 'EAN8') {
+            $leftStart = 3;
+            $leftMods = 28;
+            $rightStart = 36;
+            $rightMods = 28;
+        } else {
+            $leftStart = 3;
+            $leftMods = 42;
+            $rightStart = 50;
+            $rightMods = 42;
+        }
+
+        if (isset($hri['middle_left']) && $hri['middle_left'] !== '') {
+            $tw = strlen($hri['middle_left']) * $fw;
+            $zoneX = $barsLeft + ($leftStart * $w);
+            $zoneW = $leftMods * $w;
+            imagestring($img, $font, (int) ($zoneX + (($zoneW - $tw) / 2)), $textY, $hri['middle_left'], $fgcol);
+        }
+        if (isset($hri['middle_right']) && $hri['middle_right'] !== '') {
+            $tw = strlen($hri['middle_right']) * $fw;
+            $zoneX = $barsLeft + ($rightStart * $w);
+            $zoneW = $rightMods * $w;
+            imagestring($img, $font, (int) ($zoneX + (($zoneW - $tw) / 2)), $textY, $hri['middle_right'], $fgcol);
+        }
+    }
+
+    /**
+     * Build retail-style human-readable digits for EAN/UPC (SVG markup fragments).
+     *
+     * @param string $color
+     * @param float|int $w
+     * @param float|int $h
+     * @param int $pad
+     * @param float|int $labelMargin
+     * @param float $contentWidth
+     * @return string
+     */
+    protected function buildEanUpcHriSvg($color, $w, $h, $pad, $labelMargin, $contentWidth)
+    {
+        if (empty($this->barcode_array['hri']) || !is_array($this->barcode_array['hri'])) {
+            return '';
+        }
+
+        $hri = $this->barcode_array['hri'];
+        $barsLeft = $pad + $labelMargin;
+        $textY = $pad + $h - 2;
+        $svg = '';
+
+        if (isset($hri['left']) && $hri['left'] !== '') {
+            $svg .= "\t" . '<text x="' . ($barsLeft - 4) . '" y="' . $textY . '" text-anchor="end" fill="' . $color . '" font-size="12px">' . $hri['left'] . '</text>' . "\n";
+        }
+        if (isset($hri['right']) && $hri['right'] !== '') {
+            $svg .= "\t" . '<text x="' . ($barsLeft + $contentWidth + 4) . '" y="' . $textY . '" text-anchor="start" fill="' . $color . '" font-size="12px">' . $hri['right'] . '</text>' . "\n";
+        }
+        if (isset($hri['middle']) && $hri['middle'] !== '') {
+            $svg .= "\t" . '<text x="' . ($barsLeft + ($contentWidth / 2)) . '" y="' . $textY . '" text-anchor="middle" fill="' . $color . '" font-size="12px">' . $hri['middle'] . '</text>' . "\n";
+            return $svg;
+        }
+
+        $type = isset($this->barcode_array['ean_type']) ? $this->barcode_array['ean_type'] : 'EAN13';
+        if ($type === 'EAN8') {
+            $leftStart = 3;
+            $leftMods = 28;
+            $rightStart = 36;
+            $rightMods = 28;
+        } else {
+            $leftStart = 3;
+            $leftMods = 42;
+            $rightStart = 50;
+            $rightMods = 42;
+        }
+
+        if (isset($hri['middle_left']) && $hri['middle_left'] !== '') {
+            $cx = $barsLeft + (($leftStart + ($leftMods / 2)) * $w);
+            $svg .= "\t" . '<text x="' . $cx . '" y="' . $textY . '" text-anchor="middle" fill="' . $color . '" font-size="12px">' . $hri['middle_left'] . '</text>' . "\n";
+        }
+        if (isset($hri['middle_right']) && $hri['middle_right'] !== '') {
+            $cx = $barsLeft + (($rightStart + ($rightMods / 2)) * $w);
+            $svg .= "\t" . '<text x="' . $cx . '" y="' . $textY . '" text-anchor="middle" fill="' . $color . '" font-size="12px">' . $hri['middle_right'] . '</text>' . "\n";
+        }
+
+        return $svg;
+    }
+
+    /**
      * Return a .png file path which create in server
      * @param $code (string) code to print
      * @param $type (string) type of barcode: <ul><li>C39 : CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.</li><li>C39+ : CODE 39 with checksum</li><li>C39E : CODE 39 EXTENDED</li><li>C39E+ : CODE 39 EXTENDED + CHECKSUM</li><li>C93 : CODE 93 - USS-93</li><li>S25 : Standard 2 of 5</li><li>S25+ : Standard 2 of 5 + CHECKSUM</li><li>I25 : Interleaved 2 of 5</li><li>I25+ : Interleaved 2 of 5 + CHECKSUM</li><li>C128 : CODE 128</li><li>C128A : CODE 128 A</li><li>C128B : CODE 128 B</li><li>C128C : CODE 128 C</li><li>EAN2 : 2-Digits UPC-Based Extention</li><li>EAN5 : 5-Digits UPC-Based Extention</li><li>EAN8 : EAN 8</li><li>EAN13 : EAN 13</li><li>UPCA : UPC-A</li><li>UPCE : UPC-E</li><li>MSI : MSI (Variation of Plessey code)</li><li>MSI+ : MSI + CHECKSUM (modulo 11)</li><li>POSTNET : POSTNET</li><li>PLANET : PLANET</li><li>RMS4CC : RMS4CC (Royal Mail 4-state Customer Code) - CBC (Customer Bar Code)</li><li>KIX : KIX (Klant index - Customer index)</li><li>IMB: Intelligent Mail Barcode - Onecode - USPS-B-3200</li><li>CODABAR : CODABAR</li><li>CODE11 : CODE 11</li><li>PHARMA : PHARMACODE</li><li>PHARMA2T : PHARMACODE TWO-TRACKS</li></ul>
@@ -277,8 +418,10 @@ class DNS1D {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
         $pad = $this->getPadding();
+        $eanLayout = $this->usesEanUpcLayout();
+        $labelMargin = ($showCode && $eanLayout) ? (int) max(10, $w * 6) : 0;
         // calculate image size
-        $width = ($this->barcode_array['maxw'] * $w) + (2 * $pad);
+        $width = ($this->barcode_array['maxw'] * $w) + (2 * $pad) + (2 * $labelMargin);
         $height = $h + (2 * $pad);
         if (function_exists('imagecreate')) {
             // GD library
@@ -301,13 +444,13 @@ class DNS1D {
             return false;
         }
         // print bars
-        $x = $pad;
+        $x = $pad + $labelMargin;
         $bh = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
 
-        if($showCode)
+        if($showCode && !$eanLayout)
                  $bh -= imagefontheight(3) ;
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
@@ -321,7 +464,9 @@ class DNS1D {
             $x += $bw;
         }
     if($showCode)
-            if ($imagick) {
+            if ($eanLayout && !$imagick) {
+                $this->drawEanUpcHriGd($png, $fgcol, $w, $h, $pad, $labelMargin);
+            } elseif ($imagick) {
                 $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
                 $bar->annotation( 10 , $h - $bh +10 + $pad , $code );
             } else {
@@ -1650,9 +1795,12 @@ class DNS1D {
             throw new \Milon\Barcode\WrongCheckDigitException($r, intval($code[$data_len]));
         }
         if ($len == 12) {
-            // UPC-A
+            // UPC-A (also used as intermediate for UPC-E)
             $code = '0' . $code;
             ++$len;
+            $wasUpca = !$upce;
+        } else {
+            $wasUpca = false;
         }
         if ($upce) {
             // convert UPC-A to UPC-E
@@ -1779,7 +1927,46 @@ class DNS1D {
             $seq .= '101'; // right guard bar
         }
         $clen = strlen($seq);
+        $guardModules = array();
+        if ($upce) {
+            // 3 left guard + 42 data + 6 right guard = 51
+            for ($i = 0; $i < 3; ++$i) {
+                $guardModules[$i] = true;
+            }
+            for ($i = 45; $i < 51; ++$i) {
+                $guardModules[$i] = true;
+            }
+        } elseif ($len == 8) {
+            // 3 + 28 + 5 + 28 + 3 = 67
+            for ($i = 0; $i < 3; ++$i) {
+                $guardModules[$i] = true;
+            }
+            for ($i = 31; $i < 36; ++$i) {
+                $guardModules[$i] = true;
+            }
+            for ($i = 64; $i < 67; ++$i) {
+                $guardModules[$i] = true;
+            }
+        } else {
+            // EAN-13 / UPC-A: 3 + 42 + 5 + 42 + 3 = 95
+            for ($i = 0; $i < 3; ++$i) {
+                $guardModules[$i] = true;
+            }
+            for ($i = 45; $i < 50; ++$i) {
+                $guardModules[$i] = true;
+            }
+            for ($i = 92; $i < 95; ++$i) {
+                $guardModules[$i] = true;
+            }
+        }
+
+        $maxh = 11;
+        $digitH = 7;
+        $bararray['maxh'] = $maxh;
+        $bararray['layout'] = 'eanupc';
         $w = 0;
+        $pos = 0;
+        $k = 0;
         for ($i = 0; $i < $clen; ++$i) {
             $w += 1;
             if (($i == ($clen - 1)) OR (($i < ($clen - 1)) AND ($seq[$i] != $seq[($i + 1)]))) {
@@ -1788,12 +1975,59 @@ class DNS1D {
                 } else {
                     $t = false; // space
                 }
-                $bararray['bcode'][$k] = array('t' => $t, 'w' => $w, 'h' => 1, 'p' => 0);
+                $isGuard = false;
+                for ($m = $pos; $m < ($pos + $w); ++$m) {
+                    if (isset($guardModules[$m])) {
+                        $isGuard = true;
+                        break;
+                    }
+                }
+                $bararray['bcode'][$k] = array(
+                    't' => $t,
+                    'w' => $w,
+                    'h' => $isGuard ? $maxh : $digitH,
+                    'p' => 0,
+                );
                 $bararray['maxw'] += $w;
                 ++$k;
+                $pos += $w;
                 $w = 0;
             }
         }
+
+        if ($upce) {
+            $bararray['ean_type'] = 'UPCE';
+            $bararray['hri'] = array(
+                'left' => substr($code, 1, 1),
+                'middle' => $upce_code,
+                'right' => substr($code, -1),
+            );
+        } elseif ($len == 8) {
+            $bararray['ean_type'] = 'EAN8';
+            $bararray['hri'] = array(
+                'left' => '',
+                'middle_left' => substr($code, 0, 4),
+                'middle_right' => substr($code, 4, 4),
+                'right' => '',
+            );
+        } elseif (!empty($wasUpca)) {
+            $bararray['ean_type'] = 'UPCA';
+            $bararray['hri'] = array(
+                'left' => substr($code, 1, 1),
+                'middle_left' => substr($code, 2, 5),
+                'middle_right' => substr($code, 7, 5),
+                'right' => substr($code, 12, 1),
+            );
+        } else {
+            $bararray['ean_type'] = 'EAN13';
+            $bararray['hri'] = array(
+                'left' => substr($code, 0, 1),
+                'middle_left' => substr($code, 1, 6),
+                'middle_right' => substr($code, 7, 6),
+                'right' => '',
+            );
+        }
+
         return $bararray;
     }
 

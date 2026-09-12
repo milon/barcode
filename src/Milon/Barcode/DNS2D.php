@@ -69,6 +69,7 @@ class DNS2D {
     use ResolvesStorePath;
     use DestroysGdImages;
     use SupportsPadding;
+    use SupportsLogo;
 
     /**
      * Array representation of barcode.
@@ -235,6 +236,7 @@ class DNS2D {
             $png->drawimage($bar);
             echo $png;
         } else {
+            $this->applyLogoToGdImage($png, (int) $width, (int) $height);
             imagepng($png);
             $this->destroyGdImage($png);
         }
@@ -328,6 +330,8 @@ class DNS2D {
         if ($imagick) {
             $png->drawimage($bar);
             //echo $png;
+        } else {
+            $this->applyLogoToGdImage($png, (int) $width, (int) $height);
         }
         if (ImagePng($png, $save_file)) {
             $this->destroyGdImage($png);
