@@ -20,25 +20,57 @@ class InvalidBarcodeExceptionTest extends TestCase
         $dns->getBarcodeSVG('123', 'NOTATYPE');
     }
 
-    public function testDns1dThrowsWhenEncodingFailsForCharset(): void
+    public function testDns1dThrowsCharsetHintForC128CWithLetters(): void
     {
         $dns = new DNS1D();
         $dns->setStorPath(sys_get_temp_dir());
 
         $this->expectException(InvalidBarcodeException::class);
-        $this->expectExceptionMessage('Unable to encode barcode of type C128C');
+        $this->expectExceptionMessage('C128C supports digits only');
 
-        // C128C only supports digits; letters cannot be encoded
         $dns->getBarcodeSVG('ABC', 'C128C');
     }
 
-    public function testDns1dThrowsForInvalidCode39Character(): void
+    public function testDns1dThrowsEvenLengthHintForC128C(): void
     {
         $dns = new DNS1D();
         $dns->setStorPath(sys_get_temp_dir());
 
         $this->expectException(InvalidBarcodeException::class);
-        $this->expectExceptionMessage('Unable to encode barcode of type C39');
+        $this->expectExceptionMessage('C128C requires an even number of digits');
+
+        $dns->getBarcodeSVG('123', 'C128C');
+    }
+
+    public function testDns1dThrowsCharsetHintForC128ALowercase(): void
+    {
+        $dns = new DNS1D();
+        $dns->setStorPath(sys_get_temp_dir());
+
+        $this->expectException(InvalidBarcodeException::class);
+        $this->expectExceptionMessage('lowercase letters are not allowed');
+
+        $dns->getBarcodeSVG('abc', 'C128A');
+    }
+
+    public function testDns1dThrowsNumericHintForEan13(): void
+    {
+        $dns = new DNS1D();
+        $dns->setStorPath(sys_get_temp_dir());
+
+        $this->expectException(InvalidBarcodeException::class);
+        $this->expectExceptionMessage('requires a numeric code');
+
+        $dns->getBarcodeSVG('MT-00001', 'EAN13');
+    }
+
+    public function testDns1dThrowsCode39CharsetHint(): void
+    {
+        $dns = new DNS1D();
+        $dns->setStorPath(sys_get_temp_dir());
+
+        $this->expectException(InvalidBarcodeException::class);
+        $this->expectExceptionMessage('CODE 39 supports digits, uppercase letters');
 
         $dns->getBarcodeSVG('hello!', 'C39');
     }
@@ -54,13 +86,13 @@ class InvalidBarcodeExceptionTest extends TestCase
         $dns->getBarcodeSVG('test', 'NOTATYPE');
     }
 
-    public function testDns2dThrowsWhenDatamatrixEncodingFails(): void
+    public function testDns2dThrowsCapacityHintForEmptyDatamatrix(): void
     {
         $dns = new DNS2D();
         $dns->setStorPath(sys_get_temp_dir());
 
         $this->expectException(InvalidBarcodeException::class);
-        $this->expectExceptionMessage('Unable to encode barcode of type DATAMATRIX');
+        $this->expectExceptionMessage('empty or exceed the maximum capacity');
 
         $dns->getBarcodeSVG('', 'DATAMATRIX');
     }

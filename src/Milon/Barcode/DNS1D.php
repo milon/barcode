@@ -487,20 +487,16 @@ class DNS1D {
                 break;
             }
             default: {
-                throw new InvalidBarcodeException('Unsupported barcode type: ' . $type);
+                throw InvalidBarcodeException::forUnsupportedType($type);
             }
         }
 
         if ($arrcode === false || !is_array($arrcode)) {
-            throw new InvalidBarcodeException(
-                'Unable to encode barcode of type ' . strtoupper($type) . ' for the given code.'
-            );
+            throw InvalidBarcodeException::forEncodingFailure($type, $code);
         }
 
         if (!isset($arrcode['maxw'], $arrcode['maxh'], $arrcode['bcode']) || !is_array($arrcode['bcode'])) {
-            throw new InvalidBarcodeException(
-                'Unable to encode barcode of type ' . strtoupper($type) . ' for the given code.'
-            );
+            throw InvalidBarcodeException::forEncodingFailure($type, $code);
         }
 
         $this->barcode_array = $arrcode;
@@ -1592,7 +1588,18 @@ class DNS1D {
      */
     protected function barcode_eanupc($code, $len = 13) {
         if (!ctype_digit($code)) {
-            throw new \InvalidArgumentException('Code must be digit. get ' . $code);
+            $eanTypes = array(
+                2 => 'EAN2',
+                5 => 'EAN5',
+                6 => 'UPCE',
+                8 => 'EAN8',
+                12 => 'UPCA',
+                13 => 'EAN13',
+            );
+            throw InvalidBarcodeException::forEncodingFailure(
+                isset($eanTypes[$len]) ? $eanTypes[$len] : 'EAN13',
+                $code
+            );
         }
 
         $upce = false;

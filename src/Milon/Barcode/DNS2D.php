@@ -389,23 +389,19 @@ class DNS2D {
                     break;
                 }
             default: {
-                    throw new InvalidBarcodeException('Unsupported barcode type: ' . $type);
+                    throw InvalidBarcodeException::forUnsupportedType($type);
                 }
         }
 
         if ($this->barcode_array === false || !is_array($this->barcode_array)) {
-            throw new InvalidBarcodeException(
-                'Unable to encode barcode of type ' . $qrtype . ' for the given code.'
-            );
+            throw InvalidBarcodeException::forEncodingFailure($qrtype, $code);
         }
 
         if (
             !isset($this->barcode_array['num_cols'], $this->barcode_array['num_rows'], $this->barcode_array['bcode'])
             || !is_array($this->barcode_array['bcode'])
         ) {
-            throw new InvalidBarcodeException(
-                'Unable to encode barcode of type ' . $qrtype . ' for the given code.'
-            );
+            throw InvalidBarcodeException::forEncodingFailure($qrtype, $code);
         }
     }
 
