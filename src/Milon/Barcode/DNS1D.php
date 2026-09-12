@@ -484,11 +484,22 @@ class DNS1D {
                 break;
             }
             default: {
-                $this->barcode_array = false;
-                    $arrcode = false;
-                    break;
+                throw new InvalidBarcodeException('Unsupported barcode type: ' . $type);
             }
         }
+
+        if ($arrcode === false || !is_array($arrcode)) {
+            throw new InvalidBarcodeException(
+                'Unable to encode barcode of type ' . strtoupper($type) . ' for the given code.'
+            );
+        }
+
+        if (!isset($arrcode['maxw'], $arrcode['maxh'], $arrcode['bcode']) || !is_array($arrcode['bcode'])) {
+            throw new InvalidBarcodeException(
+                'Unable to encode barcode of type ' . strtoupper($type) . ' for the given code.'
+            );
+        }
+
         $this->barcode_array = $arrcode;
     }
 
