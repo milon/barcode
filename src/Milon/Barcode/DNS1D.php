@@ -167,11 +167,13 @@ class DNS1D {
      * @param $type (string) type of barcode: <ul><li>C39 : CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.</li><li>C39+ : CODE 39 with checksum</li><li>C39E : CODE 39 EXTENDED</li><li>C39E+ : CODE 39 EXTENDED + CHECKSUM</li><li>C93 : CODE 93 - USS-93</li><li>S25 : Standard 2 of 5</li><li>S25+ : Standard 2 of 5 + CHECKSUM</li><li>I25 : Interleaved 2 of 5</li><li>I25+ : Interleaved 2 of 5 + CHECKSUM</li><li>C128 : CODE 128</li><li>C128A : CODE 128 A</li><li>C128B : CODE 128 B</li><li>C128C : CODE 128 C</li><li>EAN2 : 2-Digits UPC-Based Extention</li><li>EAN5 : 5-Digits UPC-Based Extention</li><li>EAN8 : EAN 8</li><li>EAN13 : EAN 13</li><li>UPCA : UPC-A</li><li>UPCE : UPC-E</li><li>MSI : MSI (Variation of Plessey code)</li><li>MSI+ : MSI + CHECKSUM (modulo 11)</li><li>POSTNET : POSTNET</li><li>PLANET : PLANET</li><li>RMS4CC : RMS4CC (Royal Mail 4-state Customer Code) - CBC (Customer Bar Code)</li><li>KIX : KIX (Klant index - Customer index)</li><li>IMB: Intelligent Mail Barcode - Onecode - USPS-B-3200</li><li>CODABAR : CODABAR</li><li>CODE11 : CODE 11</li><li>PHARMA : PHARMACODE</li><li>PHARMA2T : PHARMACODE TWO-TRACKS</li></ul>
      * @param $w (int) Width of a single bar element in pixels.
      * @param $h (int) Height of a single bar element in pixels.
-     * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
+     * @param $color (array) RGB (0-255) foreground color for bar elements.
+     * @param $showCode (bool) if true shows code string under the barcode.
+     * @param $bgcolor (array|null) RGB (0-255) background color (transparent as default).
      * @return string|false in case of error.
      * @protected
      */
-    public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
+    public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false, $bgcolor = null) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // calculate image size
@@ -181,15 +183,17 @@ class DNS1D {
             // GD library
             $imagick = false;
             $png = imagecreate($width, $height);
-            $bgcol = imagecolorallocate($png, 255, 255, 255);
-            imagecolortransparent($png, $bgcol);
+            $bgcol = imagecolorallocate($png, ...($bgcolor ?: array(255, 255, 255)));
+            if (!$bgcolor) {
+                imagecolortransparent($png, $bgcol);
+            }
             $fgcol = imagecolorallocate($png, $color[0], $color[1], $color[2]);
         } elseif (extension_loaded('imagick')) {
             $imagick = true;
-            $bgcol = new \imagickpixel('rgb(255,255,255)');
+            $bgcol = new \imagickpixel('rgb(' . implode(',', $bgcolor ?: array(255, 255, 255)) . ')');
             $fgcol = new \imagickpixel('rgb(' . $color[0] . ',' . $color[1] . ',' . $color[2] . ')');
             $png = new \Imagick();
-            $png->newImage($width, $height, 'none', 'png');
+            $png->newImage($width, $height, !$bgcolor ? 'none' : $bgcol, 'png');
             $bar = new \imagickdraw();
             $bar->setfillcolor($fgcol);
         } else {
@@ -256,11 +260,13 @@ class DNS1D {
      * @param $type (string) type of barcode: <ul><li>C39 : CODE 39 - ANSI MH10.8M-1983 - USD-3 - 3 of 9.</li><li>C39+ : CODE 39 with checksum</li><li>C39E : CODE 39 EXTENDED</li><li>C39E+ : CODE 39 EXTENDED + CHECKSUM</li><li>C93 : CODE 93 - USS-93</li><li>S25 : Standard 2 of 5</li><li>S25+ : Standard 2 of 5 + CHECKSUM</li><li>I25 : Interleaved 2 of 5</li><li>I25+ : Interleaved 2 of 5 + CHECKSUM</li><li>C128 : CODE 128</li><li>C128A : CODE 128 A</li><li>C128B : CODE 128 B</li><li>C128C : CODE 128 C</li><li>EAN2 : 2-Digits UPC-Based Extention</li><li>EAN5 : 5-Digits UPC-Based Extention</li><li>EAN8 : EAN 8</li><li>EAN13 : EAN 13</li><li>UPCA : UPC-A</li><li>UPCE : UPC-E</li><li>MSI : MSI (Variation of Plessey code)</li><li>MSI+ : MSI + CHECKSUM (modulo 11)</li><li>POSTNET : POSTNET</li><li>PLANET : PLANET</li><li>RMS4CC : RMS4CC (Royal Mail 4-state Customer Code) - CBC (Customer Bar Code)</li><li>KIX : KIX (Klant index - Customer index)</li><li>IMB: Intelligent Mail Barcode - Onecode - USPS-B-3200</li><li>CODABAR : CODABAR</li><li>CODE11 : CODE 11</li><li>PHARMA : PHARMACODE</li><li>PHARMA2T : PHARMACODE TWO-TRACKS</li></ul>
      * @param $w (int) Width of a single bar element in pixels.
      * @param $h (int) Height of a single bar element in pixels.
-     * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
+     * @param $color (array) RGB (0-255) foreground color for bar elements.
+     * @param $showCode (bool) if true shows code string under the barcode.
+     * @param $bgcolor (array|null) RGB (0-255) background color (transparent as default).
      * @return path or false in case of error.
      * @protected
      */
-    protected function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
+    protected function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false, $bgcolor = null) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // calculate image size
@@ -270,15 +276,17 @@ class DNS1D {
             // GD library
             $imagick = false;
             $png = imagecreate($width, $height);
-            $bgcol = imagecolorallocate($png, 255, 255, 255);
-            imagecolortransparent($png, $bgcol);
+            $bgcol = imagecolorallocate($png, ...($bgcolor ?: array(255, 255, 255)));
+            if (!$bgcolor) {
+                imagecolortransparent($png, $bgcol);
+            }
             $fgcol = imagecolorallocate($png, $color[0], $color[1], $color[2]);
         } elseif (extension_loaded('imagick')) {
             $imagick = true;
-            $bgcol = new imagickpixel('rgb(255,255,255)');
+            $bgcol = new imagickpixel('rgb(' . implode(',', $bgcolor ?: array(255, 255, 255)) . ')');
             $fgcol = new imagickpixel('rgb(' . $color[0] . ',' . $color[1] . ',' . $color[2] . ')');
             $png = new Imagick();
-            $png->newImage($width, $height, 'none', 'png');
+            $png->newImage($width, $height, !$bgcolor ? 'none' : $bgcol, 'png');
             $bar = new imagickdraw();
             $bar->setfillcolor($fgcol);
         } else {
