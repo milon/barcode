@@ -282,14 +282,10 @@ DNS2D::getBarcodePNG('PDF417 Demo Payload', 'PDF417', 3, 3, [0, 0, 0], [255, 255
 
 Browse all generated samples: [`docs/examples/gallery.html`](docs/examples/gallery.html)
 
-Per-example screenshots (gallery cards): [`docs/examples/screenshots/browser/`](docs/examples/screenshots/browser/)
-
 Regenerate images + gallery:
 
 ```shell
 php docs/generate-examples.php
-# optional: Chrome headless card screenshots
-bash docs/screenshot-examples.sh
 ```
 
 ---
