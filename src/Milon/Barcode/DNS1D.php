@@ -182,7 +182,7 @@ class DNS1D {
         if (function_exists('imagecreate')) {
             // GD library
             $imagick = false;
-            $png = imagecreate($width, $height);
+            $png = imagecreate((int) $width, (int) $height);
             $bgcol = imagecolorallocate($png, ...($bgcolor ?: array(255, 255, 255)));
             if (!$bgcolor) {
                 imagecolortransparent($png, $bgcol);
@@ -212,7 +212,7 @@ class DNS1D {
                 if ($imagick) {
                     $bar->rectangle($x, $y, ($x + $bw), ($y + $bh));
                 } else {
-                    imagefilledrectangle($png, $x, $y, ($x + $bw) - 1, ($y + $bh), $fgcol);
+                    imagefilledrectangle($png, (int) $x, (int) $y, (int) (($x + $bw) - 1), (int) ($y + $bh), $fgcol);
                 }
             }
             $x += $bw;
@@ -227,7 +227,7 @@ class DNS1D {
         } else {
             $width_text = imagefontwidth(3) * strlen($code);
             $height_text = imagefontheight(3);
-            imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
+            imagestring($png, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $height_text), $code, $fgcol);
 
         }
         // get image out put
@@ -275,7 +275,7 @@ class DNS1D {
         if (function_exists('imagecreate')) {
             // GD library
             $imagick = false;
-            $png = imagecreate($width, $height);
+            $png = imagecreate((int) $width, (int) $height);
             $bgcol = imagecolorallocate($png, ...($bgcolor ?: array(255, 255, 255)));
             if (!$bgcolor) {
                 imagecolortransparent($png, $bgcol);
@@ -306,7 +306,7 @@ class DNS1D {
                 if ($imagick) {
                     $bar->rectangle($x, $y, ($x + $bw), ($y + $bh));
                 } else {
-                    imagefilledrectangle($png, $x, $y, ($x + $bw) - 1, ($y + $bh), $fgcol);
+                    imagefilledrectangle($png, (int) $x, (int) $y, (int) (($x + $bw) - 1), (int) ($y + $bh), $fgcol);
                 }
             }
             $x += $bw;
@@ -318,7 +318,7 @@ class DNS1D {
             } else {
                 $width_text = imagefontwidth(3) * strlen($code);
                 $height_text = imagefontheight(3);
-                imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
+                imagestring($png, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $height_text), $code, $fgcol);
             }
 
         $file_name = $this->resolveBarcodeFilename($code, '', $filename);
@@ -2666,7 +2666,7 @@ class DNS1D {
         if (function_exists('imagecreate')) {
             // GD library
             $imagick = false;
-            $jpg = imagecreate($width, $height);
+            $jpg = imagecreate((int) $width, (int) $height);
             $bgcol = imagecolorallocate($jpg, 255, 255, 255);
             imagecolortransparent($jpg, $bgcol);
             $fgcol = imagecolorallocate($jpg, $color[0], $color[1], $color[2]);
@@ -2695,7 +2695,7 @@ class DNS1D {
                 if ($imagick) {
                     $bar->rectangle($x, $y, ($x + $bw), ($y + $bh));
                 } else {
-                    imagefilledrectangle($jpg, $x, $y, ($x + $bw) - 1, ($y + $bh), $fgcol);
+                    imagefilledrectangle($jpg, (int) $x, (int) $y, (int) (($x + $bw) - 1), (int) ($y + $bh), $fgcol);
                 }
             }
             $x += $bw;
@@ -2710,7 +2710,7 @@ class DNS1D {
         } else {
             $width_text = imagefontwidth(3) * strlen($code);
             $height_text = imagefontheight(3);
-            imagestring($jpg, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
+            imagestring($jpg, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $height_text), $code, $fgcol);
 
         }
         // get image out put
@@ -2748,7 +2748,7 @@ class DNS1D {
         if (function_exists('imagecreate')) {
             // GD library
             $imagick = false;
-            $jpg = imagecreate($width, $height);
+            $jpg = imagecreate((int) $width, (int) $height);
             $bgcol = imagecolorallocate($jpg, 255, 255, 255);
             imagecolortransparent($jpg, $bgcol);
             $fgcol = imagecolorallocate($jpg, $color[0], $color[1], $color[2]);
@@ -2777,7 +2777,7 @@ class DNS1D {
                 if ($imagick) {
                     $bar->rectangle($x, $y, ($x + $bw), ($y + $bh));
                 } else {
-                    imagefilledrectangle($jpg, $x, $y, ($x + $bw) - 1, ($y + $bh), $fgcol);
+                    imagefilledrectangle($jpg, (int) $x, (int) $y, (int) (($x + $bw) - 1), (int) ($y + $bh), $fgcol);
                 }
             }
             $x += $bw;
@@ -2789,7 +2789,7 @@ class DNS1D {
             } else {
                 $width_text = imagefontwidth(3) * strlen($code);
                 $height_text = imagefontheight(3);
-                imagestring($jpg, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
+                imagestring($jpg, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $height_text), $code, $fgcol);
             }
 
         $file_name = $this->resolveBarcodeFilename($code, '', $filename);

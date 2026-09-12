@@ -1,0 +1,72 @@
+name: Bug report
+description: Something generates incorrectly or throws unexpectedly
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please fill every section — incomplete reports are hard to reproduce.
+        This package **generates** barcodes only (no camera scanning / auth).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Expected vs actual behavior.
+      placeholder: Expected a PNG of EAN-13… instead I got InvalidBarcodeException…
+    validations:
+      required: true
+  - type: input
+    id: package-version
+    attributes:
+      label: milon/barcode version
+      placeholder: e.g. 12.0.1
+    validations:
+      required: true
+  - type: input
+    id: php-version
+    attributes:
+      label: PHP version
+      placeholder: e.g. 8.3.12
+    validations:
+      required: true
+  - type: input
+    id: laravel-version
+    attributes:
+      label: Laravel version (or "none" for standalone)
+      placeholder: e.g. 11.x / none
+    validations:
+      required: true
+  - type: input
+    id: symbology
+    attributes:
+      label: Barcode type
+      placeholder: e.g. C128, QRCODE, EAN13
+    validations:
+      required: true
+  - type: textarea
+    id: code-sample
+    attributes:
+      label: Minimal reproducible example
+      description: Exact code, payload string, and options ($w, $h, colors).
+      render: php
+      placeholder: |
+        DNS1D::getBarcodePNG('...', 'C128', 3, 80);
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Error message / stack trace
+      render: shell
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I read the README (units, Blade `{!! !!}`, `data:image/png;base64,`, bgcolor, charset table)
+          required: true
+        - label: I confirmed GD (`ext-gd`) is installed
+          required: true
+        - label: This is about generating a barcode (not scanning / camera / login)
+          required: true

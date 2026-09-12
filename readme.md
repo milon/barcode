@@ -1,231 +1,335 @@
-[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) 
-[![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode) 
+[![Packagist Downloads](https://img.shields.io/packagist/dt/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![Stable version](https://img.shields.io/packagist/v/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
 [![License](https://img.shields.io/packagist/l/milon/barcode.svg)](https://packagist.org/packages/milon/barcode)
+[![Tests](https://github.com/milon/barcode/actions/workflows/tests.yml/badge.svg)](https://github.com/milon/barcode/actions/workflows/tests.yml)
 
 ![Banner](./banner.png)
 
-This is a barcode generation package inspired by <https://github.com/tecnickcom/TCPDF>. Actually, I use that package's underline classes for generating barcodes. This package is just a wrapper of that package and adds compatibility with Laravel.
+Barcode generation for Laravel and plain PHP. This package wraps the TCPDF barcode engines (1D + QR / Data Matrix / PDF417) behind a small API that returns SVG, HTML, PNG, and JPEG.
 
-I used the following classes of that package.
+**Requires the PHP GD extension** (`ext-gd`).
 
-- src/Milon/Barcode/Datamatrix.php (include/barcodes/datamatrix.php)
-- src/Milon/Barcode/DNS1D.php (tcpdf_barcodes_1d.php)
-- src/Milon/Barcode/DNS2D.php (tcpdf_barcodes_2d.php)
-- src/Milon/Barcode/PDF417.php (include/barcodes/pdf417.php)
-- src/Milon/Barcode/QRcode.php (include/barcodes/qrcode.php)
+Examples below are real outputs from this library. Regenerate them with:
 
-[Read More on TCPDF website](http://www.tcpdf.org)
+```shell
+php docs/generate-examples.php
+```
 
-This package relies on [php-gd](http://php.net/manual/en/book.image.php) extension. So, make sure it is installed on your machine.
+---
 
 ## Installation
 
-Begin by installing this package through Composer. Just run following command to terminal-
-
-```shell script
+```shell
 composer require milon/barcode
 ```
 
-You can also edit your project's `composer.json` file to require `milon/barcode`. Just make sure you choosed the compatible version of the package from the following table.
+### Laravel compatibility
 
-## Compatibility
+| Laravel | Package |
+|---------|---------|
+| 13.* | ^13.0 |
+| 12.* | ^12.0 |
+| 11.* | ^11.0 |
+| 10.* | ^10.0 |
+| 9.* | ^9.0 |
+| 8.* | ^8.0 |
+| 7.* | ^7.0 |
+| 6.* | ^6.0 |
+| 5.0–5.1 | ^5.1 |
+| 4.x | ^4.2 |
 
-| Laravel Version | Barcode Package Version |
-|-----------------|-------------------------|
-| 13.*            | ^13.0                   |
-| 12.*            | ^12.0                   |
-| 11.*            | ^11.0                   |
-| 10.*            | ^10.0                   |
-| 9.*             | ^9.0                    |
-| 8.*             | ^8.0                    |
-| 7.*             | ^7.0                    |
-| 6.*             | ^6.0                    |
-| 5.0 and 5.1     | ^5.1                    |
-| 4.0, 4.1, 4.2   | ^4.2                    |
+Laravel 6+ auto-discovers the service provider and facades (`DNS1D`, `DNS2D`).
 
-## Configuration
-
-> If you are using version 6 or above, then the Service Provider and aliases will be published automatically. For prior versions, please follow the below instruction.
-
-After updating Composer, add the service provider to your `config/app.php` file:
-
-```php
-'providers' => [
-    // ...
-    Milon\Barcode\BarcodeServiceProvider::class,
-]
-```
-
-For Laravel version 4.*, add the following lines to your `app/config/app.php` file:
-
-```php
-'providers' => array(
-    // ...
-    'Milon\Barcode\BarcodeServiceProvider',
-)
-```
-
-**Make sure you have write permission to the storage path. By default it sets to `/storage` folder.**
-
-```php
-'aliases' => [
-    // ...
-    'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
-    'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
-]
-```
-
-For version 4.2 alias will be like this-
-
-```php
-'aliases' => array(
-    // ...
-    'DNS1D' => 'Milon\Barcode\Facades\DNS1DFacade',
-    'DNS2D' => 'Milon\Barcode\Facades\DNS2DFacade',
-)
-```
-
-## Publishing Configuration
-
-To customize the barcode settings (e.g., store path), publish the configuration file(s) by running the appropriate command in the terminal:
+### Publish config (optional)
 
 ```shell
-# Laravel 5.x
-php artisan vendor:publish
-
-# Laravel 4.x
-php artisan config:publish milon/barcode
+php artisan vendor:publish --provider="Milon\Barcode\BarcodeServiceProvider"
 ```
 
-## Usage
+Default store path is the Laravel `storage` directory (used by `*Path` helpers). Ensure the directory is writable.
 
-Bar-code generator like Qr Code, PDF417, C39, C39+, C39E, C39E+, C93, S25, S25+, I25, I25+, C128, C128A, C128B, C128C, 2-Digits UPC-Based Extention, 5-Digits UPC-Based Extention, EAN 8, EAN 13, UPC-A, UPC-E, MSI (Variation of Plessey code)
+---
 
-generator in html, png , jpeg embedded base64 code and SVG canvas
+## Quick start
 
 ```php
-echo DNS1D::getBarcodeSVG('4445645656', 'PHARMA2T');
-echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T');
-echo '<img src="data:image/png,' . DNS1D::getBarcodePNG('4', 'C39+') . '" alt="barcode"   />';
-echo DNS1D::getBarcodePNGPath('4445645656', 'PHARMA2T');
-echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('4', 'C39+') . '" alt="barcode"   />';
-echo DNS1D::getBarcodeJPGPath('4445645656', 'PHARMA2T');
-echo '<img src="data:image/jpeg;base64,' . DNS1D::getBarcodeJPG('4', 'C39+') . '" alt="barcode"   />';
+use DNS1D;
+use DNS2D;
+
+// SVG / HTML (ready to echo)
+echo DNS1D::getBarcodeSVG('CODE39DEMO', 'C39');
+echo DNS2D::getBarcodeHTML('https://example.com', 'QRCODE');
+
+// PNG / JPEG as base64 (use the data URI form)
+echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('CODE39DEMO', 'C39') . '" alt="barcode">';
+echo '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG('https://example.com', 'QRCODE') . '" alt="qr">';
 ```
+
+### Blade
+
+Always use `{!! !!}` (unescaped). PNG helpers return **raw base64**, not a full `data:` URL:
+
+```blade
+{!! DNS1D::getBarcodeHTML('5901234123457', 'EAN13') !!}
+
+<img
+  src="data:image/png;base64,{{ DNS2D::getBarcodePNG($url, 'QRCODE', 6, 6, [0,0,0], [255,255,255]) }}"
+  alt="QR code"
+>
+```
+
+---
+
+## Units: `$w` and `$h`
+
+| API | `$w` | `$h` |
+|-----|------|------|
+| **DNS1D** (1D) | Width of a **single bar** in pixels | Total barcode height in pixels |
+| **DNS2D** (QR / DM / PDF417) | Width of a **module** in pixels | Height of a **module** in pixels |
+
+Larger `$w` / `$h` = larger image. Typical starting points:
+
+- 1D labels: `$w = 2`–`3`, `$h = 50`–`80`
+- QR for screen: `$w = $h = 4`–`8`
+- QR for print: `$w = $h = 8`–`12`
+
+---
+
+## Output methods
+
+| Method | Returns |
+|--------|---------|
+| `getBarcodeSVG(...)` | SVG markup string |
+| `getBarcodeHTML(...)` | HTML (div/span) markup |
+| `getBarcodePNG(...)` | Base64-encoded PNG |
+| `getBarcodeJPG(...)` | Base64-encoded JPEG (1D) |
+| `getBarcodePNGPath(...)` | Relative path to a PNG written under the store path |
+| `getBarcodeJPGPath(...)` | Relative path to a JPEG written under the store path (1D) |
+
+### Common options
+
+**1D (`DNS1D`)**
+
+```text
+getBarcodePNG($code, $type, $w = 2, $h = 30, $color = [0,0,0], $showCode = false, $bgcolor = null)
+getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = [0,0,0], $showCode = false, $bgcolor = null, $filename = null)
+```
+
+**2D (`DNS2D`)**
+
+```text
+getBarcodePNG($code, $type, $w = 3, $h = 3, $color = [0,0,0], $bgcolor = null)
+getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = [0,0,0], $bgcolor = null, $filename = null)
+```
+
+- `$color` — RGB foreground `[r, g, b]` (SVG/HTML use CSS color strings)
+- `$showCode` — print human-readable text under 1D bars
+- `$bgcolor` — RGB background, or `null` for transparent (default)
+- `$filename` — optional custom file name for `*Path` helpers (extension optional; path segments are stripped)
 
 ```php
-echo DNS1D::getBarcodeSVG('4445645656', 'C39');
-echo DNS2D::getBarcodeHTML('4445645656', 'QRCODE');
-echo DNS2D::getBarcodePNGPath('4445645656', 'PDF417');
-echo DNS2D::getBarcodeSVG('4445645656', 'DATAMATRIX');
-echo '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG('4', 'PDF417') . '" alt="barcode"   />';
+// Custom file name → storage/.../product-42.png
+DNS2D::getBarcodePNGPath($url, 'QRCODE', 6, 6, [0, 0, 0], [255, 255, 255], 'product-42');
 ```
 
-## Width and Height example
+---
+
+## Background color (dark UI / email)
+
+Transparent PNGs disappear on dark backgrounds. Pass a white (or light) `$bgcolor`:
+
+| Transparent (default) | White background |
+|-----------------------|------------------|
+| ![Transparent QR](docs/examples/qrcode-transparent.png) | ![QR on white](docs/examples/qrcode-on-white.png) |
 
 ```php
-echo DNS1D::getBarcodeSVG('4445645656', 'PHARMA2T',3,33);
-echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T',3,33);
-echo '<img src="' . DNS1D::getBarcodePNG('4', 'C39+',3,33) . '" alt="barcode"   />';
-echo DNS1D::getBarcodePNGPath('4445645656', 'PHARMA2T',3,33);
-echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('4', 'C39+',3,33) . '" alt="barcode"   />';
-echo DNS1D::getBarcodeJPGPath('4445645656', 'PHARMA2T',3,33);
-echo '<img src="data:image/jpeg;base64,' . DNS1D::getBarcodeJPG('4', 'C39+',3,33) . '" alt="barcode"   />';
+// Recommended for dark themes and email clients
+DNS2D::getBarcodePNG($url, 'QRCODE', 6, 6, [0, 0, 0], [255, 255, 255]);
+
+DNS1D::getBarcodePNG('WHITEBG', 'C128', 3, 70, [0, 0, 0], false, [255, 255, 255]);
 ```
 
-## Color
+![CODE 128 with white background](docs/examples/c128-white-bg.png)
+
+---
+
+## Examples (with screenshots)
+
+### CODE 39
+
+![CODE 39](docs/examples/c39.png)
 
 ```php
-echo DNS1D::getBarcodeSVG('4445645656', 'PHARMA2T',3,33,'green');
-echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T',3,33,'green');
-echo '<img src="' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1)) . '" alt="barcode"   />';
-echo DNS1D::getBarcodePNGPath('4445645656', 'PHARMA2T',3,33,array(255,255,0));
-echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1)) . '" alt="barcode"   />';
-echo DNS1D::getBarcodeJPGPath('4445645656', 'PHARMA2T',3,33,array(255,255,0));
-echo '<img src="data:image/jpeg;base64,' . DNS1D::getBarcodeJPG('4', 'C39+',3,33,array(1,1,1)) . '" alt="barcode"   />';
+DNS1D::getBarcodePNG('CODE39DEMO', 'C39', 3, 80, [0, 0, 0], true, [255, 255, 255]);
 ```
 
-## Show Text
+### CODE 39+
+
+![CODE 39+](docs/examples/c39-plus.png)
 
 ```php
-echo DNS1D::getBarcodeSVG('4445645656', 'PHARMA2T',3,33,'green', true);
-echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T',3,33,'green', true);
-echo '<img src="' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1), true) . '" alt="barcode"   />';
-echo DNS1D::getBarcodePNGPath('4445645656', 'PHARMA2T',3,33,array(255,255,0), true);
-echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG('4', 'C39+',3,33,array(1,1,1), true) . '" alt="barcode"   />';
-echo DNS1D::getBarcodeJPGPath('4445645656', 'PHARMA2T',3,33,array(255,255,0), true);
-echo '<img src="data:image/jpeg;base64,' . DNS1D::getBarcodeJPG('4', 'C39+',3,33,array(1,1,1), true) . '" alt="barcode"   />';
+DNS1D::getBarcodePNG('CODE39', 'C39+', 3, 80, [0, 0, 0], true, [255, 255, 255]);
 ```
 
-## 2D Barcodes
+### CODE 128
+
+![CODE 128](docs/examples/c128.png)
 
 ```php
-echo DNS2D::getBarcodeHTML('4445645656', 'QRCODE');
-echo DNS2D::getBarcodePNGPath('4445645656', 'PDF417');
-echo DNS2D::getBarcodeSVG('4445645656', 'DATAMATRIX');
+DNS1D::getBarcodePNG('Code128Demo', 'C128', 3, 80, [0, 0, 0], true, [255, 255, 255]);
 ```
 
-## 1D Barcodes
+### CODE 128A / 128B / 128C
+
+| C128A | C128B | C128C |
+|-------|-------|-------|
+| ![C128A](docs/examples/c128a.png) | ![C128B](docs/examples/c128b.png) | ![C128C](docs/examples/c128c.png) |
 
 ```php
-echo DNS1D::getBarcodeHTML('4445645656', 'C39');
-echo DNS1D::getBarcodeHTML('4445645656', 'C39+');
-echo DNS1D::getBarcodeHTML('4445645656', 'C39E');
-echo DNS1D::getBarcodeHTML('4445645656', 'C39E+');
-echo DNS1D::getBarcodeHTML('4445645656', 'C93');
-echo DNS1D::getBarcodeHTML('4445645656', 'S25');
-echo DNS1D::getBarcodeHTML('4445645656', 'S25+');
-echo DNS1D::getBarcodeHTML('4445645656', 'I25');
-echo DNS1D::getBarcodeHTML('4445645656', 'I25+');
-echo DNS1D::getBarcodeHTML('4445645656', 'C128');
-echo DNS1D::getBarcodeHTML('4445645656', 'C128A');
-echo DNS1D::getBarcodeHTML('4445645656', 'C128B');
-echo DNS1D::getBarcodeHTML('4445645656', 'C128C');
-echo DNS1D::getBarcodeHTML('4445645656', 'GS1-128');
-echo DNS1D::getBarcodeHTML('44455656', 'EAN2');
-echo DNS1D::getBarcodeHTML('4445656', 'EAN5');
-echo DNS1D::getBarcodeHTML('4445', 'EAN8');
-echo DNS1D::getBarcodeHTML('4445', 'EAN13');
-echo DNS1D::getBarcodeHTML('4445645656', 'UPCA');
-echo DNS1D::getBarcodeHTML('4445645656', 'UPCE');
-echo DNS1D::getBarcodeHTML('4445645656', 'MSI');
-echo DNS1D::getBarcodeHTML('4445645656', 'MSI+');
-echo DNS1D::getBarcodeHTML('4445645656', 'POSTNET');
-echo DNS1D::getBarcodeHTML('4445645656', 'PLANET');
-echo DNS1D::getBarcodeHTML('4445645656', 'RMS4CC');
-echo DNS1D::getBarcodeHTML('4445645656', 'KIX');
-echo DNS1D::getBarcodeHTML('4445645656', 'IMB');
-echo DNS1D::getBarcodeHTML('4445645656', 'CODABAR');
-echo DNS1D::getBarcodeHTML('4445645656', 'CODE11');
-echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA');
-echo DNS1D::getBarcodeHTML('4445645656', 'PHARMA2T');
+DNS1D::getBarcodePNG('CODE128A', 'C128A', 3, 80, [0, 0, 0], true, [255, 255, 255]);
+DNS1D::getBarcodePNG('Code128B', 'C128B', 3, 80, [0, 0, 0], true, [255, 255, 255]);
+DNS1D::getBarcodePNG('12345678', 'C128C', 3, 80, [0, 0, 0], true, [255, 255, 255]); // digits, even length
 ```
 
-# Running without Laravel
+### EAN-13 / EAN-8 / UPC-A
 
-You can use this library without using Laravel.
-
-Example:
+| EAN-13 | EAN-8 | UPC-A |
+|--------|-------|-------|
+| ![EAN-13](docs/examples/ean13.png) | ![EAN-8](docs/examples/ean8.png) | ![UPC-A](docs/examples/upca.png) |
 
 ```php
-use \Milon\Barcode\DNS1D;
-
-$d = new DNS1D();
-$d->setStorPath(__DIR__.'/cache/');
-echo $d->getBarcodeHTML('9780691147727', 'EAN13');
+DNS1D::getBarcodePNG('5901234123457', 'EAN13', 3, 80, [0, 0, 0], true, [255, 255, 255]);
+DNS1D::getBarcodePNG('96385074', 'EAN8', 3, 80, [0, 0, 0], true, [255, 255, 255]);
+DNS1D::getBarcodePNG('042100005264', 'UPCA', 3, 80, [0, 0, 0], true, [255, 255, 255]);
 ```
+
+### Interleaved 2 of 5 / Codabar / Pharmacode
+
+| I25 | Codabar | Pharmacode |
+|-----|---------|------------|
+| ![I25](docs/examples/i25.png) | ![Codabar](docs/examples/codabar.png) | ![Pharmacode](docs/examples/pharma.png) |
+
+```php
+DNS1D::getBarcodePNG('12345670', 'I25', 3, 80, [0, 0, 0], true, [255, 255, 255]);
+DNS1D::getBarcodePNG('A123456A', 'CODABAR', 3, 80, [0, 0, 0], true, [255, 255, 255]);
+DNS1D::getBarcodePNG('123456', 'PHARMA', 3, 80, [0, 0, 0], true, [255, 255, 255]);
+```
+
+### Custom bar color
+
+![Green CODE 39](docs/examples/c39-green.png)
+
+```php
+DNS1D::getBarcodePNG('GREENDEMO', 'C39', 3, 80, [0, 128, 0], true, [255, 255, 255]);
+```
+
+### QR Code / Data Matrix / PDF417
+
+| QR Code | Data Matrix | PDF417 |
+|---------|-------------|--------|
+| ![QR](docs/examples/qrcode.png) | ![Data Matrix](docs/examples/datamatrix.png) | ![PDF417](docs/examples/pdf417.png) |
+
+```php
+DNS2D::getBarcodePNG('https://milon.im', 'QRCODE', 6, 6, [0, 0, 0], [255, 255, 255]);
+DNS2D::getBarcodePNG('DM-DEMO-12345', 'DATAMATRIX', 6, 6, [0, 0, 0], [255, 255, 255]);
+DNS2D::getBarcodePNG('PDF417 Demo Payload', 'PDF417', 3, 3, [0, 0, 0], [255, 255, 255]);
+```
+
+Browse all generated samples: [`docs/examples/gallery.html`](docs/examples/gallery.html)
+
+Per-example screenshots (gallery cards): [`docs/examples/screenshots/browser/`](docs/examples/screenshots/browser/)
+
+Regenerate images + gallery:
+
+```shell
+php docs/generate-examples.php
+# optional: Chrome headless card screenshots
+bash docs/screenshot-examples.sh
+```
+
+---
+
+## Symbology character sets
+
+Invalid input throws `Milon\Barcode\InvalidBarcodeException` with a hint for the chosen type.
+
+| Type | Allowed data (practical) |
+|------|--------------------------|
+| **C39** | `0-9 A-Z` space and `-.$/+%` |
+| **C39E** / **C39E+** | Full ASCII (extended CODE 39) |
+| **C128** | Full ASCII; auto code-set |
+| **C128A** | Uppercase / control; **no lowercase** — use C128B or C128 |
+| **C128B** | Full ASCII |
+| **C128C** | **Digits only**, encoded in pairs (even length) |
+| **EAN13** | 12–13 digits (check digit calculated/validated) |
+| **EAN8** | 7–8 digits |
+| **UPCA** | 11–12 digits |
+| **UPCE** | Compressed UPC-E digit form |
+| **I25** / **S25** | Digits (I25 prefers even length) |
+| **CODABAR** | Digits plus `-$:/.+` with A–D start/stop |
+| **PHARMA** | Numeric pharmacode |
+| **QRCODE** | Text/URL; capacity depends on version/ECC |
+| **DATAMATRIX** | Text; capacity depends on symbol size |
+| **PDF417** | Longer text payloads |
+
+Prefer **C128** (auto) unless you specifically need A/B/C.
+
+### Also supported (1D)
+
+`C39+`, `C93`, `S25`, `S25+`, `I25+`, `GS1-128`, `EAN2`, `EAN5`, `MSI`, `MSI+`, `POSTNET`, `PLANET`, `RMS4CC`, `KIX`, `IMB`, `CODE11`, `PHARMA2T`
+
+---
+
+## Standalone PHP (no Laravel)
+
+Laravel is optional. Without a container, the store path defaults to the system temp directory (or whatever you set):
+
+```php
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
+
+$d1 = new DNS1D();
+$d1->setStorPath(__DIR__ . '/cache/');
+
+echo $d1->getBarcodeHTML('9780691147727', 'EAN13');
+echo '<img src="data:image/png;base64,' . $d1->getBarcodePNG('9780691147727', 'EAN13') . '">';
+
+$d2 = new DNS2D();
+$d2->setStorPath(__DIR__ . '/cache/');
+file_put_contents(
+    __DIR__ . '/cache/qr.png',
+    base64_decode($d2->getBarcodePNG('https://example.com', 'QRCODE', 6, 6, [0, 0, 0], [255, 255, 255]))
+);
+```
+
+Use the **instance** API (or the Laravel facade). Calling `DNS2D::getBarcodePNG()` as a static method on the class itself will not work.
+
+---
+
+## FAQ
+
+**Why is my Blade barcode empty / escaped HTML?**  
+Use `{!! DNS1D::getBarcodeHTML(...) !!}`, not `{{ }}`.
+
+**Why is the `<img>` broken?**  
+PNG helpers return base64 only. Prefix with `data:image/png;base64,`.
+
+**Barcode works in light mode but not dark mode / email?**  
+Pass a solid `$bgcolor`, e.g. `[255, 255, 255]`.
+
+**`InvalidBarcodeException`?**  
+The payload does not match the symbology (see table above). Switch type or sanitize input.
+
+**Can this package scan barcodes from a camera?**  
+No. It only **generates** barcodes. Scanning needs a separate library or device SDK.
+
+**Can it authenticate users / replace login?**  
+No. Generating a QR of a URL or token is not authentication by itself.
+
+---
 
 ## License
 
-This package is published under `GNU LGPLv3` license and copyright to [Nuruzzaman Milon](http://milon.im). Original Barcode generation classes were written by Nicola Asuni. The license agreement is on project's root.
+GNU LGPLv3. Copyright [Nuruzzaman Milon](https://milon.im). Original barcode classes by Nicola Asuni / Tecnick.com LTD ([TCPDF](https://tcpdf.org)).
 
-### [Buy me a coffee ☕](https://paypal.me/tomilon?locale.x=en_US)
-
-License: GNU LGPLv3<br>
-Package Author: [Nuruzzaman Milon](http://milon.im)<br>
-Original Barcode Class Author: [Nicola Asuni](http://www.tcpdf.org)<br>
-Package Copyright: Nuruzzaman Milon<br>
-Barcode Generation Class Copyright:<br>
-Nicola Asuni<br>
-Tecnick.com LTD<br>
-www.tecnick.com
+### [Buy me a coffee](https://paypal.me/tomilon?locale.x=en_US)

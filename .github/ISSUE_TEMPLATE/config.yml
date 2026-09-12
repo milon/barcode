@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: FAQ / out of scope
+    url: https://github.com/milon/barcode/blob/master/readme.md#faq
+    about: Scanning cameras, auth/login via QR, and hosting setup are documented in the README FAQ — this package only generates barcodes.
+  - name: Packagist
+    url: https://packagist.org/packages/milon/barcode
+    about: Installation and version information

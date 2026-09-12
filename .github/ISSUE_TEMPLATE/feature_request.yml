@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest an improvement to barcode generation
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feature requests should stay in scope: **generating** 1D/2D barcodes (SVG/HTML/PNG/JPEG).
+        Out of scope: camera scanning, auth systems, hosting/deploy guides.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What limitation are you hitting today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: How should the API look? Include example method signatures if possible.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This is about generating barcodes (not scanning or authentication)
+          required: true
