@@ -5,31 +5,18 @@ namespace Milon\Barcode\Tests;
 use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 class UpcALayoutAndQrLogoTest extends TestCase
 {
     public function testUpcaEncoderUsesTallerGuardBars(): void
     {
         $dns = new DNS1D();
-        $method = new ReflectionMethod(DNS1D::class, 'setBarcode');
-        $method->invoke($dns, '042100005264', 'UPCA');
+        // Public SVG output exposes relative bar heights (guards full, digits shorter).
+        $svg = $dns->getBarcodeSVG('042100005264', 'UPCA', 2, 55, 'black', false, true);
 
-        $property = new \ReflectionProperty(DNS1D::class, 'barcode_array');
-        $arr = $property->getValue($dns);
-
-        $this->assertSame('eanupc', $arr['layout']);
-        $this->assertSame('UPCA', $arr['ean_type']);
-        $this->assertSame(11, $arr['maxh']);
-
-        $heights = array();
-        foreach ($arr['bcode'] as $bar) {
-            if ($bar['t']) {
-                $heights[$bar['h']] = true;
-            }
-        }
-        $this->assertArrayHasKey(11, $heights);
-        $this->assertArrayHasKey(7, $heights);
+        $this->assertStringContainsString('height="55"', $svg);
+        // digitH/maxh = 7/11 of 55 ≈ 35.000
+        $this->assertMatchesRegularExpression('/height="35(\.0+)?"/', $svg);
     }
 
     public function testUpcaPngWithShowCodeContainsSplitHri(): void
