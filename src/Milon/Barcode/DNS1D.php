@@ -64,6 +64,8 @@ use Milon\Barcode\GS1_128\GS1128;
  */
 class DNS1D {
 
+    use ResolvesStorePath;
+
     /**
      * Array representation of barcode.
      * @protected
@@ -87,9 +89,7 @@ class DNS1D {
      * @protected
      */
     public function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black', $showCode = true, $inline = false) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
@@ -135,9 +135,7 @@ class DNS1D {
      * @protected
      */
     public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         $this->setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;">' . "\n";
         $html = '<div style="font-size:0;position:relative;width:' . ($this->barcode_array['maxw'] * $w) . 'px;height:' . ($h) . 'px;">' . "\n";
@@ -173,9 +171,7 @@ class DNS1D {
      * @protected
      */
     public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
@@ -264,9 +260,7 @@ class DNS1D {
      * @protected
      */
     protected function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
@@ -2648,9 +2642,7 @@ class DNS1D {
      * @protected
      */
     public function getBarcodeJPG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);
@@ -2731,9 +2723,7 @@ class DNS1D {
      * @protected
      */
     protected function getBarcodeJPGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // calculate image size
         $width = ($this->barcode_array['maxw'] * $w);

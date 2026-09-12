@@ -66,6 +66,8 @@ use Illuminate\Support\Str;
  */
 class DNS2D {
 
+    use ResolvesStorePath;
+
     /**
      * Array representation of barcode.
      * @protected
@@ -93,9 +95,7 @@ class DNS2D {
      * @protected
      */
     public function getBarcodeSVG($code, $type, $w = 3, $h = 3, $color = 'black') {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         //set barcode code and type
         $this->setBarcode($code, $type);
         // replace table for special characters
@@ -139,9 +139,7 @@ class DNS2D {
      * @protected
      */
     public function getBarcodeHTML($code, $type, $w = 10, $h = 10, $color = 'black') {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         //set barcode code and type
         $this->setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;width:' . ($w * $this->barcode_array['num_cols']) . 'px;height:' . ($h * $this->barcode_array['num_rows']) . 'px;">' . "\n";
@@ -180,9 +178,7 @@ class DNS2D {
      * @protected
      */
     public function getBarcodePNG($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0), $bgcolor = null) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         //set barcode code and type
         $this->setBarcode($code, $type);
         // calculate image size
@@ -275,9 +271,7 @@ class DNS2D {
      * @protected
      */
     protected function getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0), $bgcolor = null) {
-        if (!$this->store_path) {
-            $this->setStorPath(app('config')->get("barcode.store_path"));
-        }
+        $this->ensureStorePath();
         //set barcode code and type
         $this->setBarcode($code, $type);
         // calculate image size
