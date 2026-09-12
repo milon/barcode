@@ -67,6 +67,7 @@ use Illuminate\Support\Str;
 class DNS2D {
 
     use ResolvesStorePath;
+    use DestroysGdImages;
 
     /**
      * Array representation of barcode.
@@ -231,9 +232,7 @@ class DNS2D {
             echo $png;
         } else {
             imagepng($png);
-            if (is_resource($png)) {
-                imagedestroy($png);
-            }
+            $this->destroyGdImage($png);
         }
         $image = ob_get_clean();
         $image = base64_encode($image);
@@ -326,14 +325,10 @@ class DNS2D {
             //echo $png;
         }
         if (ImagePng($png, $save_file)) {
-            if (is_resource($png)) {
-                imagedestroy($png);
-            }
+            $this->destroyGdImage($png);
             return str_replace(public_path(), '', $save_file);
         } else {
-            if (is_resource($png)) {
-                imagedestroy($png);
-            }
+            $this->destroyGdImage($png);
             return $code;
         }
     }

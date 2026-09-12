@@ -65,6 +65,7 @@ use Milon\Barcode\GS1_128\GS1128;
 class DNS1D {
 
     use ResolvesStorePath;
+    use DestroysGdImages;
 
     /**
      * Array representation of barcode.
@@ -231,9 +232,7 @@ class DNS1D {
             echo $png;
         } else {
             imagepng($png);
-            if (is_resource($png)) {
-                imagedestroy($png);
-            }
+            $this->destroyGdImage($png);
         }
         $image = ob_get_clean();
         $image = base64_encode($image);
@@ -322,14 +321,10 @@ class DNS1D {
             //echo $png;
         }
         if (ImagePng($png, $save_file)) {
-            if (is_resource($png)) {
-                imagedestroy($png);
-            }
+            $this->destroyGdImage($png);
             return str_replace(public_path(), '', $save_file);
         } else {
-            if (is_resource($png)) {
-                imagedestroy($png);
-            }
+            $this->destroyGdImage($png);
             return $code;
         }
     }
@@ -2709,9 +2704,7 @@ class DNS1D {
             echo $jpg;
         } else {
             imagejpeg($jpg);
-            if (is_resource($jpg)) {
-                imagedestroy($jpg);
-            }
+            $this->destroyGdImage($jpg);
         }
         $image = ob_get_clean();
         $image = base64_encode($image);
@@ -2791,14 +2784,10 @@ class DNS1D {
             //echo $jpg;
         }
         if (imagejpeg($jpg, $save_file)) {
-            if (is_resource($jpg)) {
-                imagedestroy($jpg);
-            }
+            $this->destroyGdImage($jpg);
             return str_replace(public_path(), '', $save_file);
         } else {
-            if (is_resource($jpg)) {
-                imagedestroy($jpg);
-            }
+            $this->destroyGdImage($jpg);
             return $code;
         }
     }
