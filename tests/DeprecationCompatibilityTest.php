@@ -68,6 +68,22 @@ class DeprecationCompatibilityTest extends TestCase
         $this->assertSame(array(), $pngPathDeprecations);
     }
 
+    public function testDns1dShowCodeDoesNotTriggerDeprecations(): void
+    {
+        $dns1d = new DNS1D();
+        $dns1d->setStorPath($this->temporaryStoragePath());
+
+        list($pngBarcode, $pngDeprecations) = $this->captureDeprecations(function () use ($dns1d) {
+            return $dns1d->getBarcodePNG('Code128Demo', 'C128', 3, 80, array(0, 0, 0), true, array(255, 255, 255));
+        });
+
+        $this->assertNotFalse($pngBarcode);
+        $raw = base64_decode($pngBarcode, true);
+        $this->assertNotFalse($raw);
+        $this->assertSame("\x89PNG\r\n\x1a\n", substr($raw, 0, 8));
+        $this->assertSame(array(), $pngDeprecations);
+    }
+
     private function captureDeprecations(callable $callback): array
     {
         $deprecations = array();

@@ -79,6 +79,43 @@ class PngBackgroundColorTest extends TestCase
         $this->assertBackgroundColor($image, 200, 220, 240);
     }
 
+    public function testDns2dAcceptsCustomBackgroundOnPngPath(): void
+    {
+        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'milon-barcode-qrbg-' . uniqid('', true);
+        mkdir($dir);
+
+        $dns = new DNS2D();
+        $dns->setStorPath($dir);
+
+        try {
+            $path = $dns->getBarcodePNGPath(
+                'https://example.com/path-bg',
+                'QRCODE',
+                3,
+                3,
+                array(0, 0, 0),
+                array(255, 255, 255),
+                'qr-bg'
+            );
+            $absolute = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR)
+                . DIRECTORY_SEPARATOR
+                . ltrim($path, '/\\');
+
+            $this->assertFileExists($absolute);
+            $image = imagecreatefrompng($absolute);
+            $this->assertNotFalse($image);
+            $this->assertSame(-1, imagecolortransparent($image));
+            unlink($absolute);
+        } finally {
+            if (is_dir($dir)) {
+                foreach (glob($dir . DIRECTORY_SEPARATOR . '*') ?: array() as $file) {
+                    unlink($file);
+                }
+                rmdir($dir);
+            }
+        }
+    }
+
     /**
      * @return resource|\GdImage
      */
