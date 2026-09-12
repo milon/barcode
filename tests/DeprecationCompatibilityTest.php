@@ -1,12 +1,5 @@
 <?php
 
-namespace Milon\Barcode;
-
-function public_path()
-{
-    return sys_get_temp_dir();
-}
-
 namespace Milon\Barcode\Tests;
 
 use Milon\Barcode\DNS1D;

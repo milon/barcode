@@ -263,10 +263,10 @@ class DNS1D {
      * @param $color (array) RGB (0-255) foreground color for bar elements.
      * @param $showCode (bool) if true shows code string under the barcode.
      * @param $bgcolor (array|null) RGB (0-255) background color (transparent as default).
-     * @return path or false in case of error.
-     * @protected
+     * @param $filename (string|null) optional custom filename without path (extension optional).
+     * @return string path or false in case of error.
      */
-    protected function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false, $bgcolor = null) {
+    public function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false, $bgcolor = null, $filename = null) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // calculate image size
@@ -321,7 +321,7 @@ class DNS1D {
                 imagestring($png, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
             }
 
-        $file_name= Str::slug($code);
+        $file_name = $this->resolveBarcodeFilename($code, '', $filename);
         $save_file = $this->checkfile($this->store_path . $file_name . ".png");
 
         if ($imagick) {
@@ -2588,7 +2588,7 @@ class DNS1D {
     }
 
     public function setStorPath($path) {
-        $this->store_path = $path;
+        $this->store_path = $this->normalizeStorePath($path);
         return $this;
     }
 
@@ -2735,10 +2735,11 @@ class DNS1D {
      * @param $w (int) Width of a single bar element in pixels.
      * @param $h (int) Height of a single bar element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements (background is transparent).
-     * @return path or false in case of error.
-     * @protected
+     * @param $showCode (bool) if true shows code string under the barcode.
+     * @param $filename (string|null) optional custom filename without path (extension optional).
+     * @return string path or false in case of error.
      */
-    protected function getBarcodeJPGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
+    public function getBarcodeJPGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false, $filename = null) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
         // calculate image size
@@ -2791,7 +2792,7 @@ class DNS1D {
                 imagestring($jpg, 3, ($width/2) - ($width_text/2) , ($height - $height_text) , $code, $fgcol);
             }
 
-        $file_name= Str::slug($code);
+        $file_name = $this->resolveBarcodeFilename($code, '', $filename);
         $save_file = $this->checkfile($this->store_path . $file_name . ".jpg");
 
         if ($imagick) {

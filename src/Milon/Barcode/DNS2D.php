@@ -268,10 +268,10 @@ class DNS2D {
      * @param $h (int) Height of a single rectangle element in pixels.
      * @param $color (array) RGB (0-255) foreground color for bar elements.
      * @param $bgcolor (array) RGB (0-255) background color (transparent as default).
+     * @param $filename (string|null) optional custom filename without path (extension optional).
      * @return string|false path of image which was created or false in case of error
-     * @protected
      */
-    protected function getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0), $bgcolor = null) {
+    public function getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = array(0, 0, 0), $bgcolor = null, $filename = null) {
         $this->ensureStorePath();
         //set barcode code and type
         $this->setBarcode($code, $type);
@@ -317,7 +317,7 @@ class DNS2D {
             }
             $y += $h;
         }
-        $file_name= Str::slug($code.$type);
+        $file_name = $this->resolveBarcodeFilename($code, $type, $filename);
         $save_file = $this->checkfile($this->store_path . $file_name . ".png");
 
         if ($imagick) {
@@ -418,7 +418,7 @@ class DNS2D {
     }
 
     public function setStorPath($path) {
-        $this->store_path = rtrim((string) $path, '/' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->store_path = $this->normalizeStorePath($path);
         return $this;
     }
 
