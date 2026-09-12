@@ -132,6 +132,23 @@ getBarcodePNGPath($code, $type, $w = 3, $h = 3, $color = [0,0,0], $bgcolor = nul
 DNS2D::getBarcodePNGPath($url, 'QRCODE', 6, 6, [0, 0, 0], [255, 255, 255], 'product-42');
 ```
 
+### Quiet zone (padding) for print / scanners
+
+Printed barcodes often fail to scan when bars sit flush against the page edge or other graphics. Add a quiet zone with `setPadding()` (pixels on every side):
+
+```php
+// ~10× bar width is a common 1D rule of thumb ($w = 2 → padding 20)
+DNS1D::setPadding(20);
+echo DNS1D::getBarcodeSVG($code, 'C128', 2, 80);
+
+DNS2D::setPadding(4 * 6); // ~4 modules around a QR with $w = 6
+echo '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG($url, 'QRCODE', 6, 6, [0, 0, 0], [255, 255, 255]) . '">';
+
+DNS1D::setPadding(0); // reset (instances/facades keep the value until changed)
+```
+
+SVG output also sets `shape-rendering="crispEdges"` to reduce print-time anti-alias blur.
+
 ---
 
 ## Background color (dark UI / email)
@@ -316,6 +333,9 @@ PNG helpers return base64 only. Prefix with `data:image/png;base64,`.
 
 **Barcode works in light mode but not dark mode / email?**  
 Pass a solid `$bgcolor`, e.g. `[255, 255, 255]`.
+
+**Printed barcode won’t scan reliably?**  
+Add a quiet zone (`setPadding(...)`), use a larger `$w` (avoid `$w = 1` for print), and prefer SVG/PNG over scaled-down screen captures. See [Quiet zone](#quiet-zone-padding-for-print--scanners).
 
 **`InvalidBarcodeException`?**  
 The payload does not match the symbology (see table above). Switch type or sanitize input.

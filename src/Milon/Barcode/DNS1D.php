@@ -66,6 +66,7 @@ class DNS1D {
 
     use ResolvesStorePath;
     use DestroysGdImages;
+    use SupportsPadding;
 
     /**
      * Array representation of barcode.
@@ -94,30 +95,33 @@ class DNS1D {
         $this->setBarcode($code, $type);
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
+        $pad = $this->getPadding();
+        $contentWidth = round(($this->barcode_array['maxw'] * $w), 3);
         $svg = '';
         if (!$inline)
         {
             $svg = '<' . '?' . 'xml version="1.0" standalone="no"' . '?' . '>' . "\n";
             $svg .= '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' . "\n";
         }
-        $svg .= '<svg width="' . round(($this->barcode_array['maxw'] * $w), 3) . '" height="' . $h . '" version="1.1" xmlns="http://www.w3.org/2000/svg">' . "\n";
+        $svg .= '<svg width="' . ($contentWidth + (2 * $pad)) . '" height="' . ($h + (2 * $pad)) . '" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">' . "\n";
         $svg .= "\t" . '<g id="bars" fill="' . $color . '" stroke="none">' . "\n";
         // print bars
-        $x = 0;
+        $x = $pad;
+        $bh = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
         if($showCode)
                 $bh -= 12;
             if ($v['t']) {
-                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
+                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
                 // draw a vertical bar
                 $svg .= "\t\t" . '<rect x="' . $x . '" y="' . $y . '" width="' . $bw . '" height="' . $bh . '" />' . "\n";
             }
             $x += $bw;
         }
     if($showCode)
-            $svg .= "\t" .'<text x="'. (round(($this->barcode_array['maxw'] * $w), 3)/2)  .'" text-anchor="middle"  y="'.  ($bh + 12) .'" id="code" fill="' . $color . '" font-size ="12px" >'. $code .'</text>'. "\n";
+            $svg .= "\t" .'<text x="'. (($contentWidth / 2) + $pad)  .'" text-anchor="middle"  y="'.  ($bh + 12 + $pad) .'" id="code" fill="' . $color . '" font-size ="12px" >'. $code .'</text>'. "\n";
 
         $svg .= "\t" . '</g>' . "\n";
         $svg .= '</svg>' . "\n";
@@ -138,24 +142,25 @@ class DNS1D {
     public function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black', $showCode =0) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
-        $html = '<div style="font-size:0;position:relative;">' . "\n";
-        $html = '<div style="font-size:0;position:relative;width:' . ($this->barcode_array['maxw'] * $w) . 'px;height:' . ($h) . 'px;">' . "\n";
+        $pad = $this->getPadding();
+        $contentWidth = $this->barcode_array['maxw'] * $w;
+        $html = '<div style="font-size:0;position:relative;width:' . ($contentWidth + (2 * $pad)) . 'px;height:' . ($h + (2 * $pad)) . 'px;">' . "\n";
         // print bars
-        $x = 0;
+        $x = $pad;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
         if($showCode)
             $bh -= ($showCode + 12);
             if ($v['t']) {
-                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
+                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
                 // draw a vertical bar
                 $html .= '<div style="background-color:' . $color . ';width:' . $bw . 'px;height:' . $bh . 'px;position:absolute;left:' . $x . 'px;top:' . $y . 'px;">&nbsp;</div>' . "\n";
             }
             $x += $bw;
         }
     if($showCode)
-            $html .= '<div style="position:absolute;bottom:0; text-align:center;color:' . $color . '; width:' . ($this->barcode_array['maxw'] * $w) . 'px;  font-size: ' . $showCode . 'px;">' . $code . '</div>';
+            $html .= '<div style="position:absolute;bottom:' . $pad . 'px;left:' . $pad . 'px; text-align:center;color:' . $color . '; width:' . $contentWidth . 'px;  font-size: ' . $showCode . 'px;">' . $code . '</div>';
 
         $html .= '</div>' . "\n";
         return $html;
@@ -176,9 +181,10 @@ class DNS1D {
     public function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false, $bgcolor = null) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
+        $pad = $this->getPadding();
         // calculate image size
-        $width = ($this->barcode_array['maxw'] * $w);
-        $height = $h;
+        $width = ($this->barcode_array['maxw'] * $w) + (2 * $pad);
+        $height = $h + (2 * $pad);
         if (function_exists('imagecreate')) {
             // GD library
             $imagick = false;
@@ -200,14 +206,15 @@ class DNS1D {
             return false;
         }
         // print bars
-        $x = 0;
+        $x = $pad;
+        $bh = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
         if($showCode)
                 $bh -= imagefontheight(3) ;
             if ($v['t']) {
-                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
+                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
                 // draw a vertical bar
                 if ($imagick) {
                     $bar->rectangle($x, $y, ($x + $bw), ($y + $bh));
@@ -223,11 +230,11 @@ class DNS1D {
         if($showCode)
             if ($imagick) {
             $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
-            $bar->annotation( 10 , $h - $bh +10 , $code );
+            $bar->annotation( 10 , $h - $bh +10 + $pad , $code );
         } else {
             $width_text = imagefontwidth(3) * strlen($code);
             $height_text = imagefontheight(3);
-            imagestring($png, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $height_text), $code, $fgcol);
+            imagestring($png, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $pad - $height_text), $code, $fgcol);
 
         }
         // get image out put
@@ -269,9 +276,10 @@ class DNS1D {
     public function getBarcodePNGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false, $bgcolor = null, $filename = null) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
+        $pad = $this->getPadding();
         // calculate image size
-        $width = ($this->barcode_array['maxw'] * $w);
-        $height = $h;
+        $width = ($this->barcode_array['maxw'] * $w) + (2 * $pad);
+        $height = $h + (2 * $pad);
         if (function_exists('imagecreate')) {
             // GD library
             $imagick = false;
@@ -293,7 +301,8 @@ class DNS1D {
             return false;
         }
         // print bars
-        $x = 0;
+        $x = $pad;
+        $bh = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
@@ -301,7 +310,7 @@ class DNS1D {
         if($showCode)
                  $bh -= imagefontheight(3) ;
             if ($v['t']) {
-                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
+                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
                 // draw a vertical bar
                 if ($imagick) {
                     $bar->rectangle($x, $y, ($x + $bw), ($y + $bh));
@@ -314,11 +323,11 @@ class DNS1D {
     if($showCode)
             if ($imagick) {
                 $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
-                $bar->annotation( 10 , $h - $bh +10 , $code );
+                $bar->annotation( 10 , $h - $bh +10 + $pad , $code );
             } else {
                 $width_text = imagefontwidth(3) * strlen($code);
                 $height_text = imagefontheight(3);
-                imagestring($png, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $height_text), $code, $fgcol);
+                imagestring($png, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $pad - $height_text), $code, $fgcol);
             }
 
         $file_name = $this->resolveBarcodeFilename($code, '', $filename);
@@ -2660,9 +2669,10 @@ class DNS1D {
     public function getBarcodeJPG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
+        $pad = $this->getPadding();
         // calculate image size
-        $width = ($this->barcode_array['maxw'] * $w);
-        $height = $h;
+        $width = ($this->barcode_array['maxw'] * $w) + (2 * $pad);
+        $height = $h + (2 * $pad);
         if (function_exists('imagecreate')) {
             // GD library
             $imagick = false;
@@ -2683,14 +2693,15 @@ class DNS1D {
             return false;
         }
         // print bars
-        $x = 0;
+        $x = $pad;
+        $bh = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
         if($showCode)
                 $bh -= imagefontheight(3) ;
             if ($v['t']) {
-                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
+                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
                 // draw a vertical bar
                 if ($imagick) {
                     $bar->rectangle($x, $y, ($x + $bw), ($y + $bh));
@@ -2706,11 +2717,11 @@ class DNS1D {
         if($showCode)
             if ($imagick) {
             $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
-            $bar->annotation( 10 , $h - $bh +10 , $code );
+            $bar->annotation( 10 , $h - $bh +10 + $pad , $code );
         } else {
             $width_text = imagefontwidth(3) * strlen($code);
             $height_text = imagefontheight(3);
-            imagestring($jpg, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $height_text), $code, $fgcol);
+            imagestring($jpg, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $pad - $height_text), $code, $fgcol);
 
         }
         // get image out put
@@ -2742,9 +2753,10 @@ class DNS1D {
     public function getBarcodeJPGPath($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0), $showCode = false, $filename = null) {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
+        $pad = $this->getPadding();
         // calculate image size
-        $width = ($this->barcode_array['maxw'] * $w);
-        $height = $h;
+        $width = ($this->barcode_array['maxw'] * $w) + (2 * $pad);
+        $height = $h + (2 * $pad);
         if (function_exists('imagecreate')) {
             // GD library
             $imagick = false;
@@ -2764,7 +2776,8 @@ class DNS1D {
             return false;
         }
         // print bars
-        $x = 0;
+        $x = $pad;
+        $bh = 0;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
@@ -2772,7 +2785,7 @@ class DNS1D {
         if($showCode)
                  $bh -= imagefontheight(3) ;
             if ($v['t']) {
-                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3);
+                $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
                 // draw a vertical bar
                 if ($imagick) {
                     $bar->rectangle($x, $y, ($x + $bw), ($y + $bh));
@@ -2785,11 +2798,11 @@ class DNS1D {
     if($showCode)
             if ($imagick) {
                 $bar->setTextAlignment(\Imagick::ALIGN_CENTER);
-                $bar->annotation( 10 , $h - $bh +10 , $code );
+                $bar->annotation( 10 , $h - $bh +10 + $pad , $code );
             } else {
                 $width_text = imagefontwidth(3) * strlen($code);
                 $height_text = imagefontheight(3);
-                imagestring($jpg, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $height_text), $code, $fgcol);
+                imagestring($jpg, 3, (int) (($width / 2) - ($width_text / 2)), (int) ($height - $pad - $height_text), $code, $fgcol);
             }
 
         $file_name = $this->resolveBarcodeFilename($code, '', $filename);
