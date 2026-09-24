@@ -10,11 +10,12 @@ class InvalidBarcodeException extends \InvalidArgumentException
     /**
      * @param string $type
      * @param string $code
+     * @param string $message
      * @return self
      */
-    public static function forEncodingFailure($type, $code)
+    public static function forEncodingFailure($type, $code, $message = '')
     {
-        return new self(self::encodingFailureMessage($type, $code));
+        return new self(self::encodingFailureMessage($type, $code, $message));
     }
 
     /**
@@ -31,12 +32,13 @@ class InvalidBarcodeException extends \InvalidArgumentException
      *
      * @param string $type
      * @param string $code
+     * @param string $message
      * @return string
      */
-    public static function encodingFailureMessage($type, $code)
+    public static function encodingFailureMessage($type, $code, $message = '')
     {
         $type = strtoupper((string) $type);
-        $message = 'Unable to encode barcode of type ' . $type . ' for the given code.';
+        $message = 'Unable to encode barcode of type ' . $type . ' for the given code.' . ($message ? ' '.$message : '');
 
         switch ($type) {
             case 'C128A':
@@ -56,6 +58,11 @@ class InvalidBarcodeException extends \InvalidArgumentException
                 break;
             case 'C128':
                 $message .= ' The code contains characters that cannot be represented in Code 128.';
+                break;
+            case 'GS1-128':
+                if ($code && $code[0] !== '(') {
+                    $message .= ' GS1 Application Identifiers (AI) should be in parentheses.';
+                }
                 break;
             case 'C39':
             case 'C39+':

@@ -3,11 +3,16 @@
 
 namespace Milon\Barcode\GS1_128;
 
+use Milon\Barcode\InvalidBarcodeException;
 
 class SectionSlicer
 {
     public function getSections($data)
     {
+        if (($data[0] ?? null) !== '(') {
+            throw InvalidBarcodeException::forEncodingFailure('GS1-128', $data);
+        }
+
         $pattern = '#\((\d+)\)((?:[^\(])+)#';
         preg_match_all($pattern, $data, $matches);
 
@@ -28,16 +33,17 @@ class SectionSlicer
     public function build($identifier, $value)
     {
         if (array_key_exists($identifier, AIData::$default) === false) {
-            throw new \LogicException(sprintf('Unknown application identifier %s', $identifier));
+            throw InvalidBarcodeException::forEncodingFailure('GS1-128', '', sprintf('Unknown application identifier %s', $identifier));
         }
 
         [$minLength, $maxLength, $description] = AIData::$default[$identifier];
+        $fixedLength = $minLength === $maxLength;
 
         if (strlen($value) < $minLength || strlen($value) > $maxLength) {
-            throw new \LogicException($description);
-        }
+            $message = $fixedLength ? "exactly {$minLength} characters" : "between {$minLength} and {$maxLength} characters";
 
-        $fixedLength = $minLength === $maxLength;
+            throw InvalidBarcodeException::forEncodingFailure('GS1-128', '', $description . " must be {$message}.");
+        }
 
         return new Section($identifier, $value, $fixedLength);
     }
