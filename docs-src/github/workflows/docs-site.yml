@@ -1,0 +1,66 @@
+# Copy this file to .github/workflows/docs-site.yml when scaffolding.
+# This repo's live workflow lives at ../../../.github/workflows/docs-site.yml
+# and pins milon/papyrus to v1.3.0 (docs-src is not at the package root).
+name: docs-site
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/checkout@v5
+        with:
+          repository: milon/papyrus
+          ref: v1.3.0
+          path: .tools/papyrus
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: dom, gd, mbstring, zip, zlib
+          coverage: none
+
+      - name: Install Papyrus
+        working-directory: .tools/papyrus
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Build documentation site
+        env:
+          PAPYRUS_BIN: ${{ github.workspace }}/.tools/papyrus/bin/papyrus
+        run: docs-src/bin/build-site
+
+      - name: Locate site output
+        id: site
+        run: echo "dir=$(ls -d docs/*-site | head -n 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ steps.site.outputs.dir }}
+
+  deploy:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

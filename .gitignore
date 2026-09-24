@@ -4,3 +4,9 @@ composer.lock
 .DS_Store
 .idea
 .phpunit.result.cache
+# Papyrus docs site
+docs/*-site/
+docs-src/assets/examples/
+docs-src/export/
+docs-src/.papyrus/
+.tools/

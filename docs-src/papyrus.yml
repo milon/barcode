@@ -1,0 +1,87 @@
+# milon/barcode — Papyrus docs site (milon/papyrus ^1.3)
+# Features used: mode docs, nav groups, edit links, banner, links (url + chapter),
+# base_path, On this page / Copy / search (built-in), asset copy via build:site.
+title: milon/barcode
+subtitle: Barcode generation for Laravel and PHP
+author: Nuruzzaman Milon
+themes:
+  - light
+  - dark
+
+document:
+  size: a4
+  margin_left: 25
+  margin_right: 25
+  margin_top: 20
+  margin_bottom: 20
+
+toc:
+  h1: 0
+  h2: 0
+  h3: 1
+
+site:
+  mode: docs
+  banner: banner.png
+  lead: 'Barcode generation for Laravel and plain PHP — SVG, HTML, PNG, and JPEG from one small API.'
+  base_path: /barcode
+  version: latest
+  # Add peer deploys here when you publish versioned docs (needs 2+ entries for the switcher):
+  # versions:
+  #   - { label: latest, path: /barcode }
+  #   - { label: v12, path: /barcode/v12 }
+  repository: 'https://github.com/milon/barcode'
+  edit_path: docs-src/content
+  edit_branch: master
+  links:
+    - label: GitHub
+      url: 'https://github.com/milon/barcode'
+    - label: Packagist
+      url: 'https://packagist.org/packages/milon/barcode'
+    - label: Issues
+      url: 'https://github.com/milon/barcode/issues'
+    - label: Examples
+      chapter: 06-examples-with-screenshots.md
+    - label: FAQ
+      chapter: 09-faq.md
+  nav:
+    - group: Getting started
+      chapters:
+        - 00-welcome.md
+        - 01-installation.md
+        - 02-quick-start.md
+    - group: API
+      chapters:
+        - 03-units-w-and-h.md
+        - 04-output-methods.md
+        - 05-background-color-dark-ui-email.md
+        - 06-examples-with-screenshots.md
+        - 07-symbology-character-sets.md
+    - group: More
+      chapters:
+        - 08-standalone-php-no-laravel.md
+        - 09-faq.md
+        - 10-license.md
+
+header:
+  style: 'font-style: italic; text-align: right; border-bottom: solid 1px #808080;'
+
+fonts:
+  faces:
+    - name: librelibertine
+      regular: LinLibertine_R.ttf
+      bold: LinLibertine_RB.ttf
+      italic: LinLibertine_RI.ttf
+      bold_italic: LinLibertine_RBI.ttf
+    - name: oxproto
+      regular: 0xProto-Regular.ttf
+      bold: 0xProto-Bold.ttf
+      italic: 0xProto-Italic.ttf
+      otl: true
+  script: {}
+
+mermaid:
+  enabled: false
+  format: svg
+  theme: auto
+  max_width_mm: 130
