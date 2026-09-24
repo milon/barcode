@@ -35,6 +35,7 @@ class Section implements JsonSerializable
         return $this->fixedLength;
     }
 
+    #[\ReturnTypeWillChange]
     function jsonSerialize()
     {
         return [$this->identifier, $this->value];
