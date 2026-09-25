@@ -8,3 +8,5 @@
 /phpunit.xml        export-ignore
 /tests              export-ignore
 /docs               export-ignore
+/docs-src           export-ignore
+/banner.png         export-ignore
