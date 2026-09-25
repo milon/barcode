@@ -22,8 +22,8 @@ Optional later: `site.versions` (2+ peer deploys) for a version switcher; Mermai
 
 ## Build
 
-Requires [milon/papyrus](https://github.com/milon/papyrus) **^1.3** (CI pins
-`v1.3.0`).
+Requires [milon/papyrus](https://github.com/milon/papyrus) **^1.3.1** (CI pins
+`v1.3.1`).
 
 ```bash
 docs-src/bin/build-site
@@ -52,6 +52,6 @@ papyrus import-readme -d docs-src --file readme.md --force
 
 ## GitHub Pages
 
-Workflow: `.github/workflows/docs-site.yml` (checks out Papyrus **v1.3.0**).
+Workflow: `.github/workflows/docs-site.yml` (checks out Papyrus **v1.3.1**).
 Set the Pages source to **GitHub Actions**. The site uses `base_path: /barcode`
 for project Pages at `https://<user>.github.io/barcode/`.

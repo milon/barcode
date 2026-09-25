@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           repository: milon/papyrus
-          ref: v1.3.0
+          ref: v1.3.2
           path: .tools/papyrus
 
       - uses: shivammathur/setup-php@v2
