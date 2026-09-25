@@ -1,6 +1,6 @@
 # Copy this file to .github/workflows/docs-site.yml when scaffolding.
 # This repo's live workflow lives at ../../../.github/workflows/docs-site.yml
-# and pins milon/papyrus to v1.3.0 (docs-src is not at the package root).
+# and pins milon/papyrus to v1.4.0 (docs-src is not at the package root).
 name: docs-site
 
 on:
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           repository: milon/papyrus
-          ref: v1.3.2
+          ref: v1.4.0
           path: .tools/papyrus
 
       - uses: shivammathur/setup-php@v2

@@ -1,6 +1,6 @@
-# milon/barcode — Papyrus docs site (milon/papyrus ^1.3)
-# Features used: mode docs, nav groups, edit links, banner, links (url + chapter),
-# base_path, On this page / Copy / search (built-in), asset copy via build:site.
+# milon/barcode — Papyrus docs site (milon/papyrus ^1.4)
+# Features: nav groups (collapsible), edit icons, copy code / copy markdown /
+# print page, page TOC, banner, links, base_path, search, asset copy.
 title: milon/barcode
 subtitle: Barcode generation for Laravel and PHP
 author: Nuruzzaman Milon
@@ -21,7 +21,6 @@ toc:
   h3: 1
 
 site:
-  mode: docs
   banner: banner.png
   lead: 'Barcode generation for Laravel and plain PHP — SVG, HTML, PNG, and JPEG from one small API.'
   base_path: /barcode
@@ -31,8 +30,14 @@ site:
   #   - { label: latest, path: /barcode }
   #   - { label: v12, path: /barcode/v12 }
   repository: 'https://github.com/milon/barcode'
-  edit_path: docs-src/content
-  edit_branch: master
+  edit:
+    link: true
+    path: docs-src/content
+    branch: master
+  copy_code: true
+  copy_markdown: true
+  print_page: true
+  page_toc: true
   links:
     - label: GitHub
       url: 'https://github.com/milon/barcode'

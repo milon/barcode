@@ -1,20 +1,23 @@
 # milon/barcode documentation site
 
 Source for the [Papyrus](https://github.com/milon/papyrus) multi-page docs site
-(**v1.3+**). The live README still lives at `../readme.md`; chapters here were
+(**v1.4+**). The live README still lives at `../readme.md`; chapters here were
 imported from it (`papyrus import-readme`) and can be edited independently.
 
 ## Papyrus features in use
 
 | Feature | Where |
 |---------|--------|
-| `site.mode: docs` | Package home with **Get started** CTA |
-| `site.nav` | Grouped sidebar + Prev/Next order |
-| `site.repository` / `edit_path` / `edit_branch` | **Edit this page** on chapters |
+| Unified home | **Get started** CTA + author + `links` (former `mode: docs` layout) |
+| `site.nav` | Collapsible sidebar groups + Prev/Next order |
+| `site.edit` (`link` / `path` / `branch`) | **Edit this page** icon on chapters |
+| `site.copy_code` | Icon **Copy** on code fences |
+| `site.copy_markdown` / `site.print_page` | **Copy as Markdown** + **Print this page** |
+| `site.page_toc` | **On this page** rail (always shown when enabled) |
 | `site.links` | GitHub / Packagist / Issues + chapter links |
 | `site.banner` + `lead` | Home hero |
 | `site.base_path: /barcode` | Project GitHub Pages |
-| Built-in | Search, code **Copy**, **On this page** (`h2`/`h3`), sitemap/robots/`404` |
+| Built-in | Search, sitemap/robots/`404`, image max-width in column |
 | `build:site` asset copy | `assets/examples/*` and banner |
 
 Optional later: `site.versions` (2+ peer deploys) for a version switcher; Mermaid
@@ -22,8 +25,8 @@ Optional later: `site.versions` (2+ peer deploys) for a version switcher; Mermai
 
 ## Build
 
-Requires [milon/papyrus](https://github.com/milon/papyrus) **^1.3.1** (CI pins
-`v1.3.1`).
+Requires [milon/papyrus](https://github.com/milon/papyrus) **^1.4** (CI pins
+`v1.4.0`).
 
 ```bash
 docs-src/bin/build-site
@@ -52,6 +55,6 @@ papyrus import-readme -d docs-src --file readme.md --force
 
 ## GitHub Pages
 
-Workflow: `.github/workflows/docs-site.yml` (checks out Papyrus **v1.3.1**).
+Workflow: `.github/workflows/docs-site.yml` (checks out Papyrus **v1.4.0**).
 Set the Pages source to **GitHub Actions**. The site uses `base_path: /barcode`
 for project Pages at `https://<user>.github.io/barcode/`.
