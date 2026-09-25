@@ -1,6 +1,7 @@
-# milon/barcode — Papyrus docs site (milon/papyrus ^1.4)
+# milon/barcode — Papyrus docs site (milon/papyrus ^1.5)
 # Features: nav groups (collapsible), edit icons, copy code / copy markdown /
 # print page, page TOC, banner, links, cname, search, asset copy.
+# CI installs Papyrus via the v1.5 release PHAR (see .github/workflows/docs-site.yml).
 title: milon/barcode
 subtitle: Barcode generation for Laravel and PHP
 author: Nuruzzaman Milon

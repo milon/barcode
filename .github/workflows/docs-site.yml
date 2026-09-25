@@ -21,25 +21,24 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: actions/checkout@v5
-        with:
-          repository: milon/papyrus
-          ref: v1.4.0
-          path: .tools/papyrus
-
       - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
           extensions: dom, gd, mbstring, zip, zlib
           coverage: none
 
-      - name: Install Papyrus
-        working-directory: .tools/papyrus
-        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Download Papyrus PHAR
+        env:
+          PAPYRUS_VERSION: "1.5.0"
+        run: |
+          curl -fsSL -o papyrus.phar \
+            "https://github.com/milon/papyrus/releases/download/v${PAPYRUS_VERSION}/papyrus.phar"
+          chmod +x papyrus.phar
+          php papyrus.phar --version
 
       - name: Build documentation site
         env:
-          PAPYRUS_BIN: ${{ github.workspace }}/.tools/papyrus/bin/papyrus
+          PAPYRUS_BIN: php ${{ github.workspace }}/papyrus.phar
         run: docs-src/bin/build-site
 
       - name: Locate site output

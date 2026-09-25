@@ -4,15 +4,23 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 DOCS_SRC="$ROOT/docs-src"
 PAPYRUS_BIN="${PAPYRUS_BIN:-}"
 
+# PAPYRUS_BIN may be a path or a command string (e.g. "php /path/papyrus.phar").
+run_papyrus() {
+  # shellcheck disable=SC2086
+  eval "$PAPYRUS_BIN" "$@"
+}
+
 if [[ -z "$PAPYRUS_BIN" ]]; then
-  if [[ -x "$ROOT/vendor/bin/papyrus" ]]; then
+  if [[ -x "$ROOT/papyrus.phar" ]]; then
+    PAPYRUS_BIN="php $ROOT/papyrus.phar"
+  elif [[ -x "$ROOT/vendor/bin/papyrus" ]]; then
     PAPYRUS_BIN="$ROOT/vendor/bin/papyrus"
   elif command -v papyrus >/dev/null 2>&1; then
     PAPYRUS_BIN="$(command -v papyrus)"
   elif [[ -x "$ROOT/../papyrus/bin/papyrus" ]]; then
     PAPYRUS_BIN="$ROOT/../papyrus/bin/papyrus"
   else
-    echo "papyrus CLI not found. Set PAPYRUS_BIN or install milon/papyrus (^1.4)." >&2
+    echo "papyrus CLI not found. Set PAPYRUS_BIN, download papyrus.phar (^1.5), or install milon/papyrus." >&2
     exit 1
   fi
 fi
@@ -26,8 +34,8 @@ if [[ -f "$ROOT/banner.png" ]]; then
 fi
 
 cd "$ROOT"
-"$PAPYRUS_BIN" doctor -d docs-src
-"$PAPYRUS_BIN" build:site -d docs-src -e docs
+run_papyrus doctor -d docs-src
+run_papyrus build:site -d docs-src -e docs
 
 SITE="$(ls -d "$ROOT"/docs/*-site 2>/dev/null | head -n 1 || true)"
-echo "Built: ${SITE:-unknown} (Papyrus $($PAPYRUS_BIN --version 2>/dev/null | tail -n 1 || echo unknown))"
+echo "Built: ${SITE:-unknown}"
