@@ -16,7 +16,7 @@ imported from it (`papyrus import-readme`) and can be edited independently.
 | `site.page_toc` | **On this page** rail (always shown when enabled) |
 | `site.links` | GitHub / Packagist / Issues + chapter links |
 | `site.banner` + `lead` | Home hero |
-| `site.base_path: /barcode` | Project GitHub Pages |
+| `site.cname: barcode.milon.im` | Custom domain (site at `/`, no `base_path`) |
 | Built-in | Search, sitemap/robots/`404`, image max-width in column |
 | `build:site` asset copy | `assets/examples/*` and banner |
 
@@ -37,7 +37,7 @@ Output: `docs/milon-barcode-site/`. Preview (needed for popup search):
 
 ```bash
 papyrus serve -d docs-src -e docs
-# open http://127.0.0.1:8000/barcode/
+# open http://127.0.0.1:8000/
 ```
 
 Regenerate example PNGs first if needed:
@@ -56,5 +56,9 @@ papyrus import-readme -d docs-src --file readme.md --force
 ## GitHub Pages
 
 Workflow: `.github/workflows/docs-site.yml` (checks out Papyrus **v1.4.0**).
-Set the Pages source to **GitHub Actions**. The site uses `base_path: /barcode`
-for project Pages at `https://<user>.github.io/barcode/`.
+
+1. Pages source → **GitHub Actions**
+2. Custom domain → **barcode.milon.im** (Papyrus writes a `CNAME` file on each build)
+3. Enable **Enforce HTTPS** once the certificate is ready
+
+Live site: https://barcode.milon.im/
