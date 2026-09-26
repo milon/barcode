@@ -73,4 +73,45 @@ class DNS1DTest extends TestCase
 
         $this->assertSame($dns, $result);
     }
+
+    public function testCode11KCheckDigitTenIsADash(): void
+    {
+        $this->assertSame('S0000000000113S', $this->code11Symbols('00000000001'));
+        $this->assertSame('S000000000077-S', $this->code11Symbols('00000000007'));
+    }
+
+    private function code11Symbols(string $code): string
+    {
+        $method = new \ReflectionMethod(DNS1D::class, 'barcode_code11');
+        if (PHP_VERSION_ID < 80100) {
+            $method->setAccessible(true);
+        }
+        $bars = $method->invoke($this->dns1d, $code);
+        $map = array(
+            '111121' => '0',
+            '211121' => '1',
+            '121121' => '2',
+            '221111' => '3',
+            '112121' => '4',
+            '212111' => '5',
+            '122111' => '6',
+            '111221' => '7',
+            '211211' => '8',
+            '211111' => '9',
+            '112111' => '-',
+            '112211' => 'S',
+        );
+        $widths = array();
+        foreach ($bars['bcode'] as $element) {
+            $widths[] = (string) $element['w'];
+        }
+        $symbols = '';
+        $count = count($widths);
+        for ($i = 0; $i < $count; $i += 6) {
+            $key = implode('', array_slice($widths, $i, 6));
+            $symbols .= isset($map[$key]) ? $map[$key] : '?';
+        }
+
+        return $symbols;
+    }
 }
