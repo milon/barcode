@@ -27,8 +27,8 @@ Optional later: `site.versions` (2+ peer deploys); Mermaid (`mermaid.enabled: tr
 ## Build
 
 Requires [milon/papyrus](https://github.com/milon/papyrus) **^1.5**. CI pins the
-release PHAR (`v1.5.0`). Locally you can use the PHAR, a sibling checkout, or
-`composer require milon/papyrus:^1.5` (PHP 8.2+).
+release PHAR (`v1.5.0`) on **PHP 8.4+** (the PHAR’s platform check). Locally you
+can use the PHAR, a sibling checkout, or `composer require milon/papyrus:^1.5`.
 
 ```bash
 # optional: pin the same PHAR CI uses
