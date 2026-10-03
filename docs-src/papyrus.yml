@@ -24,13 +24,11 @@ toc:
 site:
   banner: banner.png
   lead: 'Barcode generation for Laravel and plain PHP — SVG, HTML, PNG, and JPEG from one small API.'
+  # Public URL is oss.milon.im/barcode (Worker). cname is for sitemap absolutes only;
+  # CI deletes the generated CNAME so this repo does not claim the domain on Pages.
   cname: oss.milon.im
   base_path: /barcode
   version: latest
-  # Add peer deploys here when you publish versioned docs (needs 2+ entries for the switcher):
-  # versions:
-  #   - { label: latest, path: /barcode }
-  #   - { label: v12, path: /barcode/v12 }
   repository: 'https://github.com/milon/barcode'
   edit:
     link: true
