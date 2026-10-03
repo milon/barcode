@@ -45,10 +45,31 @@ jobs:
         id: site
         run: echo "dir=$(ls -d docs/*-site | head -n 1)" >> "$GITHUB_OUTPUT"
 
+      # Papyrus writes <base href="/barcode/"> but keeps files at site root.
+      # Nest under barcode/ so GitHub Pages serves oss.milon.im/barcode/.
+      - name: Nest site under /barcode for oss.milon.im
+        run: |
+          SITE="${{ steps.site.outputs.dir }}"
+          rm -rf publish
+          mkdir -p publish/barcode
+          rsync -a --exclude CNAME --exclude robots.txt "$SITE"/ publish/barcode/
+          if [[ -f "$SITE/CNAME" ]]; then
+            cp "$SITE/CNAME" publish/CNAME
+          else
+            echo "oss.milon.im" > publish/CNAME
+          fi
+          if [[ -f "$SITE/robots.txt" ]]; then
+            cp "$SITE/robots.txt" publish/robots.txt
+            cp "$SITE/robots.txt" publish/barcode/robots.txt
+          fi
+          if [[ -f "$SITE/sitemap.xml" ]]; then
+            cp "$SITE/sitemap.xml" publish/barcode/sitemap.xml
+          fi
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ steps.site.outputs.dir }}
+          path: publish
 
   deploy:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')

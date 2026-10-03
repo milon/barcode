@@ -16,10 +16,10 @@ imported from it (`papyrus import-readme`) and can be edited independently.
 | `site.page_toc` | **On this page** rail |
 | `site.links` | GitHub / Packagist / Issues + chapter links |
 | `site.banner` + `lead` | Home hero |
-| `site.cname: barcode.milon.im` | Custom domain (site at `/`, no `base_path`) |
+| `site.cname: oss.milon.im` + `base_path: /barcode` | Live at `https://oss.milon.im/barcode/` |
 | Built-in | Search, sitemap/robots/`404`, image max-width in column |
 | `build:site` asset copy | `assets/examples/*` and banner |
-| CI | Downloads `papyrus.phar` **v1.5.0** (no Composer dep on Papyrus) |
+| CI | Downloads `papyrus.phar` **v1.5.0**; nests publish under `/barcode/` |
 
 Optional later: `site.versions` (2+ peer deploys); Mermaid (`mermaid.enabled: true`
 + `mmdc` in CI); `papyrus watch --with-site`.
@@ -44,7 +44,7 @@ Output: `docs/milon-barcode-site/`. Preview (needed for popup search):
 
 ```bash
 php papyrus.phar serve -d docs-src -e docs
-# open http://127.0.0.1:8000/
+# open http://127.0.0.1:8000/barcode/
 ```
 
 Regenerate example PNGs first if needed:
@@ -65,7 +65,8 @@ php papyrus.phar import-readme -d docs-src --file readme.md --force
 Workflow: `.github/workflows/docs-site.yml` (Papyrus PHAR **v1.5.0**).
 
 1. Pages source → **GitHub Actions**
-2. Custom domain → **barcode.milon.im** (Papyrus writes a `CNAME` file on each build)
+2. Custom domain → **oss.milon.im** (Papyrus writes a `CNAME` file on each build)
 3. Enable **Enforce HTTPS** once the certificate is ready
+4. Cloudflare: `oss` CNAME → `milon.im` (proxied); root `/` redirects to `milon.im/open-source`
 
-Live site: https://barcode.milon.im/
+Live site: https://oss.milon.im/barcode/

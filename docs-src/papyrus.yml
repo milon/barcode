@@ -24,13 +24,13 @@ toc:
 site:
   banner: banner.png
   lead: 'Barcode generation for Laravel and plain PHP — SVG, HTML, PNG, and JPEG from one small API.'
-  cname: barcode.milon.im
-  # No base_path — custom domain serves the site at /
+  cname: oss.milon.im
+  base_path: /barcode
   version: latest
   # Add peer deploys here when you publish versioned docs (needs 2+ entries for the switcher):
   # versions:
-  #   - { label: latest, path: / }
-  #   - { label: v12, path: /v12 }
+  #   - { label: latest, path: /barcode }
+  #   - { label: v12, path: /barcode/v12 }
   repository: 'https://github.com/milon/barcode'
   edit:
     link: true

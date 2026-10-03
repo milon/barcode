@@ -9,7 +9,7 @@ Barcode generation for Laravel and plain PHP. This package wraps the TCPDF barco
 
 **Requires the PHP GD extension** (`ext-gd`).
 
-Full docs: [barcode.milon.im](https://barcode.milon.im/)
+Full docs: [oss.milon.im/barcode](https://oss.milon.im/barcode/)
 
 Examples below are real outputs from this library. Regenerate them with:
 
