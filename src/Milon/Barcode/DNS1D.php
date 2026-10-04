@@ -149,15 +149,18 @@ class DNS1D {
         $this->ensureStorePath();
         $this->setBarcode($code, $type);
         $pad = $this->getPadding();
+        $eanLayout = $this->usesEanUpcLayout();
+        $labelMargin = ($showCode && $eanLayout) ? max(10, $w * 6) : 0;
+        $fontSize = is_bool($showCode) ? 12 : (int) $showCode;
         $contentWidth = $this->barcode_array['maxw'] * $w;
-        $html = '<div style="font-size:0;position:relative;width:' . ($contentWidth + (2 * $pad)) . 'px;height:' . ($h + (2 * $pad)) . 'px;">' . "\n";
+        $html = '<div style="font-size:0;position:relative;width:' . ($contentWidth + (2 * $pad) + (2 * $labelMargin)) . 'px;height:' . ($h + (2 * $pad)) . 'px;">' . "\n";
         // print bars
-        $x = $pad;
+        $x = $pad + $labelMargin;
         foreach ($this->barcode_array['bcode'] as $k => $v) {
             $bw = round(($v['w'] * $w), 3);
             $bh = round(($v['h'] * $h / $this->barcode_array['maxh']), 3);
-        if($showCode)
-            $bh -= ($showCode + 12);
+        if($showCode && !$eanLayout)
+            $bh -= ($fontSize + 12);
             if ($v['t']) {
                 $y = round(($v['p'] * $h / $this->barcode_array['maxh']), 3) + $pad;
                 // draw a vertical bar
@@ -166,7 +169,11 @@ class DNS1D {
             $x += $bw;
         }
     if($showCode)
-            $html .= '<div style="position:absolute;bottom:' . $pad . 'px;left:' . $pad . 'px; text-align:center;color:' . $color . '; width:' . $contentWidth . 'px;  font-size: ' . $showCode . 'px;">' . $code . '</div>';
+            if ($eanLayout) {
+                $html .= $this->buildEanUpcHriHtml($color, $w, $h, $pad, $labelMargin, $contentWidth, $fontSize);
+            } else {
+                $html .= '<div style="position:absolute;bottom:' . $pad . 'px;left:' . $pad . 'px; text-align:center;color:' . $color . '; width:' . $contentWidth . 'px;  font-size: ' . $fontSize . 'px;">' . $code . '</div>';
+            }
 
         $html .= '</div>' . "\n";
         return $html;
@@ -400,6 +407,64 @@ class DNS1D {
         }
 
         return $svg;
+    }
+
+    /**
+     * Draw retail-style human-readable digits for EAN/UPC (HTML).
+     *
+     * @param string $color
+     * @param float|int $w
+     * @param float|int $h
+     * @param int $pad
+     * @param int $labelMargin
+     * @param float|int $contentWidth
+     * @param int $fontSize
+     * @return string
+     */
+    protected function buildEanUpcHriHtml($color, $w, $h, $pad, $labelMargin, $contentWidth, $fontSize)
+    {
+        if (empty($this->barcode_array['hri']) || !is_array($this->barcode_array['hri'])) {
+            return '';
+        }
+
+        $hri = $this->barcode_array['hri'];
+        $barsLeft = $pad + $labelMargin;
+        $style = 'position:absolute;bottom:' . $pad . 'px;color:' . $color . ';font-size:' . $fontSize . 'px;line-height:1;';
+        $html = '';
+
+        if (isset($hri['left']) && $hri['left'] !== '') {
+            $html .= '<div style="' . $style . 'left:0;width:' . max(0, $labelMargin - 4) . 'px;text-align:right;">' . $hri['left'] . '</div>' . "\n";
+        }
+        if (isset($hri['right']) && $hri['right'] !== '') {
+            $html .= '<div style="' . $style . 'left:' . ($barsLeft + $contentWidth + 4) . 'px;text-align:left;">' . $hri['right'] . '</div>' . "\n";
+        }
+        if (isset($hri['middle']) && $hri['middle'] !== '') {
+            $html .= '<div style="' . $style . 'left:' . $barsLeft . 'px;width:' . $contentWidth . 'px;text-align:center;">' . $hri['middle'] . '</div>' . "\n";
+
+            return $html;
+        }
+
+        $type = isset($this->barcode_array['ean_type']) ? $this->barcode_array['ean_type'] : 'EAN13';
+        if ($type === 'EAN8') {
+            $leftStart = 3;
+            $leftMods = 28;
+            $rightStart = 36;
+            $rightMods = 28;
+        } else {
+            $leftStart = 3;
+            $leftMods = 42;
+            $rightStart = 50;
+            $rightMods = 42;
+        }
+
+        if (isset($hri['middle_left']) && $hri['middle_left'] !== '') {
+            $html .= '<div style="' . $style . 'left:' . ($barsLeft + ($leftStart * $w)) . 'px;width:' . ($leftMods * $w) . 'px;text-align:center;">' . $hri['middle_left'] . '</div>' . "\n";
+        }
+        if (isset($hri['middle_right']) && $hri['middle_right'] !== '') {
+            $html .= '<div style="' . $style . 'left:' . ($barsLeft + ($rightStart * $w)) . 'px;width:' . ($rightMods * $w) . 'px;text-align:center;">' . $hri['middle_right'] . '</div>' . "\n";
+        }
+
+        return $html;
     }
 
     /**

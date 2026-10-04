@@ -44,6 +44,47 @@ class UpcALayoutAndQrLogoTest extends TestCase
         $this->assertStringContainsString('>123457<', $svg);
     }
 
+    public function testEan13HtmlRetailLayoutKeepsFullHeightAndSplitHri(): void
+    {
+        $dns = new DNS1D();
+        $html = $dns->getBarcodeHTML('5901234123457', 'EAN13', 2, 60, 'black', 14);
+
+        // Digit bars keep 7/11 of the height instead of subtracting showCode a second time.
+        $this->assertStringContainsString('height:38.182px', $html);
+        // Guard bars stay at full height and the root box does not grow.
+        $this->assertStringContainsString('height:60px', $html);
+        // Split human-readable digits, like the SVG/PNG output.
+        $this->assertStringContainsString('>5</div>', $html);
+        $this->assertStringContainsString('>901234</div>', $html);
+        $this->assertStringContainsString('>123457</div>', $html);
+    }
+
+    public function testEan13HtmlWithoutShowCodeHasNoDigits(): void
+    {
+        $dns = new DNS1D();
+        $html = $dns->getBarcodeHTML('5901234123457', 'EAN13', 2, 55);
+
+        $this->assertStringNotContainsString('text-align:center;color', $html);
+    }
+
+    public function testEan13HtmlShowCodeTrueUsesSvgDefaultFontSize(): void
+    {
+        $dns = new DNS1D();
+        $html = $dns->getBarcodeHTML('5901234123457', 'EAN13', 2, 60, 'black', true);
+
+        $this->assertStringContainsString('font-size:12px', $html);
+    }
+
+    public function testNonEanHtmlStillReservesSpaceForCode(): void
+    {
+        $dns = new DNS1D();
+        $html = $dns->getBarcodeHTML('TEST123', 'C128', 2, 50, 'black', 12);
+
+        // 50 - (12 + 12) = 26px, same as before the retail layout.
+        $this->assertStringContainsString('height:26px', $html);
+        $this->assertStringContainsString('font-size: 12px;">TEST123</div>', $html);
+    }
+
     public function testQrLogoIsCompositedInCenter(): void
     {
         $logoPath = sys_get_temp_dir() . '/milon-barcode-logo-' . uniqid('', true) . '.png';
