@@ -2519,6 +2519,9 @@ class DNS1D {
                 }
             }
             $check %= 11;
+            if ($check == 10) {
+                $check = '-';
+            }
             $code .= $check;
             ++$len;
         }
