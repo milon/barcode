@@ -73,4 +73,32 @@ class DNS1DTest extends TestCase
 
         $this->assertSame($dns, $result);
     }
+
+    public function testStandard25DigitEightIsNotEncodedAsZero(): void
+    {
+        $zero = $this->standard25Widths('00');
+        $eight = $this->standard25Widths('80');
+
+        $this->assertNotSame($zero, $eight);
+        $this->assertSame(array(1, 1, 1, 1, 3, 1, 3, 1, 1, 1), array_slice($zero, 6, 10));
+        $this->assertSame(array(3, 1, 1, 1, 1, 1, 3, 1, 1, 1), array_slice($eight, 6, 10));
+    }
+
+    /**
+     * @return int[]
+     */
+    private function standard25Widths(string $code): array
+    {
+        $method = new \ReflectionMethod(DNS1D::class, 'barcode_s25');
+        if (PHP_VERSION_ID < 80100) {
+            $method->setAccessible(true);
+        }
+        $bars = $method->invoke($this->dns1d, $code, false);
+        $widths = array();
+        foreach ($bars['bcode'] as $element) {
+            $widths[] = $element['w'];
+        }
+
+        return $widths;
+    }
 }
